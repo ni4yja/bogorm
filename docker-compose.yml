@@ -1,12 +1,14 @@
 services:
   db:
     image: postgis/postgis:16-3.4
-    environment:
-      POSTGRES_DB: bogorm
-      POSTGRES_USER: bogorm
-      POSTGRES_PASSWORD: bogorm
+    env_file:
+      - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bogorm -d bogorm"]
+      interval: 5s
+      retries: 5
 
   web:
     build: ./backend
@@ -16,9 +18,10 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
-    environment:
-      DATABASE_URL: postgis://bogorm:bogorm@db:5432/bogorm
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
 
 volumes:
   postgres_data:
