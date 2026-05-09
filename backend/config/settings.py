@@ -21,7 +21,7 @@ SECRET_KEY = 'django-insecure-$10cn5b7(xtn6a)#x-3(6n7o@$%ql5!ny32+^)0^^2=yyn0c7j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
 import environ
 
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'rest_framework',
+    'places',
 ]
 
 MIDDLEWARE = [
