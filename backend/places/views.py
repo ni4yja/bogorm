@@ -1,3 +1,17 @@
-from django.shortcuts import render
+from rest_framework.generics import (  # pyright: ignore[reportMissingImports]
+    ListAPIView,
+    RetrieveAPIView,
+)
 
-# Create your views here.
+from .models import Place
+from .serializers import PlaceSerializer
+
+
+class PlaceListView(ListAPIView):
+    queryset = Place.objects.all()
+    serializer_class = PlaceSerializer
+
+
+class PlaceDetailView(RetrieveAPIView):
+    queryset = Place.objects.all()
+    serializer_class = PlaceSerializer

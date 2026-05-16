@@ -1,6 +1,7 @@
 import uuid
-from django.contrib.gis.db import models # pyright: ignore[reportMissingModuleSource]
-from django.contrib.gis.geos import Point # pyright: ignore[reportMissingModuleSource]
+
+from django.contrib.gis.db import models  # pyright: ignore[reportMissingModuleSource]
+from django.contrib.gis.geos import Point  # pyright: ignore[reportMissingModuleSource]
 
 
 class PlaceCategory(models.IntegerChoices):
