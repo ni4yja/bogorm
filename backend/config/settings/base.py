@@ -1,3 +1,8 @@
+"""
+Django settings for config project.
+...
+"""
+
 import environ
 
 env = environ.Env()
