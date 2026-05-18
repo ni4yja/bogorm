@@ -1,7 +1,6 @@
 import uuid
 
-from django.contrib.gis.db import models  # pyright: ignore[reportMissingModuleSource]
-from django.contrib.gis.geos import Point  # pyright: ignore[reportMissingModuleSource]
+from django.contrib.gis.db import models
 
 
 class PlaceCategory(models.IntegerChoices):
@@ -17,9 +16,7 @@ class Place(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    lat = models.FloatField()
-    lng = models.FloatField()
-    location = models.PointField(blank=True, null=True)
+    location = models.PointField()
     category = models.IntegerField(
         choices=PlaceCategory.choices,
         default=PlaceCategory.OTHER
@@ -28,7 +25,3 @@ class Place(models.Model):
 
     def __str__(self):
         return self.title
-
-    def save(self, *args, **kwargs):
-        self.location = Point(self.lng, self.lat)
-        super().save(*args, **kwargs)
