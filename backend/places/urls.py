@@ -1,8 +1,8 @@
-from django.urls import path
+from rest_framework.routers import DefaultRouter
 
-from .views import PlaceDetailView, PlaceListView
+from .views import PlaceViewSet
 
-urlpatterns = [
-    path("places/", PlaceListView.as_view(), name="place-list"),
-    path("places/<uuid:pk>/", PlaceDetailView.as_view(), name="place-detail"),
-]
+router = DefaultRouter()
+router.register("places", PlaceViewSet, basename="place")
+
+urlpatterns = router.urls
