@@ -2,7 +2,8 @@ line-length = 88
 target-version = "py312"
 
 [lint]
-select = ["E", "F", "I"]
+select = ["E", "F", "I", "W"]
 
 [lint.per-file-ignores]
 "*/migrations/*.py" = ["E501"]
+"*/settings/*.py" = ["F403", "F405"]
