@@ -8,7 +8,9 @@ import environ
 env = environ.Env()
 environ.Env.read_env()
 
-SECRET_KEY = "django-insecure-$10cn5b7(xtn6a)#x-3(6n7o@$%ql5!ny32+^)0^^2=yyn0c7j"
+DEBUG = False
+
+SECRET_KEY = env("SECRET_KEY")
 
 # Application definition
 
@@ -109,6 +111,7 @@ REST_FRAMEWORK = {
     "DEFAULT_VERSION": "v1",
     "ALLOWED_VERSIONS": ["v1"],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "PAGE_SIZE": 20,
 }
 
 SPECTACULAR_SETTINGS = {

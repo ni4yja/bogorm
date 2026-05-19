@@ -22,6 +22,12 @@ class PlaceAdminForm(forms.ModelForm):
         model = Place
         fields = ["title", "description", "lat", "lng", "category"]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.location:
+            self.fields["lat"].initial = self.instance.location.y
+            self.fields["lng"].initial = self.instance.location.x
+
     def save(self, commit=True):
         instance = super().save(commit=False)
         instance.location = Point(
