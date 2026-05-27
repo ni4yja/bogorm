@@ -2,3 +2,4 @@
 .vscode
 .venv
 .claude
+.DS_Store
