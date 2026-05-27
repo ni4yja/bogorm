@@ -6,7 +6,7 @@ from places.models import Place, PlaceCategory
 
 
 @pytest.fixture
-def client():
+def api_client():
     return APIClient()
 
 

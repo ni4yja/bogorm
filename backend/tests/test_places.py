@@ -1,28 +1,48 @@
 import uuid
 
 import pytest
+from django.contrib.gis.geos import Point
+from django.urls import reverse
+from rest_framework import status
 
-from places.admin import PlaceAdminForm  # adjust to your app name
+from places.admin import PlaceAdminForm
+from places.models import Place, PlaceCategory
 
-BASE = "/api/v1/places"
+VALID_DATA = {
+    "title": "Test place",
+    "lat": 49.84,
+    "lng": 24.03,
+    "category": PlaceCategory.OTHER,
+}
+
+
 # ---------------------------------------------------------------------------
 # GET /api/v1/places/
 # ---------------------------------------------------------------------------
 
 
 class TestPlacesList:
-    def test_returns_200_without_auth(self, client, db):
-        response = client.get(f"{BASE}/")
-        assert response.status_code == 200
+    def test_returns_200_without_auth(self, api_client, db):
+        response = api_client.get(reverse("place-list"))
+        assert response.status_code == status.HTTP_200_OK
 
-    def test_returns_paginated_results(self, client, place):
-        response = client.get(f"{BASE}/")
-        # DRF cursor pagination wraps items in "results"
-        assert "results" in response.data
-        assert len(response.data["results"]) == 1
+    def test_returns_paginated_results(self, api_client, place):
+        Place.objects.bulk_create(
+            [
+                Place(
+                    title=f"Place {i}",
+                    location=Point(24.03, 49.84, srid=4326),
+                    category=PlaceCategory.OTHER,
+                )
+                for i in range(21)
+            ]
+        )
+        response = api_client.get(reverse("place-list"))
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data["results"]) == 20
 
-    def test_result_contains_expected_fields(self, client, place):
-        response = client.get(f"{BASE}/")
+    def test_result_contains_expected_fields(self, api_client, place):
+        response = api_client.get(reverse("place-list"))
         item = response.data["results"][0]
         for field in ("id", "title", "category"):
             assert field in item, f"Missing field: {field}"
@@ -34,41 +54,36 @@ class TestPlacesList:
 
 
 class TestPlaceDetail:
-    def test_returns_200(self, client, place):
-        response = client.get(f"{BASE}/{place.id}/")
-        assert response.status_code == 200
+    def test_returns_200(self, api_client, place):
+        response = api_client.get(reverse("place-detail", args=[place.id]))
+        assert response.status_code == status.HTTP_200_OK
 
-    def test_returns_correct_place(self, client, place):
-        response = client.get(f"{BASE}/{place.id}/")
+    def test_returns_correct_place(self, api_client, place):
+        response = api_client.get(reverse("place-detail", args=[place.id]))
         assert str(response.data["id"]) == str(place.id)
         assert response.data["title"] == place.title
 
-    def test_returns_coordinates(self, client, place):
-        response = client.get(f"{BASE}/{place.id}/")
+    def test_returns_coordinates(self, api_client, place):
+        response = api_client.get(reverse("place-detail", args=[place.id]))
         assert float(response.data["lat"]) == pytest.approx(place.location.y)
         assert float(response.data["lng"]) == pytest.approx(place.location.x)
 
-    def test_returns_full_description(self, client, place):
-        response = client.get(f"{BASE}/{place.id}/")
+    def test_returns_full_description(self, api_client, place):
+        response = api_client.get(reverse("place-detail", args=[place.id]))
         assert response.data["description"] == place.description
 
-    def test_404_for_nonexistent_uuid(self, client, db):
-        fake_id = uuid.uuid4()
-        response = client.get(f"{BASE}/{fake_id}/")
-        assert response.status_code == 404
+    def test_404_for_nonexistent_uuid(self, api_client, db):
+        response = api_client.get(reverse("place-detail", args=[uuid.uuid4()]))
+        assert response.status_code == status.HTTP_404_NOT_FOUND
 
-    def test_404_response_has_error_key(self, client, db):
-        fake_id = uuid.uuid4()
-        response = client.get(f"{BASE}/{fake_id}/")
-        # DRF за замовчуванням повертає {"detail": "..."}
+    def test_404_response_has_error_key(self, api_client, db):
+        response = api_client.get(reverse("place-detail", args=[uuid.uuid4()]))
         assert "detail" in response.data
 
 
 # ---------------------------------------------------------------------------
 # lat/lng range validation (Admin form)
 # ---------------------------------------------------------------------------
-
-VALID_DATA = {"title": "Тестове місце", "lat": 49.84, "lng": 24.03, "category": 60}
 
 
 class TestPlaceAdminFormValidation:
