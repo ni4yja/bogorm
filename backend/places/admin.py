@@ -20,7 +20,15 @@ class PlaceAdminForm(forms.ModelForm):
 
     class Meta:
         model = Place
-        fields = ["title", "description", "lat", "lng", "category"]
+        fields = [
+            "title",
+            "description",
+            "lat",
+            "lng",
+            "category",
+            "address",
+            "website",
+        ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

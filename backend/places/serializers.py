@@ -22,5 +22,7 @@ class PlaceSerializer(serializers.ModelSerializer):
             "lat",
             "lng",
             "category",
+            "address",
+            "website",
             "created_at",
         ]
