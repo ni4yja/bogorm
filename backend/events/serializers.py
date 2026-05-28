@@ -11,7 +11,7 @@ class EventSerializer(serializers.ModelSerializer):
             "place",
             "title",
             "description",
-            "event_date",
             "event_time",
+            "category",
             "created_at",
         ]
