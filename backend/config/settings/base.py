@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     "django.contrib.gis",
     "rest_framework",
     "places",
+    "events",
     "drf_spectacular",
 ]
 
