@@ -17,6 +17,11 @@ class PlaceAdminForm(forms.ModelForm):
         help_text="e.g. 20.9934177",
         validators=[MinValueValidator(-180), MaxValueValidator(180)],
     )
+    website = forms.URLField(
+        assume_scheme="https",
+        required=False,
+        empty_value="",
+    )
 
     class Meta:
         model = Place

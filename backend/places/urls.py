@@ -7,5 +7,5 @@ router = DefaultRouter()
 router.register("places", PlaceViewSet, basename="place")
 
 urlpatterns = router.urls + [
-    path("map", MapView.as_view()),
+    path("map", MapView.as_view(), name="map"),
 ]
