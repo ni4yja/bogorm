@@ -26,3 +26,19 @@ class PlaceSerializer(serializers.ModelSerializer):
             "website",
             "created_at",
         ]
+
+
+class PlaceMapSerializer(serializers.ModelSerializer):
+    lat = serializers.SerializerMethodField()
+    lng = serializers.SerializerMethodField()
+    event_count = serializers.IntegerField(read_only=True)
+
+    def get_lat(self, obj):
+        return obj.location.y
+
+    def get_lng(self, obj):
+        return obj.location.x
+
+    class Meta:
+        model = Place
+        fields = ["id", "title", "lat", "lng", "category", "event_count"]
