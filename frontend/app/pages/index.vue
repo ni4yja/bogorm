@@ -1,7 +1,3 @@
-<template>
-  <div id="map" />
-</template>
-
 <script setup lang="ts">
 import type { MapResponse } from '~/types'
 
@@ -28,6 +24,10 @@ onMounted(async () => {
   }
 })
 </script>
+
+<template>
+  <div id="map" />
+</template>
 
 <style>
 #map {

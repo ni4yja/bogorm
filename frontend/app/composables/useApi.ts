@@ -1,4 +1,4 @@
-export const useApi = () => {
+export function useApi() {
   const config = useRuntimeConfig()
 
   const get = <T>(path: string) =>
