@@ -26,12 +26,55 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div id="map" />
+  <div class="page">
+    <section class="hero">
+      <h1 class="hero-title">
+        Reading doesn't have to be a lonely habit!
+      </h1>
+      <p class="hero-subtitle">
+        Discover places, events, and people around books.<br>
+        It's totally free. And absolutely fun!
+      </p>
+    </section>
+
+    <section class="map-wrapper">
+      <div id="map" />
+    </section>
+  </div>
 </template>
 
-<style>
+<style scoped>
+.page {
+  padding-top: 60px;
+}
+
+.hero {
+  text-align: center;
+  padding: 3rem 2rem 2.5rem;
+}
+
+.hero-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  color: #2c1810;
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.7;
+}
+
+.map-wrapper {
+  margin: 0 2rem 2rem;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
 #map {
-  height: 100vh;
+  height: 620px;
   width: 100%;
 }
 </style>
