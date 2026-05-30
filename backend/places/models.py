@@ -20,6 +20,8 @@ class Place(models.Model):
     category = models.IntegerField(
         choices=PlaceCategory.choices, default=PlaceCategory.OTHER
     )
+    address = models.CharField(max_length=255, blank=True, default="")
+    website = models.URLField(blank=True, default="")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

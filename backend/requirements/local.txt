@@ -3,3 +3,4 @@ ruff==0.4
 pytest
 pytest-django
 pytest-dotenv
+django-cors-headers
