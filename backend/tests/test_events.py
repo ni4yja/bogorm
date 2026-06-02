@@ -1,7 +1,11 @@
 import uuid
 
+from django.contrib.gis.geos import Point
 from django.urls import reverse
 from rest_framework import status
+
+from events.models import Event, EventCategory
+from places.models import Place, PlaceCategory
 
 
 class TestEventsList:
@@ -31,6 +35,41 @@ class TestEventsList:
             reverse("place-events-list", kwargs={"place_pk": uuid.uuid4()})
         )
         assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_returns_only_events_for_given_place(self, api_client, place, event):
+        other_place = Place.objects.create(
+            title="Other Place",
+            location=Point(21.01, 52.23, srid=4326),
+            category=PlaceCategory.OTHER,
+        )
+        Event.objects.create(
+            place=other_place,
+            title="Other Event",
+            category=EventCategory.OTHER,
+        )
+        response = api_client.get(
+            reverse("place-events-list", kwargs={"place_pk": place.id})
+        )
+        assert len(response.data["results"]) == 1
+        assert response.data["results"][0]["title"] == event.title
+
+    def test_returns_events_ordered_by_created_at_desc(self, api_client, place):
+        event1 = Event.objects.create(
+            place=place,
+            title="First Event",
+            category=EventCategory.OTHER,
+        )
+        event2 = Event.objects.create(
+            place=place,
+            title="Second Event",
+            category=EventCategory.OTHER,
+        )
+        response = api_client.get(
+            reverse("place-events-list", kwargs={"place_pk": place.id})
+        )
+        results = response.data["results"]
+        assert results[0]["id"] == str(event2.id)
+        assert results[1]["id"] == str(event1.id)
 
 
 class TestEventDetail:

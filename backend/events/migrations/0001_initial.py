@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("places", "0002_alter_place_options"),
+        ("places", "0001_initial"),
     ]
 
     operations = [
