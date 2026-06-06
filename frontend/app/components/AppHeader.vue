@@ -25,16 +25,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 2rem;
-  height: 60px;
+  padding: var(--spacing-xs) var(--spacing-md);
+  height: var(--header-height);
   background: #fff;
 }
 
 .logo {
+  font-family: 'Merriweather', serif;
   font-weight: 700;
   font-size: 1.1rem;
-  color: #2c1810;
-  letter-spacing: 0.02em;
+  color: var(--color-primary);
 }
 
 .nav {
@@ -46,20 +46,21 @@
 .btn {
   padding: 0.5rem 1.25rem;
   border-radius: 6px;
+  font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   cursor: pointer;
   border: none;
 }
 
 .btn-primary {
-  background: #2c1810;
+  background: var(--color-primary);
   color: #fff;
 }
 
 .btn-outline {
   background: transparent;
-  border: 1.5px solid #2c1810;
-  color: #2c1810;
+  border: 1.5px solid var(--color-primary);
+  color: var(--color-primary);
   display: flex;
   align-items: center;
   gap: 0.4rem;
