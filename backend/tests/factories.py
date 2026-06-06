@@ -1,3 +1,5 @@
+import random
+
 import factory
 from django.contrib.gis.geos import Point
 
@@ -11,7 +13,13 @@ class PlaceFactory(factory.django.DjangoModelFactory):
 
     title = factory.Faker("company")
     description = factory.Faker("text")
-    location = factory.LazyFunction(lambda: Point(21.01, 52.23, srid=4326))
+    location = factory.LazyFunction(
+        lambda: Point(
+            random.uniform(20.85, 21.27),  # longitude
+            random.uniform(52.10, 52.36),  # latitude
+            srid=4326,
+        )
+    )
     category = PlaceCategory.LIBRARY
 
 

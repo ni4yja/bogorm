@@ -1,12 +1,12 @@
 import uuid
 
 import pytest
-from django.contrib.gis.geos import Point
 from django.urls import reverse
 from rest_framework import status
 
 from places.admin import PlaceAdminForm
-from places.models import Place, PlaceCategory
+from places.models import PlaceCategory
+from tests.factories import PlaceFactory
 
 VALID_DATA = {
     "title": "Test place",
@@ -27,16 +27,7 @@ class TestPlacesList:
         assert response.status_code == status.HTTP_200_OK
 
     def test_returns_paginated_results(self, api_client, place):
-        Place.objects.bulk_create(
-            [
-                Place(
-                    title=f"Place {i}",
-                    location=Point(24.03, 49.84, srid=4326),
-                    category=PlaceCategory.OTHER,
-                )
-                for i in range(21)
-            ]
-        )
+        PlaceFactory.create_batch(21)
         response = api_client.get(reverse("place-list"))
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data["results"]) == 20

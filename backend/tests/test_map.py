@@ -2,7 +2,7 @@ from django.contrib.gis.geos import Point
 from django.urls import reverse
 from rest_framework import status
 
-from places.models import Place, PlaceCategory
+from tests.factories import PlaceFactory
 
 WARSAW_BBOX = "20.85,52.10,21.15,52.35"
 WARSAW_POINT = Point(21.01, 52.23, srid=4326)
@@ -19,31 +19,19 @@ class TestMapEndpoint:
         assert "places" in response.data
 
     def test_returns_place_within_bbox(self, api_client, db):
-        place = Place.objects.create(
-            title="Inside",
-            location=WARSAW_POINT,
-            category=PlaceCategory.LIBRARY,
-        )
+        place = PlaceFactory(location=WARSAW_POINT)
         response = api_client.get(reverse("map"), {"bbox": WARSAW_BBOX})
         ids = [str(p["id"]) for p in response.data["places"]]
         assert str(place.id) in ids
 
     def test_excludes_place_outside_bbox(self, api_client, db):
-        place = Place.objects.create(
-            title="Outside",
-            location=OUTSIDE_POINT,
-            category=PlaceCategory.LIBRARY,
-        )
+        place = PlaceFactory(location=OUTSIDE_POINT)
         response = api_client.get(reverse("map"), {"bbox": WARSAW_BBOX})
         ids = [str(p["id"]) for p in response.data["places"]]
         assert str(place.id) not in ids
 
     def test_returns_expected_fields(self, api_client, db):
-        Place.objects.create(
-            title="Inside",
-            location=WARSAW_POINT,
-            category=PlaceCategory.LIBRARY,
-        )
+        PlaceFactory(location=WARSAW_POINT)
         response = api_client.get(reverse("map"), {"bbox": WARSAW_BBOX})
         item = response.data["places"][0]
         for field in ("id", "title", "lat", "lng", "category", "event_count"):

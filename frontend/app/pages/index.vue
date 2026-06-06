@@ -12,16 +12,25 @@ onMounted(async () => {
     attribution: '© OpenStreetMap contributors',
   }).addTo(map)
 
-  const bounds = map.getBounds()
-  const bbox = `${bounds.getWest()},${bounds.getSouth()},${bounds.getEast()},${bounds.getNorth()}`
+  const markersLayer = L.layerGroup().addTo(map)
 
-  const data = await get<MapResponse>(`/map?bbox=${bbox}`)
+  const fetchPlaces = async () => {
+    const bounds = map.getBounds()
+    const bbox = `${bounds.getWest()},${bounds.getSouth()},${bounds.getEast()},${bounds.getNorth()}`
 
-  for (const place of data.places) {
-    L.marker([place.lat, place.lng])
-      .addTo(map)
-      .bindPopup(place.title)
+    const data = await get<MapResponse>(`/map?bbox=${bbox}`)
+
+    markersLayer.clearLayers()
+
+    for (const place of data.places) {
+      L.marker([place.lat, place.lng])
+        .addTo(markersLayer)
+        .bindPopup(place.title)
+    }
   }
+
+  await fetchPlaces()
+  map.on('moveend', fetchPlaces)
 })
 </script>
 
