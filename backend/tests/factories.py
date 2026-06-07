@@ -6,6 +6,8 @@ from django.contrib.gis.geos import Point
 from events.models import Event, EventCategory
 from places.models import Place, PlaceCategory
 
+WARSAW_POINT = Point(21.01, 52.23, srid=4326)
+
 
 class PlaceFactory(factory.django.DjangoModelFactory):
     class Meta:
@@ -21,6 +23,10 @@ class PlaceFactory(factory.django.DjangoModelFactory):
         )
     )
     category = PlaceCategory.LIBRARY
+
+
+class WarsawPlaceFactory(PlaceFactory):
+    location = WARSAW_POINT
 
 
 class EventFactory(factory.django.DjangoModelFactory):
