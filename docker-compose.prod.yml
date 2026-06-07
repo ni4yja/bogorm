@@ -1,0 +1,37 @@
+services:
+  db:
+    image: imresamu/postgis:16-3.4
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bogorm -d bogorm"]
+      interval: 5s
+      retries: 5
+
+  web:
+    build: ./backend
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.production
+
+  frontend:
+    build: ./frontend
+    command: node .output/server/index.mjs
+    ports:
+      - "3000:3000"
+    depends_on:
+      - web
+    env_file:
+      - .env
+
+volumes:
+  postgres_data:
