@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_USER: bogorm
+          POSTGRES_PASSWORD: bogorm
+          POSTGRES_DB: bogorm
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Install GDAL
+        run: sudo apt-get install -y gdal-bin libgdal-dev
+
+      - name: Install dependencies
+        run: pip install -r backend/requirements/local.txt
+
+      - name: Run tests
+        env:
+          SECRET_KEY: test-secret-key
+          DATABASE_URL: postgis://bogorm:bogorm@localhost:5432/bogorm
+          DJANGO_SETTINGS_MODULE: config.settings.test
+        working-directory: backend
+        run: pytest tests/ -v
