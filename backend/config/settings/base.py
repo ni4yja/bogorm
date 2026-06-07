@@ -3,6 +3,8 @@ Django settings for config project.
 ...
 """
 
+from pathlib import Path
+
 import environ
 
 env = environ.Env()
@@ -10,6 +12,7 @@ environ.Env.read_env()
 
 DEBUG = False
 
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = env("SECRET_KEY")
 
 # Application definition
