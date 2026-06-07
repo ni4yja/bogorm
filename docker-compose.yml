@@ -1,6 +1,7 @@
 services:
   db:
-    image: postgis/postgis:16-3.4
+    image: imresamu/postgis:16-3.4
+    platform: linux/arm64
     env_file:
       - .env
     volumes:
@@ -24,6 +25,17 @@ services:
       - .env
     environment:
       DJANGO_SETTINGS_MODULE: config.settings.local
+
+  frontend:
+    build: ./frontend
+    command: npm run dev
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - web
 
 volumes:
   postgres_data:

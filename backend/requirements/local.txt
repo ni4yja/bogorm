@@ -1,5 +1,6 @@
 -r base.txt
 ruff==0.4
 pytest
+factory-boy
 pytest-django
 pytest-dotenv

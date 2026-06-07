@@ -1,8 +1,7 @@
 import pytest
-from django.contrib.gis.geos import Point
 from rest_framework.test import APIClient
 
-from places.models import Place, PlaceCategory
+from tests.factories import EventFactory, PlaceFactory
 
 
 @pytest.fixture
@@ -12,9 +11,9 @@ def api_client():
 
 @pytest.fixture
 def place(db):
-    return Place.objects.create(
-        title="Poliglotka",
-        description="Library on your favorite street",
-        location=Point(24.03, 49.84, srid=4326),
-        category=PlaceCategory.LIBRARY,
-    )
+    return PlaceFactory()
+
+
+@pytest.fixture
+def event(db, place):
+    return EventFactory(place=place)
