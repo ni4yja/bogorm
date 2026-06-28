@@ -11,6 +11,17 @@ const isModalOpen = computed(() => selectedPlace.value !== null)
 onMounted(async () => {
   const L = await import('leaflet')
 
+  const markerIcon = await import('leaflet/dist/images/marker-icon.png')
+  const markerIcon2x = await import('leaflet/dist/images/marker-icon-2x.png')
+  const markerShadow = await import('leaflet/dist/images/marker-shadow.png')
+
+  delete (L.Icon.Default.prototype as any)._getIconUrl
+  L.Icon.Default.mergeOptions({
+    iconUrl: markerIcon.default,
+    iconRetinaUrl: markerIcon2x.default,
+    shadowUrl: markerShadow.default,
+  })
+
   const map = L.map('map').setView([52.23, 21.01], 13)
 
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
