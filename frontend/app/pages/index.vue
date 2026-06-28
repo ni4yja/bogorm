@@ -11,15 +11,20 @@ const isModalOpen = computed(() => selectedPlace.value !== null)
 onMounted(async () => {
   const L = await import('leaflet')
 
-  const markerIcon = await import('leaflet/dist/images/marker-icon.png')
-  const markerIcon2x = await import('leaflet/dist/images/marker-icon-2x.png')
-  const markerShadow = await import('leaflet/dist/images/marker-shadow.png')
+  const categoryToIcon: Record<number, string> = {
+    10: 'library',
+    20: 'bookshop',
+    30: 'cultural-centre',
+    40: 'cafe',
+    50: 'museum',
+    60: 'other',
+  }
 
-  delete (L.Icon.Default.prototype as any)._getIconUrl
-  L.Icon.Default.mergeOptions({
-    iconUrl: markerIcon.default,
-    iconRetinaUrl: markerIcon2x.default,
-    shadowUrl: markerShadow.default,
+  const createIcon = (category: number) => L.icon({
+    iconUrl: `/icons/marker-${categoryToIcon[category] ?? 'other'}.svg`,
+    iconSize: [48, 64],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40],
   })
 
   const map = L.map('map').setView([52.23, 21.01], 13)
@@ -38,7 +43,7 @@ onMounted(async () => {
     markersLayer.clearLayers()
 
     for (const place of data.places) {
-      const marker = L.marker([place.lat, place.lng]).addTo(markersLayer)
+      const marker = L.marker([place.lat, place.lng], { icon: createIcon(place.category) }).addTo(markersLayer)
       marker.on('click', async () => {
         const detail = await get<PlaceDetail>(`/places/${place.id}/`)
         selectedPlace.value = detail
