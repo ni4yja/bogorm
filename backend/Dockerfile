@@ -12,6 +12,6 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 COPY requirements/ requirements/
-RUN pip install -r requirements/local.txt
+RUN pip install -r requirements/production.txt
 
 COPY . .
