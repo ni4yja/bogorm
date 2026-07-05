@@ -21,3 +21,11 @@ export interface PlaceDetail {
 export interface MapResponse {
   places: Place[]
 }
+
+export interface Event {
+  id: string
+  title: string
+  description: string
+  event_time: string | null
+  category: number
+}

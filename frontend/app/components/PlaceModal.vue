@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import type { PlaceDetail } from '~/types'
+import type { Event, PlaceDetail } from '~/types'
 
 defineProps<{
   place: PlaceDetail
   eventCount: number
+  events: Event[]
+  isAuthenticated?: boolean
 }>()
 
 defineEmits<{
@@ -13,22 +15,34 @@ defineEmits<{
 
 <template>
   <div class="modal">
-    <button class="close" @click="$emit('close')">
+    <button class="close" aria-label="Close" @click="$emit('close')">
       ×
     </button>
 
     <div class="image-placeholder">
-      <span class="image-icon">🖼</span>
+      <IconsImage class="image-icon" />
+    </div>
+
+    <div class="badges">
+      <div v-if="eventCount > 0 && !isAuthenticated" class="badge badge--events">
+        <IconsCalendar class="badge-icon" />
+        {{ eventCount }} Upcoming Event{{ eventCount > 1 ? 's' : '' }}
+      </div>
+      <div v-if="isAuthenticated" class="badge badge--visited">
+        <IconsPinMarked class="badge-icon" />
+        You've been here
+      </div>
     </div>
 
     <div class="content">
-      <div v-if="eventCount > 0" class="events-badge">
-        📅 {{ eventCount }} Upcoming Event{{ eventCount > 1 ? 's' : '' }}
+      <div class="title-row">
+        <h2 class="title">
+          {{ place.title }}
+        </h2>
+        <button v-if="isAuthenticated" class="bookmark-btn" aria-label="Save place">
+          <IconsBookmark class="bookmark-icon" />
+        </button>
       </div>
-
-      <h2 class="title">
-        {{ place.title }}
-      </h2>
 
       <p v-if="place.description" class="description">
         {{ place.description }}
@@ -36,12 +50,31 @@ defineEmits<{
 
       <div class="meta">
         <div v-if="place.address" class="meta-item">
-          <span class="meta-icon">📍</span>
-          {{ place.address }}
+          <IconsPin class="meta-icon" />
+          <span>{{ place.address }}</span>
         </div>
         <div v-if="place.website" class="meta-item">
-          <span class="meta-icon">🔗</span>
-          <a :href="place.website" target="_blank">{{ place.website }}</a>
+          <IconsLink class="meta-icon" />
+          <a :href="place.website" target="_blank" rel="noopener">{{ place.website }}</a>
+        </div>
+      </div>
+
+      <div v-if="isAuthenticated && events.length > 0" class="events-section">
+        <div class="events-header">
+          <IconsCalendar class="events-header-icon" />
+          Upcoming Events:
+        </div>
+        <div v-for="event in events" :key="event.id" class="event-item">
+          <div class="event-title">
+            {{ event.title }}
+            <button class="bookmark-btn" aria-label="Save event">
+              <IconsBookmark class="bookmark-icon" />
+            </button>
+          </div>
+          <div v-if="event.event_time" class="event-time">
+            <IconsTime class="meta-icon" />
+            {{ new Date(event.event_time).toLocaleString('uk-UA') }}
+          </div>
         </div>
       </div>
     </div>
@@ -54,93 +87,187 @@ defineEmits<{
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 340px;
+  width: 640px;
   max-height: calc(100% - 3rem);
   overflow-y: auto;
   background: #fff;
-  border-radius: 16px;
+  border-radius: 20px;
   z-index: 1000;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.16);
 }
 
 .close {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 1.25rem;
+  right: 1.25rem;
   background: none;
   border: none;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
+  line-height: 1;
   cursor: pointer;
-  color: #555;
+  color: var(--color-primary);
   z-index: 1;
+  padding: 0.25rem;
 }
 
 .image-placeholder {
   width: 100%;
-  height: 200px;
-  background: #f0f0f0;
+  height: 354px;
+  background: #e8e6e6;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 16px 16px 0 0;
+  border-radius: 20px 20px 0 0;
 }
 
 .image-icon {
-  font-size: 2.5rem;
-  opacity: 0.4;
+  width: 80px;
+  height: 63px;
+  color: #838383;
 }
 
-.content {
-  padding: 1.25rem 1.5rem 1.5rem;
+.badges {
+  padding: 0 1.5rem;
+  margin-top: -1rem;
+  margin-bottom: 0;
+  display: flex;
+  gap: 0.5rem;
 }
 
-.events-badge {
+.badge {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  background: var(--Primary);
-  color: #fff;
   font-size: 0.8rem;
-  padding: 0.3rem 0.75rem;
+  font-weight: 500;
+  padding: 0.35rem 0.85rem;
   border-radius: 20px;
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.badge-icon {
+  width: 14px;
+  height: 14px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.content {
+  padding: 1.25rem 1.5rem 2rem;
+}
+
+.title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
   margin-bottom: 1rem;
+  margin-top: 1rem;
 }
 
 .title {
-  color: var(--Primary);
-  margin-bottom: 0.75rem;
-  line-height: 1.35;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.bookmark-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  flex-shrink: 0;
+  color: var(--color-primary);
+  margin-top: 0.2rem;
+}
+
+.bookmark-icon {
+  width: 22px;
+  height: 22px;
 }
 
 .description {
-  font-size: 0.9rem;
-  color: #555;
+  font-size: 1rem;
+  color: #313131;
   line-height: 1.6;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .meta {
-  border-top: 1px solid #eee;
-  padding-top: 1rem;
+  border-top: 1px solid #e7e6e6;
+  padding-top: 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .meta-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  color: #444;
+  gap: 0.6rem;
+  font-size: 1rem;
+  color: #313131;
 }
 
 .meta-item a {
-  color: #444;
+  color: #313131;
   text-decoration: none;
 }
 
 .meta-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+
+.events-section {
+  margin-top: 1.5rem;
+  border-top: 1px solid #e7e6e6;
+  padding-top: 1.25rem;
+}
+
+.events-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 1rem;
+  font-weight: 600;
+  color: #313131;
+  margin-bottom: 1rem;
+}
+
+.events-header-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--color-primary);
+}
+
+.event-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.event-item:last-child {
+  margin-bottom: 0;
+}
+
+.event-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #222;
+}
+
+.event-time {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  color: #666;
 }
 </style>

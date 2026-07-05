@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import type { MapResponse, PlaceDetail } from '~/types'
+import type { Event, MapResponse, PlaceDetail } from '~/types'
 
 definePageMeta({ layout: 'default' })
 const { get } = useApi()
 
+const isAuthenticated = false // placeholder до реалізації авторизації
+
 const selectedPlace = ref<PlaceDetail | null>(null)
 const selectedEventCount = ref(0)
+const selectedEvents = ref<Event[]>([])
 const isModalOpen = computed(() => selectedPlace.value !== null)
 
 onMounted(async () => {
@@ -48,6 +51,14 @@ onMounted(async () => {
         const detail = await get<PlaceDetail>(`/places/${place.id}/`)
         selectedPlace.value = detail
         selectedEventCount.value = place.event_count
+
+        if (isAuthenticated && place.event_count > 0) {
+          const events = await get<Event[]>(`/places/${place.id}/events/`)
+          selectedEvents.value = events
+        }
+        else {
+          selectedEvents.value = []
+        }
       })
     }
   }
@@ -76,7 +87,9 @@ onMounted(async () => {
           v-if="selectedPlace"
           :place="selectedPlace"
           :event-count="selectedEventCount"
-          @close="selectedPlace = null"
+          :events="selectedEvents"
+          :is-authenticated="isAuthenticated"
+          @close="selectedPlace = null; selectedEvents = []"
         />
         <div class="unauth-banner">
           <p>
