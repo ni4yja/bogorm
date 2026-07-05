@@ -24,12 +24,29 @@ onMounted(async () => {
     60: 'other',
   }
 
-  const createIcon = (category: number) => L.icon({
-    iconUrl: `/icons/marker-${categoryToIcon[category] ?? 'other'}.svg`,
-    iconSize: [48, 64],
-    iconAnchor: [20, 40],
-    popupAnchor: [0, -40],
-  })
+  const createIcon = (category: number, hasEvents: boolean) => {
+    if (hasEvents) {
+      return L.divIcon({
+        html: `
+          <div style="position: relative; width: 48px; height: 64px;">
+            <img src="/icons/marker-${categoryToIcon[category] ?? 'other'}.svg" width="48" height="64" />
+            <img src="/icons/upcoming-events.svg" width="24" height="24" style="position: absolute; top: -2px; right: -4px;" />
+          </div>
+        `,
+        className: '',
+        iconSize: [48, 64],
+        iconAnchor: [24, 64],
+        popupAnchor: [0, -64],
+      })
+    }
+
+    return L.icon({
+      iconUrl: `/icons/marker-${categoryToIcon[category] ?? 'other'}.svg`,
+      iconSize: [48, 64],
+      iconAnchor: [24, 64],
+      popupAnchor: [0, -64],
+    })
+  }
 
   const map = L.map('map').setView([52.23, 21.01], 13)
 
@@ -47,7 +64,9 @@ onMounted(async () => {
     markersLayer.clearLayers()
 
     for (const place of data.places) {
-      const marker = L.marker([place.lat, place.lng], { icon: createIcon(place.category) }).addTo(markersLayer)
+      const marker = L.marker([place.lat, place.lng], {
+        icon: createIcon(place.category, place.event_count > 0),
+      }).addTo(markersLayer)
       marker.on('click', async () => {
         isBannerVisible.value = false
         const detail = await get<PlaceDetail>(`/places/${place.id}/`)
