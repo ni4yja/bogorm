@@ -4,7 +4,8 @@ import type { Event, MapResponse, PlaceDetail } from '~/types'
 definePageMeta({ layout: 'default' })
 const { get } = useApi()
 
-const isAuthenticated = false // placeholder до реалізації авторизації
+const isAuthenticated = false
+const isBannerVisible = ref(true)
 
 const selectedPlace = ref<PlaceDetail | null>(null)
 const selectedEventCount = ref(0)
@@ -48,6 +49,7 @@ onMounted(async () => {
     for (const place of data.places) {
       const marker = L.marker([place.lat, place.lng], { icon: createIcon(place.category) }).addTo(markersLayer)
       marker.on('click', async () => {
+        isBannerVisible.value = false
         const detail = await get<PlaceDetail>(`/places/${place.id}/`)
         selectedPlace.value = detail
         selectedEventCount.value = place.event_count
@@ -89,9 +91,9 @@ onMounted(async () => {
           :event-count="selectedEventCount"
           :events="selectedEvents"
           :is-authenticated="isAuthenticated"
-          @close="selectedPlace = null; selectedEvents = []"
+          @close="selectedPlace = null; selectedEvents = []; isBannerVisible = true"
         />
-        <div class="unauth-banner">
+        <div v-if="isBannerVisible" class="unauth-banner">
           <p>
             Without an account, <strong>you can only view the map with places</strong>.
             To check events' details, note your impressions, and stay up-to-date with literary

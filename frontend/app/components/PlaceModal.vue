@@ -16,7 +16,7 @@ defineEmits<{
 <template>
   <div class="modal">
     <button class="close" aria-label="Close" @click="$emit('close')">
-      ×
+      <IconsClose />
     </button>
 
     <div class="image-placeholder">
@@ -48,14 +48,16 @@ defineEmits<{
         {{ place.description }}
       </p>
 
-      <div class="meta">
+      <div v-if="place.address || place.website" class="meta">
         <div v-if="place.address" class="meta-item">
           <IconsPin class="meta-icon" />
           <span>{{ place.address }}</span>
         </div>
         <div v-if="place.website" class="meta-item">
           <IconsLink class="meta-icon" />
-          <a :href="place.website" target="_blank" rel="noopener">{{ place.website }}</a>
+          <a :href="place.website" target="_blank" rel="noopener">
+            {{ place.website.replace(/^https?:\/\/(www\.)?/, '') }}
+          </a>
         </div>
       </div>
 
@@ -90,9 +92,9 @@ defineEmits<{
   width: 640px;
   max-height: calc(100% - 3rem);
   overflow-y: auto;
-  background: #fff;
-  border-radius: 20px;
-  z-index: 1000;
+  background: var(--color-white);
+  border-radius: var(--badge-radius);
+  z-index: 900;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.16);
 }
 
@@ -102,8 +104,6 @@ defineEmits<{
   right: 1.25rem;
   background: none;
   border: none;
-  font-size: 1.5rem;
-  line-height: 1;
   cursor: pointer;
   color: var(--color-primary);
   z-index: 1;
@@ -113,7 +113,7 @@ defineEmits<{
 .image-placeholder {
   width: 100%;
   height: 354px;
-  background: #e8e6e6;
+  background: var(--color-light-grey-40);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -123,33 +123,34 @@ defineEmits<{
 .image-icon {
   width: 80px;
   height: 63px;
-  color: #838383;
+  color: var(--color-grey);
 }
 
 .badges {
   padding: 0 1.5rem;
-  margin-top: -1rem;
+  margin-top: calc(-1 * (var(--badge-height) + var(--spacing-xs)));
   margin-bottom: 0;
   display: flex;
   gap: 0.5rem;
 }
 
 .badge {
+  height: var(--badge-height);
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  font-size: 0.8rem;
-  font-weight: 500;
-  padding: 0.35rem 0.85rem;
+  gap: 2px;
+  font-size: 12px;
+  font-weight: 400;
+  padding: 0 8px;
   border-radius: 20px;
   background: var(--color-primary);
-  color: #fff;
+  color: var(--color-white);
 }
 
 .badge-icon {
   width: 14px;
   height: 14px;
-  color: #fff;
+  color: var(--color-white);
   flex-shrink: 0;
 }
 
@@ -188,13 +189,13 @@ defineEmits<{
 
 .description {
   font-size: 1rem;
-  color: #313131;
+  color: var(--color-black);
   line-height: 1.6;
   margin-bottom: 1.5rem;
 }
 
 .meta {
-  border-top: 1px solid #e7e6e6;
+  border-top: 1px solid var(--color-light-grey-40);
   padding-top: 1.25rem;
   display: flex;
   flex-direction: column;
@@ -206,11 +207,11 @@ defineEmits<{
   align-items: center;
   gap: 0.6rem;
   font-size: 1rem;
-  color: #313131;
+  color: var(--color-black);
 }
 
 .meta-item a {
-  color: #313131;
+  color: var(--color-black);
   text-decoration: none;
 }
 
@@ -223,7 +224,7 @@ defineEmits<{
 
 .events-section {
   margin-top: 1.5rem;
-  border-top: 1px solid #e7e6e6;
+  border-top: 1px solid var(--color-light-grey-40);
   padding-top: 1.25rem;
 }
 
@@ -233,7 +234,7 @@ defineEmits<{
   gap: 0.5rem;
   font-size: 1rem;
   font-weight: 600;
-  color: #313131;
+  color: var(--color-black);
   margin-bottom: 1rem;
 }
 
@@ -260,7 +261,7 @@ defineEmits<{
   justify-content: space-between;
   font-size: 1rem;
   font-weight: 500;
-  color: #222;
+  color: var(--color-black);
 }
 
 .event-time {
@@ -268,6 +269,6 @@ defineEmits<{
   align-items: center;
   gap: 0.4rem;
   font-size: 0.9rem;
-  color: #666;
+  color: var(--color-grey);
 }
 </style>

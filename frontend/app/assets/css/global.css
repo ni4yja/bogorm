@@ -6,12 +6,20 @@
 
 :root {
   --color-primary: #390000;
+  --color-black: #313131;
+  --color-grey: #838383;
+  --color-light-grey: #C3C0C0;
+  --color-light-grey-40: #E7E6E6;
+  --color-white: #FFFFFF;
 
   --header-height: 86px;
   --spacing-xs: 20px;
   --spacing-md: 40px;
   --spacing-lg: 80px;
   --spacing-xl: 100px;
+
+  --badge-height: 24px;
+  --badge-radius: 24px;
 }
 
 body {
