@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { Event, MapResponse, PlaceDetail } from '~/types'
+import type { Event, MapResponse, PaginatedResponse, PlaceDetail } from '~/types'
 
 definePageMeta({ layout: 'default' })
 const { get } = useApi()
 
-const isAuthenticated = false
+const isAuthenticated = true
 const isBannerVisible = ref(true)
 
 const selectedPlace = ref<PlaceDetail | null>(null)
@@ -55,8 +55,8 @@ onMounted(async () => {
         selectedEventCount.value = place.event_count
 
         if (isAuthenticated && place.event_count > 0) {
-          const events = await get<Event[]>(`/places/${place.id}/events/`)
-          selectedEvents.value = events
+          const response = await get<PaginatedResponse<Event>>(`/places/${place.id}/events/`)
+          selectedEvents.value = response.results
         }
         else {
           selectedEvents.value = []

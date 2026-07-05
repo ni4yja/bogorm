@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Event, PlaceDetail } from '~/types'
 
-defineProps<{
+const props = defineProps<{
   place: PlaceDetail
   eventCount: number
   events: Event[]
@@ -11,6 +11,10 @@ defineProps<{
 defineEmits<{
   close: []
 }>()
+
+const upcomingEvents = computed(() =>
+  props.events.filter(e => e.event_time && new Date(e.event_time) > new Date()),
+)
 </script>
 
 <template>
@@ -23,14 +27,10 @@ defineEmits<{
       <IconsImage class="image-icon" />
     </div>
 
-    <div class="badges">
-      <div v-if="eventCount > 0 && !isAuthenticated" class="badge badge--events">
+    <div v-if="eventCount > 0 && !isAuthenticated" class="badges">
+      <div class="badge badge--events">
         <IconsCalendar class="badge-icon" />
         {{ eventCount }} Upcoming Event{{ eventCount > 1 ? 's' : '' }}
-      </div>
-      <div v-if="isAuthenticated" class="badge badge--visited">
-        <IconsPinMarked class="badge-icon" />
-        You've been here
       </div>
     </div>
 
@@ -61,12 +61,12 @@ defineEmits<{
         </div>
       </div>
 
-      <div v-if="isAuthenticated && events.length > 0" class="events-section">
+      <div v-if="isAuthenticated && upcomingEvents.length > 0" class="events-section">
         <div class="events-header">
           <IconsCalendar class="events-header-icon" />
           Upcoming Events:
         </div>
-        <div v-for="event in events" :key="event.id" class="event-item">
+        <div v-for="event in upcomingEvents" :key="event.id" class="event-item">
           <div class="event-title">
             {{ event.title }}
             <button class="bookmark-btn" aria-label="Save event">
@@ -75,7 +75,13 @@ defineEmits<{
           </div>
           <div v-if="event.event_time" class="event-time">
             <IconsTime class="meta-icon" />
-            {{ new Date(event.event_time).toLocaleString('uk-UA') }}
+            {{ new Date(event.event_time).toLocaleString('uk-UA', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+            }) }}
           </div>
         </div>
       </div>
