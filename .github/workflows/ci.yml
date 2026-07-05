@@ -32,7 +32,12 @@ jobs:
           python-version: "3.12"
 
       - name: Install GDAL
-        run: sudo apt-get install -y gdal-bin libgdal-dev
+        run: |
+          for i in 1 2 3 4 5; do
+            sudo apt-get update && sudo apt-get install -y gdal-bin libgdal-dev && break
+            echo "Attempt $i failed, retrying in 20s..."
+            sleep 20
+          done
 
       - name: Install dependencies
         run: pip install -r backend/requirements/local.txt
