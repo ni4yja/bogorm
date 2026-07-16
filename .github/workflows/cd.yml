@@ -86,11 +86,9 @@ jobs:
             echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_ACTOR" --password-stdin
             cd /app/bogorm
             git pull origin main
-            BACKEND_IMAGE=$BACKEND_IMAGE:$BACKEND_TAG \
-            FRONTEND_IMAGE=$FRONTEND_IMAGE:$FRONTEND_TAG \
+            export BACKEND_IMAGE="$BACKEND_IMAGE:$BACKEND_TAG"
+            export FRONTEND_IMAGE="$FRONTEND_IMAGE:$FRONTEND_TAG"
             docker compose -f docker-compose.prod.yml pull
-            BACKEND_IMAGE=$BACKEND_IMAGE:$BACKEND_TAG \
-            FRONTEND_IMAGE=$FRONTEND_IMAGE:$FRONTEND_TAG \
             docker compose -f docker-compose.prod.yml up -d
             docker compose -f docker-compose.prod.yml exec -T web python manage.py migrate
             docker compose -f docker-compose.prod.yml exec -T web python manage.py collectstatic --noinput
