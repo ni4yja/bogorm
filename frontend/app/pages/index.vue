@@ -124,7 +124,7 @@ onMounted(async () => {
           :is-authenticated="isAuthenticated"
           @close="selectedPlace = null; selectedEvents = []; isBannerVisible = true"
         />
-        <div v-if="isBannerVisible" class="unauth-banner">
+        <div v-if="isBannerVisible && !isAuthenticated" class="unauth-banner">
           <p>
             Without an account, <strong>you can only view the map with places</strong>.
             To check events' details, note your impressions, and stay up-to-date with literary
