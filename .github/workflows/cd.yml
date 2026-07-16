@@ -69,10 +69,7 @@ jobs:
     env:
       GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GHCR_ACTOR: ${{ github.actor }}
-      BACKEND_TAG: ${{ needs.build-backend.outputs.image-tag }}
-      FRONTEND_TAG: ${{ needs.build-frontend.outputs.image-tag }}
-      BACKEND_IMAGE: ghcr.io/${{ github.repository_owner }}/bogorm-backend
-      FRONTEND_IMAGE: ghcr.io/${{ github.repository_owner }}/bogorm-frontend
+      IMAGE_TAG: ${{ github.sha }}
     steps:
       - name: Deploy to server
         uses: appleboy/ssh-action@v1.2.0
@@ -81,14 +78,16 @@ jobs:
           username: ${{ secrets.DO_USER }}
           key: ${{ secrets.DO_SSH_KEY }}
           command_timeout: 30m
-          envs: GHCR_TOKEN,GHCR_ACTOR,BACKEND_TAG,FRONTEND_TAG,BACKEND_IMAGE,FRONTEND_IMAGE
+          envs: GHCR_TOKEN,GHCR_ACTOR,IMAGE_TAG
           script: |
             echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_ACTOR" --password-stdin
             cd /app/bogorm
             git pull origin main
-            export BACKEND_IMAGE="$BACKEND_IMAGE:$BACKEND_TAG"
-            export FRONTEND_IMAGE="$FRONTEND_IMAGE:$FRONTEND_TAG"
+            export BACKEND_IMAGE="ghcr.io/ni4yja/bogorm-backend:${IMAGE_TAG::7}"
+            export FRONTEND_IMAGE="ghcr.io/ni4yja/bogorm-frontend:${IMAGE_TAG::7}"
+            echo "BACKEND_IMAGE=$BACKEND_IMAGE"
+            echo "FRONTEND_IMAGE=$FRONTEND_IMAGE"
             docker compose -f docker-compose.prod.yml pull
             docker compose -f docker-compose.prod.yml up -d
             docker compose -f docker-compose.prod.yml exec -T web python manage.py migrate
-            docker compose -f docker-compose.prod.yml exec -T web python manage.py collectstatic --noinput
+            docker compose -f docker-compose.prod.yml exec -T web python manage.py collectstatic --noinput       
