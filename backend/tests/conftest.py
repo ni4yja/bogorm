@@ -1,7 +1,7 @@
 import pytest
 from rest_framework.test import APIClient
 
-from tests.factories import EventFactory, PlaceFactory
+from tests.factories import EventFactory, WarsawPlaceFactory
 
 
 @pytest.fixture
@@ -11,7 +11,7 @@ def api_client():
 
 @pytest.fixture
 def place(db):
-    return PlaceFactory()
+    return WarsawPlaceFactory()
 
 
 @pytest.fixture

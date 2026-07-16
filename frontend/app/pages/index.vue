@@ -1,26 +1,52 @@
 <script setup lang="ts">
-import type { MapResponse, PlaceDetail } from '~/types'
+import type { Event, MapResponse, PaginatedResponse, PlaceDetail } from '~/types'
 
 definePageMeta({ layout: 'default' })
 const { get } = useApi()
 
+const isAuthenticated = true
+const isBannerVisible = ref(true)
+
 const selectedPlace = ref<PlaceDetail | null>(null)
 const selectedEventCount = ref(0)
+const selectedEvents = ref<Event[]>([])
 const isModalOpen = computed(() => selectedPlace.value !== null)
 
 onMounted(async () => {
   const L = await import('leaflet')
 
-  const markerIcon = await import('leaflet/dist/images/marker-icon.png')
-  const markerIcon2x = await import('leaflet/dist/images/marker-icon-2x.png')
-  const markerShadow = await import('leaflet/dist/images/marker-shadow.png')
+  const categoryToIcon: Record<number, string> = {
+    10: 'library',
+    20: 'bookshop',
+    30: 'cultural-centre',
+    40: 'cafe',
+    50: 'museum',
+    60: 'other',
+  }
 
-  delete (L.Icon.Default.prototype as any)._getIconUrl
-  L.Icon.Default.mergeOptions({
-    iconUrl: markerIcon.default,
-    iconRetinaUrl: markerIcon2x.default,
-    shadowUrl: markerShadow.default,
-  })
+  const createIcon = (category: number, hasEvents: boolean) => {
+    if (hasEvents) {
+      return L.divIcon({
+        html: `
+          <div style="position: relative; width: 48px; height: 64px;">
+            <img src="/icons/marker-${categoryToIcon[category] ?? 'other'}.svg" width="48" height="64" />
+            <img src="/icons/upcoming-events.svg" width="24" height="24" style="position: absolute; top: -2px; right: -4px;" />
+          </div>
+        `,
+        className: '',
+        iconSize: [48, 64],
+        iconAnchor: [24, 64],
+        popupAnchor: [0, -64],
+      })
+    }
+
+    return L.icon({
+      iconUrl: `/icons/marker-${categoryToIcon[category] ?? 'other'}.svg`,
+      iconSize: [48, 64],
+      iconAnchor: [24, 64],
+      popupAnchor: [0, -64],
+    })
+  }
 
   const map = L.map('map').setView([52.23, 21.01], 13)
 
@@ -37,12 +63,35 @@ onMounted(async () => {
 
     markersLayer.clearLayers()
 
+    let latestClickId = ''
+
     for (const place of data.places) {
-      const marker = L.marker([place.lat, place.lng]).addTo(markersLayer)
+      const marker = L.marker([place.lat, place.lng], {
+        icon: createIcon(place.category, place.event_count > 0),
+      }).addTo(markersLayer)
+
       marker.on('click', async () => {
+        const clickId = place.id
+        latestClickId = clickId
+
+        isBannerVisible.value = false
         const detail = await get<PlaceDetail>(`/places/${place.id}/`)
+        if (latestClickId !== clickId)
+          return
+
         selectedPlace.value = detail
         selectedEventCount.value = place.event_count
+
+        if (isAuthenticated && place.event_count > 0) {
+          const response = await get<PaginatedResponse<Event>>(`/places/${place.id}/events/`)
+          if (latestClickId !== clickId)
+            return
+
+          selectedEvents.value = response.results
+        }
+        else {
+          selectedEvents.value = []
+        }
       })
     }
   }
@@ -71,9 +120,11 @@ onMounted(async () => {
           v-if="selectedPlace"
           :place="selectedPlace"
           :event-count="selectedEventCount"
-          @close="selectedPlace = null"
+          :events="selectedEvents"
+          :is-authenticated="isAuthenticated"
+          @close="selectedPlace = null; selectedEvents = []; isBannerVisible = true"
         />
-        <div class="unauth-banner">
+        <div v-if="isBannerVisible && !isAuthenticated" class="unauth-banner">
           <p>
             Without an account, <strong>you can only view the map with places</strong>.
             To check events' details, note your impressions, and stay up-to-date with literary
