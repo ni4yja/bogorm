@@ -26,7 +26,7 @@ services:
       DJANGO_SETTINGS_MODULE: config.settings.production
 
   frontend:
-    image: image: ${FRONTEND_IMAGE:-ghcr.io/ni4yja/bogorm-frontend:latest}
+    image: ${FRONTEND_IMAGE:-ghcr.io/ni4yja/bogorm-frontend:latest}
     command: node .output/server/index.mjs
     ports:
       - "3000:3000"
