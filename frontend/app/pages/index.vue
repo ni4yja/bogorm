@@ -63,18 +63,30 @@ onMounted(async () => {
 
     markersLayer.clearLayers()
 
+    let latestClickId = ''
+
     for (const place of data.places) {
       const marker = L.marker([place.lat, place.lng], {
         icon: createIcon(place.category, place.event_count > 0),
       }).addTo(markersLayer)
+
       marker.on('click', async () => {
+        const clickId = place.id
+        latestClickId = clickId
+
         isBannerVisible.value = false
         const detail = await get<PlaceDetail>(`/places/${place.id}/`)
+        if (latestClickId !== clickId)
+          return
+
         selectedPlace.value = detail
         selectedEventCount.value = place.event_count
 
         if (isAuthenticated && place.event_count > 0) {
           const response = await get<PaginatedResponse<Event>>(`/places/${place.id}/events/`)
+          if (latestClickId !== clickId)
+            return
+
           selectedEvents.value = response.results
         }
         else {
