@@ -19,7 +19,7 @@ class Event(models.Model):
     place = models.ForeignKey(Place, on_delete=models.CASCADE, related_name="events")
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, default="")
-    event_time = models.DateTimeField(null=True, blank=True)
+    event_time = models.DateTimeField()
     category = models.IntegerField(
         choices=EventCategory.choices,
         default=EventCategory.OTHER,

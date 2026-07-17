@@ -2,6 +2,7 @@ import random
 
 import factory
 from django.contrib.gis.geos import Point
+from django.utils import timezone
 
 from events.models import Event, EventCategory
 from places.models import Place, PlaceCategory
@@ -36,4 +37,7 @@ class EventFactory(factory.django.DjangoModelFactory):
     place = factory.SubFactory(PlaceFactory)
     title = factory.Faker("sentence", nb_words=4)
     description = factory.Faker("text")
+    event_time = factory.LazyFunction(
+        lambda: timezone.now() + timezone.timedelta(days=30)
+    )
     category = EventCategory.OTHER
