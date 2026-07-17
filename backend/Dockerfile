@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 COPY requirements/ requirements/
-RUN pip install -r requirements/production.txt
+ARG REQUIREMENTS=requirements/production.txt
+RUN pip install -r $REQUIREMENTS
 
 COPY . .
