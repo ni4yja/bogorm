@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import type { Event, MapResponse, PaginatedResponse, PlaceDetail } from '~/types'
+import type { Event, PlaceDetail } from '~/types'
 
 definePageMeta({ layout: 'default' })
-const { get } = useApi()
 
 const isAuthenticated = true
 const isBannerVisible = ref(true)
@@ -13,91 +12,20 @@ const selectedEvents = ref<Event[]>([])
 const isModalOpen = computed(() => selectedPlace.value !== null)
 
 onMounted(async () => {
-  const L = await import('leaflet')
+  const { L, map, markersLayer } = await useLeafletMap('map')
 
-  const categoryToIcon: Record<number, string> = {
-    10: 'library',
-    20: 'bookshop',
-    30: 'cultural-centre',
-    40: 'cafe',
-    50: 'museum',
-    60: 'other',
-  }
+  const { fetchPlaces } = useMapMarkers(
+    L,
+    markersLayer,
+    isAuthenticated,
+    selectedPlace,
+    selectedEventCount,
+    selectedEvents,
+    isBannerVisible,
+  )
 
-  const createIcon = (category: number, hasEvents: boolean) => {
-    if (hasEvents) {
-      return L.divIcon({
-        html: `
-          <div style="position: relative; width: 48px; height: 64px;">
-            <img src="/icons/marker-${categoryToIcon[category] ?? 'other'}.svg" width="48" height="64" />
-            <img src="/icons/upcoming-events.svg" width="24" height="24" style="position: absolute; top: -2px; right: -4px;" />
-          </div>
-        `,
-        className: '',
-        iconSize: [48, 64],
-        iconAnchor: [24, 64],
-        popupAnchor: [0, -64],
-      })
-    }
-
-    return L.icon({
-      iconUrl: `/icons/marker-${categoryToIcon[category] ?? 'other'}.svg`,
-      iconSize: [48, 64],
-      iconAnchor: [24, 64],
-      popupAnchor: [0, -64],
-    })
-  }
-
-  const map = L.map('map').setView([52.23, 21.01], 13)
-
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '© OpenStreetMap contributors © CARTO',
-  }).addTo(map)
-
-  const markersLayer = L.layerGroup().addTo(map)
-
-  const fetchPlaces = async () => {
-    const bounds = map.getBounds()
-    const bbox = `${bounds.getWest()},${bounds.getSouth()},${bounds.getEast()},${bounds.getNorth()}`
-    const data = await get<MapResponse>(`/map?bbox=${bbox}`)
-
-    markersLayer.clearLayers()
-
-    let latestClickId = ''
-
-    for (const place of data.places) {
-      const marker = L.marker([place.lat, place.lng], {
-        icon: createIcon(place.category, place.event_count > 0),
-      }).addTo(markersLayer)
-
-      marker.on('click', async () => {
-        const clickId = place.id
-        latestClickId = clickId
-
-        isBannerVisible.value = false
-        const detail = await get<PlaceDetail>(`/places/${place.id}/`)
-        if (latestClickId !== clickId)
-          return
-
-        selectedPlace.value = detail
-        selectedEventCount.value = place.event_count
-
-        if (isAuthenticated && place.event_count > 0) {
-          const response = await get<PaginatedResponse<Event>>(`/places/${place.id}/events/`)
-          if (latestClickId !== clickId)
-            return
-
-          selectedEvents.value = response.results
-        }
-        else {
-          selectedEvents.value = []
-        }
-      })
-    }
-  }
-
-  await fetchPlaces()
-  map.on('moveend', fetchPlaces)
+  await fetchPlaces(map)
+  map.on('moveend', () => fetchPlaces(map))
 })
 </script>
 
