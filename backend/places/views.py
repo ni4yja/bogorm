@@ -1,5 +1,6 @@
 from django.contrib.gis.geos import Polygon
-from django.db.models import Count
+from django.db.models import Count, Q
+from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -29,7 +30,7 @@ class MapView(APIView):
         bounds.srid = 4326
 
         places = Place.objects.filter(location__within=bounds).annotate(
-            event_count=Count("events")
+            event_count=Count("events", filter=Q(events__event_time__gt=timezone.now()))
         )
 
         serializer = PlaceMapSerializer(places, many=True)
