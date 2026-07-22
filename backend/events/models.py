@@ -1,6 +1,8 @@
 import uuid
 
 from django.db import models
+from django.db.models import Q
+from django.utils import timezone
 
 from places.models import Place
 
@@ -14,6 +16,23 @@ class EventCategory(models.IntegerChoices):
     OTHER = 60, "Other"
 
 
+class EventQuerySet(models.QuerySet):
+    def upcoming(self):
+        return self.filter(event_time__gt=timezone.now())
+
+
+class EventManager(models.Manager):
+    def get_queryset(self):
+        return EventQuerySet(self.model, using=self._db)
+
+    def upcoming(self):
+        return self.get_queryset().upcoming()
+
+    @staticmethod
+    def upcoming_filter():
+        return Q(events__event_time__gt=timezone.now())
+
+
 class Event(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     place = models.ForeignKey(Place, on_delete=models.CASCADE, related_name="events")
@@ -25,6 +44,7 @@ class Event(models.Model):
         default=EventCategory.OTHER,
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    objects = EventManager()
 
     class Meta:
         ordering = ["-created_at"]
