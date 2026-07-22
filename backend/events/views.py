@@ -1,5 +1,4 @@
 from django.shortcuts import get_object_or_404
-from django.utils import timezone
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from places.models import Place
@@ -13,6 +12,4 @@ class EventViewSet(ReadOnlyModelViewSet):
 
     def get_queryset(self):
         place = get_object_or_404(Place, pk=self.kwargs["place_pk"])
-        return Event.objects.filter(
-            place=place, event_time__gt=timezone.now()
-        ).order_by("event_time")
+        return Event.objects.upcoming().filter(place=place).order_by("event_time")
