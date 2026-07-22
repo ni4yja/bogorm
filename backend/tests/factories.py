@@ -1,4 +1,5 @@
 import random
+from datetime import timedelta
 
 import factory
 from django.contrib.gis.geos import Point
@@ -37,7 +38,12 @@ class EventFactory(factory.django.DjangoModelFactory):
     place = factory.SubFactory(PlaceFactory)
     title = factory.Faker("sentence", nb_words=4)
     description = factory.Faker("text")
-    event_time = factory.LazyFunction(
-        lambda: timezone.now() + timezone.timedelta(days=30)
-    )
+    event_time = factory.LazyFunction(lambda: timezone.now() + timedelta(days=30))
     category = EventCategory.OTHER
+
+    class Params:
+        days_from_now = 30
+
+    @factory.lazy_attribute
+    def event_time(self):
+        return timezone.now() + timedelta(days=self.days_from_now)

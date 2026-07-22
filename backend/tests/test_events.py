@@ -44,22 +44,14 @@ class TestEventsList:
         assert response.data["results"][0]["title"] == event.title
 
     def test_returns_events_ordered_by_event_time_asc(self, api_client, place):
-        from datetime import timedelta
-
-        from django.utils import timezone
-
-        event1 = EventFactory(
-            place=place, event_time=timezone.now() + timedelta(days=1)
-        )
-        event2 = EventFactory(
-            place=place, event_time=timezone.now() + timedelta(days=5)
-        )
+        event_later = EventFactory(place=place, days_from_now=5)
+        event_sooner = EventFactory(place=place, days_from_now=1)
         response = api_client.get(
             reverse("place-events-list", kwargs={"place_pk": place.id})
         )
         results = response.data["results"]
-        assert results[0]["id"] == str(event1.id)
-        assert results[1]["id"] == str(event2.id)
+        assert results[0]["id"] == str(event_sooner.id)
+        assert results[1]["id"] == str(event_later.id)
 
 
 class TestEventDetail:
