@@ -1,8 +1,11 @@
+from datetime import timedelta
+
 from django.contrib.gis.geos import Point
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import status
 
-from tests.factories import PlaceFactory, WarsawPlaceFactory
+from tests.factories import EventFactory, PlaceFactory, WarsawPlaceFactory
 
 WARSAW_BBOX = "20.85,52.10,21.15,52.35"
 OUTSIDE_POINT = Point(19.0, 50.0, srid=4326)
@@ -40,6 +43,13 @@ class TestMapEndpoint:
         response = api_client.get(reverse("map"), {"bbox": WARSAW_BBOX})
         item = next(p for p in response.data["places"] if str(p["id"]) == str(place.id))
         assert item["event_count"] == 1
+
+    def test_event_count_excludes_past_events(self, api_client, db):
+        place = WarsawPlaceFactory()
+        EventFactory(place=place, event_time=timezone.now() - timedelta(days=1))
+        response = api_client.get(reverse("map"), {"bbox": WARSAW_BBOX})
+        item = next(p for p in response.data["places"] if str(p["id"]) == str(place.id))
+        assert item["event_count"] == 0
 
     def test_returns_400_without_bbox(self, api_client, db):
         response = api_client.get(reverse("map"))

@@ -12,4 +12,4 @@ class EventViewSet(ReadOnlyModelViewSet):
 
     def get_queryset(self):
         place = get_object_or_404(Place, pk=self.kwargs["place_pk"])
-        return Event.objects.filter(place=place)
+        return Event.objects.upcoming().filter(place=place).order_by("event_time")

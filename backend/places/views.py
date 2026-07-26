@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
+from events.models import Event
+
 from .models import Place
 from .serializers import PlaceMapSerializer, PlaceSerializer
 
@@ -29,7 +31,7 @@ class MapView(APIView):
         bounds.srid = 4326
 
         places = Place.objects.filter(location__within=bounds).annotate(
-            event_count=Count("events")
+            event_count=Count("events", filter=Event.objects.upcoming_filter())
         )
 
         serializer = PlaceMapSerializer(places, many=True)
