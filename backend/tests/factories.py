@@ -2,6 +2,7 @@ import random
 from datetime import timedelta
 
 import factory
+from django.contrib.auth import get_user_model
 from django.contrib.gis.geos import Point
 from django.utils import timezone
 
@@ -47,3 +48,19 @@ class EventFactory(factory.django.DjangoModelFactory):
     @factory.lazy_attribute
     def event_time(self):
         return timezone.now() + timedelta(days=self.days_from_now)
+
+
+class UserFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = get_user_model()
+        skip_postgeneration_save = True
+
+    username = factory.Faker("user_name")
+    email = factory.Faker("email")
+
+    @factory.post_generation
+    def password(self, create, extracted, **kwargs):
+        password = extracted or "testpass123"
+        self.set_password(password)
+        if create:
+            self.save()
