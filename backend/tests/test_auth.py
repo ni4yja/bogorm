@@ -62,6 +62,40 @@ class TestTokenRefresh:
         assert response.status_code == status.HTTP_200_OK
         assert "access" in response.data
 
+    def test_rotation_returns_new_refresh_token(self, api_client, db):
+        UserFactory(email="reader@bogorm.app", password="correcthorse123")
+
+        login_response = api_client.post(
+            reverse("token_obtain_pair"),
+            {"email": "reader@bogorm.app", "password": "correcthorse123"},
+        )
+        old_refresh_token = login_response.data["refresh"]
+
+        response = api_client.post(
+            reverse("token_refresh"), {"refresh": old_refresh_token}
+        )
+
+        assert response.status_code == status.HTTP_200_OK
+        assert "refresh" in response.data
+        assert response.data["refresh"] != old_refresh_token
+
+    def test_rejects_reused_refresh_token_after_rotation(self, api_client, db):
+        UserFactory(email="reader@bogorm.app", password="correcthorse123")
+
+        login_response = api_client.post(
+            reverse("token_obtain_pair"),
+            {"email": "reader@bogorm.app", "password": "correcthorse123"},
+        )
+        old_refresh_token = login_response.data["refresh"]
+
+        api_client.post(reverse("token_refresh"), {"refresh": old_refresh_token})
+
+        response = api_client.post(
+            reverse("token_refresh"), {"refresh": old_refresh_token}
+        )
+
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
     def test_rejects_invalid_refresh_token(self, api_client, db):
         response = api_client.post(
             reverse("token_refresh"), {"refresh": "not-a-real-token"}
