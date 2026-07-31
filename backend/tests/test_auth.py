@@ -89,9 +89,18 @@ class TestRegister:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert "email" in response.data
 
-    def test_rejects_weak_password(self, api_client, db):
+    @pytest.mark.parametrize(
+        "password, rule",
+        [
+            ("kd9wpq", "too short"),
+            ("password", "too common"),
+            ("58201947", "entirely numeric"),
+            ("newreader@bogorm.app", "too similar to the email"),
+        ],
+    )
+    def test_rejects_password_violating_policy(self, api_client, db, password, rule):
         response = api_client.post(
-            reverse("register"), register_payload(password="12345")
+            reverse("register"), register_payload(password=password)
         )
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
