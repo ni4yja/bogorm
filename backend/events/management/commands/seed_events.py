@@ -6,6 +6,7 @@ from django.core.management import CommandError
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
+from events.models import Event
 from places.models import Place
 
 EVENT_TEMPLATES = [
@@ -22,7 +23,14 @@ EVENT_TEMPLATES = [
 class Command(BaseCommand):
     help = "Seed database with test events spread across existing places"
 
-    def handle(self, *args, **kwargs):
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--clear",
+            action="store_true",
+            help="Delete existing events before seeding",
+        )
+
+    def handle(self, *args, **options):
         if not settings.SEED_COMMANDS_ENABLED:
             raise CommandError(
                 "Seed commands are disabled in this environment "
@@ -30,6 +38,10 @@ class Command(BaseCommand):
             )
 
         from tests.factories import EventFactory
+
+        if options["clear"]:
+            deleted_count, _ = Event.objects.all().delete()
+            self.stdout.write(self.style.WARNING(f"Deleted {deleted_count} events"))
 
         places = list(Place.objects.all())
 
