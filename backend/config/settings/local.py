@@ -3,6 +3,7 @@ from ctypes.util import find_library
 from .base import *
 
 DEBUG = True
+SEED_COMMANDS_ENABLED = True
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 SECRET_KEY = "speak-friend-and-enter-local-dev-only"

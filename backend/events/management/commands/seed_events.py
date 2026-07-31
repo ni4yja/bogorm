@@ -1,12 +1,12 @@
 import random
 from datetime import timedelta
 
+from django.conf import settings
 from django.core.management import CommandError
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
 from places.models import Place
-from tests.factories import EventFactory
 
 EVENT_TEMPLATES = [
     ("Past event (last month)", timedelta(days=-30)),
@@ -23,6 +23,14 @@ class Command(BaseCommand):
     help = "Seed database with test events spread across existing places"
 
     def handle(self, *args, **kwargs):
+        if not settings.SEED_COMMANDS_ENABLED:
+            raise CommandError(
+                "Seed commands are disabled in this environment "
+                "(SEED_COMMANDS_ENABLED=False)."
+            )
+
+        from tests.factories import EventFactory
+
         places = list(Place.objects.all())
 
         if not places:

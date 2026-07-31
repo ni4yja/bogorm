@@ -17,6 +17,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = env("SECRET_KEY")
 AUTH_USER_MODEL = "users.CustomUser"
 
+SEED_COMMANDS_ENABLED = False
+
 # Application definition
 
 INSTALLED_APPS = [
