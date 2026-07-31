@@ -162,3 +162,60 @@ class TestRegisterAndLoginFlow:
 
         assert response.status_code == status.HTTP_200_OK
         assert "access" in response.data
+
+
+class TestLogout:
+    def test_returns_205_and_blacklists_token(self, api_client, db):
+        UserFactory(email="reader@bogorm.app", password="correcthorse123")
+
+        login_response = api_client.post(
+            reverse("token_obtain_pair"),
+            {"email": "reader@bogorm.app", "password": "correcthorse123"},
+        )
+        access_token = login_response.data["access"]
+        refresh_token = login_response.data["refresh"]
+
+        api_client.credentials(HTTP_AUTHORIZATION=f"Bearer {access_token}")
+        response = api_client.post(reverse("logout"), {"refresh": refresh_token})
+
+        assert response.status_code == status.HTTP_205_RESET_CONTENT
+
+        refresh_response = api_client.post(
+            reverse("token_refresh"), {"refresh": refresh_token}
+        )
+        assert refresh_response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_requires_authentication(self, api_client, db):
+        response = api_client.post(reverse("logout"), {"refresh": "irrelevant"})
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_rejects_missing_refresh_token(self, api_client, db):
+        UserFactory(email="reader@bogorm.app", password="correcthorse123")
+
+        login_response = api_client.post(
+            reverse("token_obtain_pair"),
+            {"email": "reader@bogorm.app", "password": "correcthorse123"},
+        )
+        access_token = login_response.data["access"]
+
+        api_client.credentials(HTTP_AUTHORIZATION=f"Bearer {access_token}")
+        response = api_client.post(reverse("logout"), {})
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_rejects_already_blacklisted_token(self, api_client, db):
+        UserFactory(email="reader@bogorm.app", password="correcthorse123")
+
+        login_response = api_client.post(
+            reverse("token_obtain_pair"),
+            {"email": "reader@bogorm.app", "password": "correcthorse123"},
+        )
+        access_token = login_response.data["access"]
+        refresh_token = login_response.data["refresh"]
+
+        api_client.credentials(HTTP_AUTHORIZATION=f"Bearer {access_token}")
+        api_client.post(reverse("logout"), {"refresh": refresh_token})
+
+        response = api_client.post(reverse("logout"), {"refresh": refresh_token})
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
