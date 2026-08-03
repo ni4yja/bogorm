@@ -1,6 +1,7 @@
 from django.contrib.gis.geos import Polygon
 from django.db.models import Count
 from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ReadOnlyModelViewSet
@@ -15,8 +16,15 @@ class PlaceViewSet(ReadOnlyModelViewSet):
     queryset = Place.objects.all()
     serializer_class = PlaceSerializer
 
+    def get_permissions(self):
+        if self.action == "retrieve":
+            return [AllowAny()]
+        return [IsAuthenticated()]
+
 
 class MapView(APIView):
+    permission_classes = [AllowAny]
+
     def get(self, request):
         bbox = request.query_params.get("bbox")
         if not bbox:

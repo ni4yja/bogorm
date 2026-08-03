@@ -22,18 +22,18 @@ VALID_DATA = {
 
 
 class TestPlacesList:
-    def test_returns_200_without_auth(self, api_client, db):
+    def test_returns_401_without_auth(self, api_client, db):
         response = api_client.get(reverse("place-list"))
-        assert response.status_code == status.HTTP_200_OK
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_returns_paginated_results(self, api_client, place):
+    def test_returns_paginated_results(self, authenticated_client, place):
         PlaceFactory.create_batch(21)
-        response = api_client.get(reverse("place-list"))
+        response = authenticated_client.get(reverse("place-list"))
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data["results"]) == 20
 
-    def test_result_contains_expected_fields(self, api_client, place):
-        response = api_client.get(reverse("place-list"))
+    def test_result_contains_expected_fields(self, authenticated_client, place):
+        response = authenticated_client.get(reverse("place-list"))
         item = response.data["results"][0]
         for field in ("id", "title", "category"):
             assert field in item, f"Missing field: {field}"
@@ -45,7 +45,7 @@ class TestPlacesList:
 
 
 class TestPlaceDetail:
-    def test_returns_200(self, api_client, place):
+    def test_returns_200_without_auth(self, api_client, place):
         response = api_client.get(reverse("place-detail", args=[place.id]))
         assert response.status_code == status.HTTP_200_OK
 
