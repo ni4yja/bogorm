@@ -46,6 +46,17 @@ class TestLogin:
 
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
+    def test_login_is_case_insensitive_for_email(self, api_client, db):
+        UserFactory(email="reader@bogorm.app", password="correcthorse123")
+
+        response = api_client.post(
+            reverse("token_obtain_pair"),
+            {"email": "Reader@Bogorm.app", "password": "correcthorse123"},
+        )
+
+        assert response.status_code == status.HTTP_200_OK
+        assert "access" in response.data
+
 
 class TestTokenRefresh:
     def test_returns_new_access_token(self, api_client, db):
