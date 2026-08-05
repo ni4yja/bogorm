@@ -3,10 +3,15 @@ const { isAuthenticated, logout } = useAuth()
 const router = useRouter()
 
 const isDropdownOpen = ref(false)
+const isMounted = ref(false)
 const accountRef = useTemplateRef('accountRef')
 
 onClickOutside(accountRef, () => {
   isDropdownOpen.value = false
+})
+
+onMounted(() => {
+  isMounted.value = true
 })
 
 async function handleLogout() {
@@ -22,7 +27,9 @@ async function handleLogout() {
       Bogorm
     </NuxtLink>
 
-    <nav v-if="!isAuthenticated" class="nav">
+    <div v-if="!isMounted" class="nav-placeholder" />
+
+    <nav v-else-if="!isAuthenticated" class="nav">
       <NuxtLink to="/register" class="btn btn-primary">
         Sign Up
       </NuxtLink>
@@ -68,6 +75,11 @@ async function handleLogout() {
   font-size: 1.1rem;
   color: var(--color-primary);
   text-decoration: none;
+}
+
+.nav-placeholder {
+  width: 180px;
+  height: 40px;
 }
 
 .nav {
