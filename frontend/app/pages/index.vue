@@ -3,7 +3,7 @@ import type { Event, PlaceDetail } from '~/types'
 
 definePageMeta({ layout: 'default' })
 
-const isAuthenticated = true
+const { isAuthenticated } = useAuth()
 const isBannerVisible = ref(true)
 
 const selectedPlace = ref<PlaceDetail | null>(null)
@@ -58,9 +58,9 @@ onMounted(async () => {
             To check events' details, note your impressions, and stay up-to-date with literary
             life of Warsaw, you need to <strong>sign up to our platform</strong>.
           </p>
-          <button class="btn-full">
+          <NuxtLink to="/register" class="btn-full">
             Get The Full Experience
-          </button>
+          </NuxtLink>
         </div>
       </ClientOnly>
     </section>
@@ -134,5 +134,8 @@ onMounted(async () => {
   border-radius: 8px;
   font-size: 0.95rem;
   cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
 }
 </style>

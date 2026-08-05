@@ -30,22 +30,22 @@ async function handleSubmit() {
 <template>
   <AuthLayout title="Sign up" subtitle="Create your Bogorm account">
     <form class="auth-form" @submit.prevent="handleSubmit">
-      <label class="label" for="username">Username</label>
-      <input
-        id="username"
-        v-model="username"
-        type="text"
-        placeholder="your_username"
-        class="input"
-        required
-      >
-
       <label class="label" for="email">Email</label>
       <input
         id="email"
         v-model="email"
         type="email"
         placeholder="name@example.com"
+        class="input"
+        required
+      >
+
+      <label class="label" for="username">Username</label>
+      <input
+        id="username"
+        v-model="username"
+        type="text"
+        placeholder="your_username"
         class="input"
         required
       >

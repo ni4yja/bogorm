@@ -1,6 +1,14 @@
 import type { Event, MapResponse, PaginatedResponse, PlaceDetail } from '~/types'
 
-export function useMapMarkers(L: typeof import('leaflet'), markersLayer: ReturnType<typeof L.layerGroup>, isAuthenticated: boolean, selectedPlace: Ref<PlaceDetail | null>, selectedEventCount: Ref<number>, selectedEvents: Ref<Event[]>, isBannerVisible: Ref<boolean>) {
+export function useMapMarkers(
+  L: typeof import('leaflet'),
+  markersLayer: ReturnType<typeof L.layerGroup>,
+  isAuthenticated: Ref<boolean>,
+  selectedPlace: Ref<PlaceDetail | null>,
+  selectedEventCount: Ref<number>,
+  selectedEvents: Ref<Event[]>,
+  isBannerVisible: Ref<boolean>,
+) {
   const { get } = useApi()
   const { createIcon } = useMapIcons(L)
 
@@ -30,7 +38,7 @@ export function useMapMarkers(L: typeof import('leaflet'), markersLayer: ReturnT
         selectedPlace.value = detail
         selectedEventCount.value = place.event_count
 
-        if (isAuthenticated && place.event_count > 0) {
+        if (isAuthenticated.value && place.event_count > 0) {
           const response = await get<PaginatedResponse<Event>>(`/places/${place.id}/events/`)
           if (latestClickId !== clickId)
             return
