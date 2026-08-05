@@ -11,6 +11,7 @@
   --color-light-grey: #C3C0C0;
   --color-light-grey-40: #E7E6E6;
   --color-white: #FFFFFF;
+  --color-error: #A32D2D;
 
   --header-height: 86px;
   --spacing-xs: 20px;
@@ -65,7 +66,7 @@ h2 {
 }
 
 .auth-form .error {
-  color: #a32d2d;
+  color: var(--color-error);
   font-size: 13px;
   margin: -8px 0 16px;
 }

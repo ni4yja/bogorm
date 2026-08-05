@@ -27,6 +27,7 @@ defineProps<{
 
 <style scoped>
 .auth-page {
+  position: relative;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

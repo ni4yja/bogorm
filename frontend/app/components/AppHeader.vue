@@ -3,6 +3,11 @@ const { isAuthenticated, logout } = useAuth()
 const router = useRouter()
 
 const isDropdownOpen = ref(false)
+const accountRef = useTemplateRef('accountRef')
+
+onClickOutside(accountRef, () => {
+  isDropdownOpen.value = false
+})
 
 async function handleLogout() {
   isDropdownOpen.value = false
@@ -26,7 +31,7 @@ async function handleLogout() {
       </NuxtLink>
     </nav>
 
-    <div v-else class="account">
+    <div v-else ref="accountRef" class="account">
       <button class="account-trigger" @click="isDropdownOpen = !isDropdownOpen">
         <IconsProfile class="avatar-icon" />
         <IconsChevronDown class="chevron" :class="{ open: isDropdownOpen }" />
@@ -34,7 +39,7 @@ async function handleLogout() {
 
       <div v-if="isDropdownOpen" class="dropdown">
         <button class="dropdown-item" @click="handleLogout">
-          <IconsLogIn class="dropdown-icon dropdown-icon--logout" />
+          <IconsLogOut class="dropdown-icon" />
           Log Out
         </button>
       </div>
@@ -167,9 +172,5 @@ async function handleLogout() {
   width: 18px;
   height: 18px;
   flex-shrink: 0;
-}
-
-.dropdown-icon--logout {
-  transform: scaleX(-1);
 }
 </style>

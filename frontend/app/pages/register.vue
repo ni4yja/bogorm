@@ -2,29 +2,15 @@
 definePageMeta({ layout: 'auth' })
 
 const { register } = useAuth()
-const router = useRouter()
 
 const email = ref('')
 const username = ref('')
 const password = ref('')
-const error = ref('')
-const isLoading = ref(false)
 
-async function handleSubmit() {
-  error.value = ''
-  isLoading.value = true
-
-  try {
-    await register(email.value, username.value, password.value)
-    await router.push('/')
-  }
-  catch {
-    error.value = 'Could not create account. Please check your details.'
-  }
-  finally {
-    isLoading.value = false
-  }
-}
+const { error, isLoading, handleSubmit } = useAuthForm(
+  () => register(email.value, username.value, password.value),
+  'Could not create account. Please check your details.',
+)
 </script>
 
 <template>

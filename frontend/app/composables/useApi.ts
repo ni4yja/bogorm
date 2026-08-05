@@ -1,7 +1,6 @@
 export function useApi() {
   const config = useRuntimeConfig()
-  const accessToken = useLocalStorage<string | null>('access_token', null)
-  const refreshToken = useLocalStorage<string | null>('refresh_token', null)
+  const { accessToken, refreshToken } = useAuthTokens()
 
   const getAuthHeaders = (): Record<string, string> => {
     if (!accessToken.value)
@@ -22,20 +21,20 @@ export function useApi() {
     refreshToken.value = response.refresh
   }
 
+  const fetchWithAuth = <T>(path: string, options: Record<string, unknown>) =>
+    $fetch<T>(`${config.public.apiBase}${path}`, {
+      ...options,
+      headers: getAuthHeaders(),
+    })
+
   const request = async <T>(path: string, options: Record<string, unknown> = {}) => {
     try {
-      return await $fetch<T>(`${config.public.apiBase}${path}`, {
-        ...options,
-        headers: getAuthHeaders(),
-      })
+      return await fetchWithAuth<T>(path, options)
     }
     catch (error: any) {
       if (error?.response?.status === 401 && refreshToken.value) {
         await refreshAccessToken()
-        return await $fetch<T>(`${config.public.apiBase}${path}`, {
-          ...options,
-          headers: getAuthHeaders(),
-        })
+        return await fetchWithAuth<T>(path, options)
       }
       throw error
     }

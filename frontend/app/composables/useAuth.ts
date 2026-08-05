@@ -1,6 +1,5 @@
 export function useAuth() {
-  const accessToken = useLocalStorage<string | null>('access_token', null)
-  const refreshToken = useLocalStorage<string | null>('refresh_token', null)
+  const { accessToken, refreshToken } = useAuthTokens()
   const { post } = useApi()
 
   const isAuthenticated = computed(() => !!accessToken.value)

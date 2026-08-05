@@ -2,28 +2,14 @@
 definePageMeta({ layout: 'auth' })
 
 const { login } = useAuth()
-const router = useRouter()
 
 const email = ref('')
 const password = ref('')
-const error = ref('')
-const isLoading = ref(false)
 
-async function handleSubmit() {
-  error.value = ''
-  isLoading.value = true
-
-  try {
-    await login(email.value, password.value)
-    await router.push('/')
-  }
-  catch {
-    error.value = 'Invalid email or password'
-  }
-  finally {
-    isLoading.value = false
-  }
-}
+const { error, isLoading, handleSubmit } = useAuthForm(
+  () => login(email.value, password.value),
+  'Invalid email or password',
+)
 </script>
 
 <template>
