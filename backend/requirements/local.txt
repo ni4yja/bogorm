@@ -2,5 +2,5 @@
 ruff==0.4
 pytest
 factory-boy
-pytest-django
+pytest-django==4.12.0
 pytest-dotenv

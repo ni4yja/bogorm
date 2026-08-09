@@ -42,9 +42,6 @@ jobs:
       - name: Install dependencies
         run: pip install -r backend/requirements/local.txt
 
-      - name: Debug dependency versions
-        run: pip show django pytest-django pytest
-
       - name: Run tests
         env:
           SECRET_KEY: test-secret-key
