@@ -2,8 +2,11 @@ export function useApi() {
   const config = useRuntimeConfig()
   const { accessToken, refreshToken } = useAuthTokens()
 
-  const getAuthHeaders = (): Record<string, string> => {
-    if (!accessToken.value)
+  const AUTH_PATHS = ['/auth/login/', '/auth/register/', '/auth/refresh/']
+  const isAuthPath = (path: string) => AUTH_PATHS.some(p => path.startsWith(p))
+
+  const getAuthHeaders = (path: string): Record<string, string> => {
+    if (isAuthPath(path) || !accessToken.value)
       return {}
     return { Authorization: `Bearer ${accessToken.value}` }
   }
@@ -24,7 +27,7 @@ export function useApi() {
   const fetchWithAuth = <T>(path: string, options: Record<string, unknown>) =>
     $fetch<T>(`${config.public.apiBase}${path}`, {
       ...options,
-      headers: getAuthHeaders(),
+      headers: getAuthHeaders(path),
     })
 
   const request = async <T>(path: string, options: Record<string, unknown> = {}) => {
@@ -32,7 +35,7 @@ export function useApi() {
       return await fetchWithAuth<T>(path, options)
     }
     catch (error: any) {
-      if (error?.response?.status === 401 && refreshToken.value) {
+      if (!isAuthPath(path) && error?.response?.status === 401 && refreshToken.value) {
         await refreshAccessToken()
         return await fetchWithAuth<T>(path, options)
       }
