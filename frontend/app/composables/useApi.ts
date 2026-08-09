@@ -66,12 +66,21 @@ export function useApi() {
     return { Authorization: `Bearer ${accessToken.value}` }
   }
 
-  const request = async <T>(path: string, options: Record<string, unknown> = {}) => {
+  const request = async <T>(
+    path: string,
+    options: {
+      method?: 'GET' | 'POST'
+      body?: Record<string, unknown> | (() => Record<string, unknown>)
+    } = {},
+  ) => {
     await ensureFreshToken(path)
+
+    const resolvedBody = typeof options.body === 'function' ? options.body() : options.body
 
     try {
       return await $fetch<T>(`${config.public.apiBase}${path}`, {
-        ...options,
+        method: options.method,
+        body: resolvedBody,
         headers: getAuthHeaders(path),
       })
     }
@@ -85,7 +94,7 @@ export function useApi() {
 
   const get = <T>(path: string) => request<T>(path)
 
-  const post = <T>(path: string, body: Record<string, unknown>) =>
+  const post = <T>(path: string, body: Record<string, unknown> | (() => Record<string, unknown>)) =>
     request<T>(path, { method: 'POST', body })
 
   return { get, post }
