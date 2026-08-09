@@ -1,3 +1,5 @@
+let refreshPromise: Promise<void> | null = null
+
 export function useApi() {
   const config = useRuntimeConfig()
   const { accessToken, refreshToken } = useAuthTokens()
@@ -38,12 +40,22 @@ export function useApi() {
       return
 
     if (isTokenExpired(accessToken.value)) {
+      if (!refreshPromise) {
+        refreshPromise = refreshAccessToken()
+          .catch((error) => {
+            accessToken.value = null
+            refreshToken.value = null
+            throw error
+          })
+          .finally(() => {
+            refreshPromise = null
+          })
+      }
+
       try {
-        await refreshAccessToken()
+        await refreshPromise
       }
       catch {
-        accessToken.value = null
-        refreshToken.value = null
       }
     }
   }
