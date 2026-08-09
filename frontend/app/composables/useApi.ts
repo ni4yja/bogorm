@@ -1,14 +1,23 @@
 export function useApi() {
   const config = useRuntimeConfig()
   const { accessToken, refreshToken } = useAuthTokens()
+  const router = useRouter()
 
   const AUTH_PATHS = ['/auth/login/', '/auth/register/', '/auth/refresh/']
   const isAuthPath = (path: string) => AUTH_PATHS.some(p => path.startsWith(p))
 
-  const getAuthHeaders = (path: string): Record<string, string> => {
-    if (isAuthPath(path) || !accessToken.value)
-      return {}
-    return { Authorization: `Bearer ${accessToken.value}` }
+  const isTokenExpired = (token: string): boolean => {
+    try {
+      const parts = token.split('.')
+      if (parts.length !== 3)
+        return true
+
+      const payload = JSON.parse(atob(parts[1]!))
+      return payload.exp * 1000 < Date.now()
+    }
+    catch {
+      return true
+    }
   }
 
   const refreshAccessToken = async () => {
@@ -24,20 +33,39 @@ export function useApi() {
     refreshToken.value = response.refresh
   }
 
-  const fetchWithAuth = <T>(path: string, options: Record<string, unknown>) =>
-    $fetch<T>(`${config.public.apiBase}${path}`, {
-      ...options,
-      headers: getAuthHeaders(path),
-    })
+  const ensureFreshToken = async (path: string) => {
+    if (isAuthPath(path) || !accessToken.value)
+      return
+
+    if (isTokenExpired(accessToken.value)) {
+      try {
+        await refreshAccessToken()
+      }
+      catch {
+        accessToken.value = null
+        refreshToken.value = null
+      }
+    }
+  }
+
+  const getAuthHeaders = (path: string): Record<string, string> => {
+    if (isAuthPath(path) || !accessToken.value)
+      return {}
+    return { Authorization: `Bearer ${accessToken.value}` }
+  }
 
   const request = async <T>(path: string, options: Record<string, unknown> = {}) => {
+    await ensureFreshToken(path)
+
     try {
-      return await fetchWithAuth<T>(path, options)
+      return await $fetch<T>(`${config.public.apiBase}${path}`, {
+        ...options,
+        headers: getAuthHeaders(path),
+      })
     }
     catch (error: any) {
-      if (!isAuthPath(path) && error?.response?.status === 401 && refreshToken.value) {
-        await refreshAccessToken()
-        return await fetchWithAuth<T>(path, options)
+      if (!isAuthPath(path) && error?.response?.status === 401) {
+        await router.push('/login')
       }
       throw error
     }
