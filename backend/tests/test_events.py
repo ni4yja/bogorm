@@ -1,6 +1,7 @@
 import uuid
 from datetime import timedelta
 
+import pytest
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
@@ -195,6 +196,8 @@ class TestAllEventsList:
         item = response.data["results"][0]
         assert item["place"]["id"] == str(place.id)
         assert item["place"]["title"] == place.title
+        assert item["place"]["lat"] == pytest.approx(place.location.y)
+        assert item["place"]["lng"] == pytest.approx(place.location.x)
 
     def test_pagination_envelope_present(self, authenticated_client, place, event):
         response = authenticated_client.get(reverse("event-list"))

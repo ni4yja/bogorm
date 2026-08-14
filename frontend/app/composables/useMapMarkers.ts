@@ -13,6 +13,8 @@ export function useMapMarkers(
   const { createIcon } = useMapIcons(L)
 
   let latestClickId = ''
+  const markersById = new Map<string, InstanceType<typeof L.Marker>>()
+  let highlightedMarkerId: string | null = null
 
   const fetchPlaces = async (map: ReturnType<typeof L.map>) => {
     const bounds = map.getBounds()
@@ -20,11 +22,17 @@ export function useMapMarkers(
     const data = await get<MapResponse>(`/map?bbox=${bbox}`)
 
     markersLayer.clearLayers()
+    markersById.clear()
 
     for (const place of data.places) {
       const marker = L.marker([place.lat, place.lng], {
         icon: createIcon(place.category, place.event_count > 0),
       }).addTo(markersLayer)
+
+      markersById.set(place.id, marker)
+
+      if (place.id === highlightedMarkerId)
+        marker.getElement()?.classList.add('marker-highlighted')
 
       marker.on('click', async () => {
         const clickId = place.id
@@ -51,5 +59,20 @@ export function useMapMarkers(
     }
   }
 
-  return { fetchPlaces }
+  const clearHighlight = () => {
+    if (highlightedMarkerId) {
+      const previous = markersById.get(highlightedMarkerId)
+      previous?.getElement()?.classList.remove('marker-highlighted')
+      highlightedMarkerId = null
+    }
+  }
+
+  const highlightMarker = (placeId: string) => {
+    clearHighlight()
+    const marker = markersById.get(placeId)
+    marker?.getElement()?.classList.add('marker-highlighted')
+    highlightedMarkerId = placeId
+  }
+
+  return { fetchPlaces, highlightMarker, clearHighlight }
 }

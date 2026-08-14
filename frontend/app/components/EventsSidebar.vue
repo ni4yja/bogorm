@@ -3,6 +3,10 @@ import type { EventListItem } from '~/types'
 
 type SidebarState = 'list' | 'detail' | 'collapsed'
 
+const emit = defineEmits<{
+  selectEvent: [place: { id: string, lat: number, lng: number }]
+}>()
+
 const { events, isLoading, error, fetchWeeklyEvents } = useEventsSidebar()
 const { getCategoryLabel } = useEventCategory()
 
@@ -16,12 +20,19 @@ onMounted(() => {
 function openDetail(event: EventListItem) {
   selectedEvent.value = event
   state.value = 'detail'
+  emit('selectEvent', {
+    id: event.place.id,
+    lat: event.place.lat,
+    lng: event.place.lng,
+  })
 }
 
 function closeDetail() {
   selectedEvent.value = null
   state.value = 'list'
 }
+
+defineExpose({ closeDetail })
 
 function toggleCollapse() {
   state.value = state.value === 'collapsed' ? 'list' : 'collapsed'

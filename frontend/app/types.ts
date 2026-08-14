@@ -21,6 +21,8 @@ export interface PlaceDetail {
 export interface PlaceMinimal {
   id: string
   title: string
+  lat: number
+  lng: number
 }
 
 export interface MapResponse {

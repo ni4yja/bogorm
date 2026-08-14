@@ -111,3 +111,9 @@ h4 {
   color: var(--color-primary);
   text-decoration: underline;
 }
+
+.marker-highlighted {
+  filter: drop-shadow(0 0 8px var(--color-primary));
+  transform: scale(1.15);
+  transition: transform 0.2s ease;
+}
