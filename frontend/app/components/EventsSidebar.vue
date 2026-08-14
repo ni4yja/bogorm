@@ -30,7 +30,7 @@ function toggleCollapse() {
 function formatEventTime(eventTime: string | null) {
   if (!eventTime)
     return ''
-  return new Date(eventTime).toLocaleString('uk-UA', {
+  return new Date(eventTime).toLocaleString('pl-PL', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -60,14 +60,9 @@ function formatEventTime(eventTime: string | null) {
         </div>
 
         <div class="detail-content">
-          <div class="title-row">
-            <h3 class="event-title-lg">
-              {{ selectedEvent.title }}
-            </h3>
-            <button class="bookmark-btn" aria-label="Save event">
-              <IconsBookmark class="bookmark-icon" />
-            </button>
-          </div>
+          <h3 class="event-title-lg">
+            {{ selectedEvent.title }}
+          </h3>
 
           <p v-if="selectedEvent.description" class="description">
             {{ selectedEvent.description }}
@@ -117,14 +112,9 @@ function formatEventTime(eventTime: string | null) {
           class="event-item"
           @click="openDetail(event)"
         >
-          <div class="event-item-top">
-            <h4 class="event-title">
-              {{ event.title }}
-            </h4>
-            <span class="bookmark-btn" role="button" aria-label="Save event" @click.stop>
-              <IconsBookmark class="bookmark-icon" />
-            </span>
-          </div>
+          <h4 class="event-title">
+            {{ event.title }}
+          </h4>
           <div v-if="event.event_time" class="event-meta">
             <IconsTime class="meta-icon" />
             {{ formatEventTime(event.event_time) }}
@@ -247,29 +237,8 @@ function formatEventTime(eventTime: string | null) {
   padding-bottom: 0.5rem;
 }
 
-.event-item-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-
 .event-title {
   margin: 0;
-}
-
-.bookmark-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.15rem;
-  color: var(--color-primary);
-  flex-shrink: 0;
-}
-
-.bookmark-icon {
-  width: 18px;
-  height: 18px;
 }
 
 .event-meta {
@@ -371,17 +340,9 @@ function formatEventTime(eventTime: string | null) {
   padding: 1rem 1.5rem 1.5rem;
 }
 
-.title-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
-}
-
 .event-title-lg {
   color: var(--color-primary);
-  margin: 0;
+  margin: 0 0 0.75rem;
 }
 
 .description {

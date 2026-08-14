@@ -1,4 +1,6 @@
 export function useEventCategory() {
+  // Keep in sync with the backend EventCategory enum (backend/events/models.py).
+  // Unknown/future values fall back to 'Other' below.
   const categoryLabels: Record<number, string> = {
     10: 'Book Presentation',
     20: 'Author Meeting',

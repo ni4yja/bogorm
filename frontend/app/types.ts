@@ -35,12 +35,7 @@ export interface Event {
   category: number
 }
 
-export interface EventListItem {
-  id: string
-  title: string
-  description: string
-  event_time: string | null
-  category: number
+export interface EventListItem extends Event {
   place: PlaceMinimal
 }
 
