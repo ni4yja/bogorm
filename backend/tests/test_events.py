@@ -83,3 +83,123 @@ class TestEventDetail:
             )
         )
         assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+class TestAllEventsList:
+    def test_returns_401_without_auth(self, api_client, db):
+        response = api_client.get(reverse("event-list"))
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_defaults_to_upcoming(self, authenticated_client, place):
+        upcoming_event = EventFactory(place=place, days_from_now=1)
+        EventFactory(place=place, days_from_now=-1)
+
+        response = authenticated_client.get(reverse("event-list"))
+
+        assert response.status_code == status.HTTP_200_OK
+        ids = [item["id"] for item in response.data["results"]]
+        assert ids == [str(upcoming_event.id)]
+
+    def test_upcoming_ordered_by_event_time_asc(self, authenticated_client, place):
+        event_later = EventFactory(place=place, days_from_now=5)
+        event_sooner = EventFactory(place=place, days_from_now=1)
+
+        response = authenticated_client.get(
+            reverse("event-list"), {"status": "upcoming"}
+        )
+
+        results = response.data["results"]
+        assert results[0]["id"] == str(event_sooner.id)
+        assert results[1]["id"] == str(event_later.id)
+
+    def test_archived_ordered_by_event_time_desc(self, authenticated_client, place):
+        event_older = EventFactory(place=place, days_from_now=-5)
+        event_newer = EventFactory(place=place, days_from_now=-1)
+
+        response = authenticated_client.get(
+            reverse("event-list"), {"status": "archived"}
+        )
+
+        results = response.data["results"]
+        assert results[0]["id"] == str(event_newer.id)
+        assert results[1]["id"] == str(event_older.id)
+
+    def test_rejects_invalid_status(self, authenticated_client, db):
+        response = authenticated_client.get(reverse("event-list"), {"status": "blah"})
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "status" in response.data
+
+    def test_filters_by_category(self, authenticated_client, place):
+        matching_event = EventFactory(place=place, days_from_now=1, category=10)
+        EventFactory(place=place, days_from_now=1, category=20)
+
+        response = authenticated_client.get(reverse("event-list"), {"category": 10})
+
+        ids = [item["id"] for item in response.data["results"]]
+        assert ids == [str(matching_event.id)]
+
+    def test_category_filter_combines_with_status(self, authenticated_client, place):
+        matching_event = EventFactory(place=place, days_from_now=1, category=10)
+        EventFactory(place=place, days_from_now=-1, category=10)  # archived, excluded
+        EventFactory(place=place, days_from_now=1, category=20)  # wrong category
+
+        response = authenticated_client.get(
+            reverse("event-list"), {"status": "upcoming", "category": 10}
+        )
+
+        ids = [item["id"] for item in response.data["results"]]
+        assert ids == [str(matching_event.id)]
+
+    def test_rejects_non_integer_category(self, authenticated_client, place):
+        EventFactory(place=place, days_from_now=1)
+
+        response = authenticated_client.get(reverse("event-list"), {"category": "abc"})
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "category" in response.data
+
+    def test_returns_nested_place(self, authenticated_client, place, event):
+        response = authenticated_client.get(reverse("event-list"))
+
+        item = response.data["results"][0]
+        assert item["place"]["id"] == str(place.id)
+        assert item["place"]["title"] == place.title
+
+    def test_pagination_envelope_present(self, authenticated_client, place, event):
+        response = authenticated_client.get(reverse("event-list"))
+
+        for key in ("count", "next", "previous", "results"):
+            assert key in response.data
+
+
+class TestAllEventsDetail:
+    def test_returns_200(self, authenticated_client, place, event):
+        response = authenticated_client.get(reverse("event-detail", args=[event.id]))
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_returns_correct_event_with_nested_place(
+        self, authenticated_client, place, event
+    ):
+        response = authenticated_client.get(reverse("event-detail", args=[event.id]))
+        assert str(response.data["id"]) == str(event.id)
+        assert response.data["place"]["id"] == str(place.id)
+
+    def test_404_for_nonexistent_event(self, authenticated_client, db):
+        response = authenticated_client.get(
+            reverse("event-detail", args=[uuid.uuid4()])
+        )
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_returns_archived_event_without_status_param(
+        self, authenticated_client, place
+    ):
+        archived = EventFactory(place=place, days_from_now=-3)
+
+        response = authenticated_client.get(reverse("event-detail", args=[archived.id]))
+
+        assert response.status_code == status.HTTP_200_OK
+        assert str(response.data["id"]) == str(archived.id)
+
+    def test_requires_auth(self, api_client, place, event):
+        response = api_client.get(reverse("event-detail", args=[event.id]))
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED

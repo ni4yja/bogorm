@@ -20,6 +20,9 @@ class EventQuerySet(models.QuerySet):
     def upcoming(self):
         return self.filter(event_time__gt=timezone.now())
 
+    def archived(self):
+        return self.filter(event_time__lte=timezone.now())
+
 
 class EventManager(models.Manager):
     def get_queryset(self):
@@ -27,6 +30,9 @@ class EventManager(models.Manager):
 
     def upcoming(self):
         return self.get_queryset().upcoming()
+
+    def archived(self):
+        return self.get_queryset().archived()
 
     @staticmethod
     def upcoming_filter():
