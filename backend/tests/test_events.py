@@ -150,6 +150,14 @@ class TestAllEventsList:
         ids = [item["id"] for item in response.data["results"]]
         assert ids == [str(matching_event.id)]
 
+    def test_rejects_non_integer_category(self, authenticated_client, place):
+        EventFactory(place=place, days_from_now=1)
+
+        response = authenticated_client.get(reverse("event-list"), {"category": "abc"})
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "category" in response.data
+
     def test_returns_nested_place(self, authenticated_client, place, event):
         response = authenticated_client.get(reverse("event-list"))
 
@@ -181,6 +189,16 @@ class TestAllEventsDetail:
             reverse("event-detail", args=[uuid.uuid4()])
         )
         assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_returns_archived_event_without_status_param(
+        self, authenticated_client, place
+    ):
+        archived = EventFactory(place=place, days_from_now=-3)
+
+        response = authenticated_client.get(reverse("event-detail", args=[archived.id]))
+
+        assert response.status_code == status.HTTP_200_OK
+        assert str(response.data["id"]) == str(archived.id)
 
     def test_requires_auth(self, api_client, place, event):
         response = api_client.get(reverse("event-detail", args=[event.id]))

@@ -20,17 +20,24 @@ class AllEventsViewSet(ReadOnlyModelViewSet):
     serializer_class = EventListSerializer
 
     def get_queryset(self):
-        status_param = self.request.query_params.get("status", "upcoming")
+        queryset = Event.objects.select_related("place")
 
+        if self.action != "list":
+            return queryset
+
+        status_param = self.request.query_params.get("status", "upcoming")
         if status_param == "upcoming":
-            queryset = Event.objects.upcoming().order_by("event_time")
+            queryset = queryset.upcoming().order_by("event_time")
         elif status_param == "archived":
-            queryset = Event.objects.archived().order_by("-event_time")
+            queryset = queryset.archived().order_by("-event_time")
         else:
             raise ValidationError({"status": "Must be 'upcoming' or 'archived'."})
 
         category = self.request.query_params.get("category")
-        if category:
-            queryset = queryset.filter(category=category)
+        if category is not None:
+            try:
+                queryset = queryset.filter(category=int(category))
+            except (TypeError, ValueError):
+                raise ValidationError({"category": "Must be an integer."})
 
         return queryset
