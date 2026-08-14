@@ -1,4 +1,5 @@
 import uuid
+from datetime import timedelta
 
 from django.db import models
 from django.db.models import Q
@@ -18,10 +19,18 @@ class EventCategory(models.IntegerChoices):
 
 class EventQuerySet(models.QuerySet):
     def upcoming(self):
-        return self.filter(event_time__gt=timezone.now())
+        return self.filter(event_time__gt=timezone.now()).order_by("event_time")
 
     def archived(self):
-        return self.filter(event_time__lte=timezone.now())
+        return self.filter(event_time__lte=timezone.now()).order_by("-event_time")
+
+    def this_week(self):
+        now = timezone.now()
+        start_of_week = (now - timedelta(days=now.weekday())).replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
+        end_of_week = start_of_week + timedelta(days=7)
+        return self.filter(event_time__gte=start_of_week, event_time__lt=end_of_week)
 
 
 class EventManager(models.Manager):
@@ -33,6 +42,9 @@ class EventManager(models.Manager):
 
     def archived(self):
         return self.get_queryset().archived()
+
+    def this_week(self):
+        return self.get_queryset().this_week()
 
     @staticmethod
     def upcoming_filter():
