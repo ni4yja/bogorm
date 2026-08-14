@@ -13,7 +13,7 @@ class EventViewSet(ReadOnlyModelViewSet):
 
     def get_queryset(self):
         place = get_object_or_404(Place, pk=self.kwargs["place_pk"])
-        return Event.objects.upcoming().filter(place=place).order_by("event_time")
+        return Event.objects.upcoming().filter(place=place)
 
 
 class AllEventsViewSet(ReadOnlyModelViewSet):
@@ -27,11 +27,16 @@ class AllEventsViewSet(ReadOnlyModelViewSet):
 
         status_param = self.request.query_params.get("status", "upcoming")
         if status_param == "upcoming":
-            queryset = queryset.upcoming().order_by("event_time")
+            queryset = queryset.upcoming()
         elif status_param == "archived":
-            queryset = queryset.archived().order_by("-event_time")
+            queryset = queryset.archived()
         else:
             raise ValidationError({"status": "Must be 'upcoming' or 'archived'."})
+
+        if self.request.query_params.get("week") == "current":
+            if status_param != "upcoming":
+                raise ValidationError({"week": "Only valid when status is 'upcoming'."})
+            queryset = queryset.filter(pk__in=Event.objects.this_week().values("pk"))
 
         category = self.request.query_params.get("category")
         if category is not None:

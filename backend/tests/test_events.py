@@ -1,6 +1,8 @@
 import uuid
+from datetime import timedelta
 
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import status
 
 from tests.factories import EventFactory, PlaceFactory
@@ -56,6 +58,35 @@ class TestEventsList:
         results = response.data["results"]
         assert results[0]["id"] == str(event_sooner.id)
         assert results[1]["id"] == str(event_later.id)
+
+    def test_week_current_filters_to_current_calendar_week(
+        self, authenticated_client, place
+    ):
+        now = timezone.now()
+        start_of_week = (now - timedelta(days=now.weekday())).replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
+        end_of_week = start_of_week + timedelta(days=7)
+
+        within_week_time = min(
+            now + timedelta(hours=1), end_of_week - timedelta(hours=1)
+        )
+        event_this_week = EventFactory(place=place, event_time=within_week_time)
+        EventFactory(place=place, event_time=end_of_week + timedelta(days=1))
+
+        response = authenticated_client.get(
+            reverse("event-list"), {"status": "upcoming", "week": "current"}
+        )
+
+        ids = [item["id"] for item in response.data["results"]]
+        assert ids == [str(event_this_week.id)]
+
+    def test_week_current_rejects_archived_status(self, authenticated_client, db):
+        response = authenticated_client.get(
+            reverse("event-list"), {"status": "archived", "week": "current"}
+        )
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "week" in response.data
 
 
 class TestEventDetail:
