@@ -100,7 +100,7 @@ const upcomingEvents = computed(() =>
   overflow-y: auto;
   background: var(--color-white);
   border-radius: var(--badge-radius);
-  z-index: 900;
+  z-index: 1000;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.16);
 }
 

@@ -10,11 +10,27 @@ const selectedPlace = ref<PlaceDetail | null>(null)
 const selectedEventCount = ref(0)
 const selectedEvents = ref<Event[]>([])
 const isModalOpen = computed(() => selectedPlace.value !== null)
+const sidebarRef = ref<{ closeDetail: () => void } | null>(null)
+
+let mapInstance: Awaited<ReturnType<typeof useLeafletMap>>['map'] | null = null
+let highlightMarkerFn: ((placeId: string) => void) | null = null
+let clearHighlightFn: (() => void) | null = null
+
+watch(selectedPlace, (place) => {
+  if (place)
+    sidebarRef.value?.closeDetail()
+})
+
+watch(isAuthenticated, (authenticated) => {
+  if (!authenticated)
+    clearHighlightFn?.()
+})
 
 onMounted(async () => {
   const { L, map, markersLayer } = await useLeafletMap('map')
+  mapInstance = map
 
-  const { fetchPlaces } = useMapMarkers(
+  const { fetchPlaces, highlightMarker, clearHighlight } = useMapMarkers(
     L,
     markersLayer,
     isAuthenticated,
@@ -23,10 +39,25 @@ onMounted(async () => {
     selectedEvents,
     isBannerVisible,
   )
+  highlightMarkerFn = highlightMarker
+  clearHighlightFn = clearHighlight
 
   await fetchPlaces(map)
   map.on('moveend', () => fetchPlaces(map))
 })
+
+function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
+  if (!mapInstance)
+    return
+
+  selectedPlace.value = null
+
+  mapInstance.flyTo([place.lat, place.lng], 16, { duration: 0.8 })
+
+  mapInstance.once('moveend', () => {
+    highlightMarkerFn?.(place.id)
+  })
+}
 </script>
 
 <template>
@@ -43,7 +74,8 @@ onMounted(async () => {
 
     <section class="map-wrapper">
       <ClientOnly>
-        <div id="map" :class="{ dimmed: isModalOpen }" />
+        <div id="map" />
+        <div v-if="isModalOpen" class="map-overlay" />
         <PlaceModal
           v-if="selectedPlace"
           :place="selectedPlace"
@@ -52,7 +84,7 @@ onMounted(async () => {
           :is-authenticated="isAuthenticated"
           @close="selectedPlace = null; selectedEvents = []; isBannerVisible = true"
         />
-        <EventsSidebar v-if="isAuthenticated" />
+        <EventsSidebar v-if="isAuthenticated" ref="sidebarRef" @select-event="handleSelectEvent" />
         <div v-if="isBannerVisible && !isAuthenticated" class="unauth-banner">
           <p>
             Without an account, <strong>you can only view the map with places</strong>.
@@ -96,11 +128,13 @@ onMounted(async () => {
 #map {
   height: 620px;
   width: 100%;
-  transition: filter 0.2s ease;
 }
 
-#map.dimmed {
-  filter: brightness(0.85);
+.map-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 950;
 }
 
 :deep(.leaflet-top.leaflet-right) {
