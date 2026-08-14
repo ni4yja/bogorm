@@ -52,6 +52,7 @@ onMounted(async () => {
           :is-authenticated="isAuthenticated"
           @close="selectedPlace = null; selectedEvents = []; isBannerVisible = true"
         />
+        <EventsSidebar v-if="isAuthenticated" />
         <div v-if="isBannerVisible && !isAuthenticated" class="unauth-banner">
           <p>
             Without an account, <strong>you can only view the map with places</strong>.
@@ -100,6 +101,17 @@ onMounted(async () => {
 
 #map.dimmed {
   filter: brightness(0.85);
+}
+
+:deep(.leaflet-top.leaflet-right) {
+  top: 50%;
+  transform: translateY(-50%);
+  right: 1rem;
+}
+
+:deep(.leaflet-control-zoom) {
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .unauth-banner {

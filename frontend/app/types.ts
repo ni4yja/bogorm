@@ -18,6 +18,11 @@ export interface PlaceDetail {
   website: string
 }
 
+export interface PlaceMinimal {
+  id: string
+  title: string
+}
+
 export interface MapResponse {
   places: Place[]
 }
@@ -28,6 +33,10 @@ export interface Event {
   description: string
   event_time: string | null
   category: number
+}
+
+export interface EventListItem extends Event {
+  place: PlaceMinimal
 }
 
 export interface PaginatedResponse<T> {
