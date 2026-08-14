@@ -102,6 +102,17 @@ onMounted(async () => {
   filter: brightness(0.85);
 }
 
+:deep(.leaflet-top.leaflet-right) {
+  top: 50%;
+  transform: translateY(-50%);
+  right: 1rem;
+}
+
+:deep(.leaflet-control-zoom) {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
 .unauth-banner {
   position: absolute;
   bottom: 1.5rem;
