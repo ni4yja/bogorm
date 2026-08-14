@@ -52,6 +52,7 @@ onMounted(async () => {
           :is-authenticated="isAuthenticated"
           @close="selectedPlace = null; selectedEvents = []; isBannerVisible = true"
         />
+        <EventsSidebar v-if="isAuthenticated" />
         <div v-if="isBannerVisible && !isAuthenticated" class="unauth-banner">
           <p>
             Without an account, <strong>you can only view the map with places</strong>.

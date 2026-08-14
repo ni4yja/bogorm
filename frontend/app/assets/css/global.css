@@ -48,6 +48,18 @@ h2 {
   letter-spacing: 0;
 }
 
+h3 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 23px;
+}
+
+h4 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 19px;
+}
+
 .auth-form .label {
   display: block;
   font-size: 13px;
