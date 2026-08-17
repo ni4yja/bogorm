@@ -196,8 +196,8 @@ class TestAllEventsList:
         item = response.data["results"][0]
         assert item["place"]["id"] == str(place.id)
         assert item["place"]["title"] == place.title
-        assert item["place"]["lat"] == pytest.approx(place.location.y)
-        assert item["place"]["lng"] == pytest.approx(place.location.x)
+        assert item["place"]["lat"] == pytest.approx(place.lat)
+        assert item["place"]["lng"] == pytest.approx(place.lng)
 
     def test_pagination_envelope_present(self, authenticated_client, place, event):
         response = authenticated_client.get(reverse("event-list"))

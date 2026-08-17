@@ -4,14 +4,8 @@ from .models import Place
 
 
 class CoordinatesMixin(serializers.Serializer):
-    lat = serializers.SerializerMethodField()
-    lng = serializers.SerializerMethodField()
-
-    def get_lat(self, obj):
-        return obj.location.y
-
-    def get_lng(self, obj):
-        return obj.location.x
+    lat = serializers.FloatField(read_only=True)
+    lng = serializers.FloatField(read_only=True)
 
 
 class PlaceSerializer(CoordinatesMixin, serializers.ModelSerializer):
