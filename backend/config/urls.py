@@ -3,9 +3,11 @@ from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework_simplejwt.views import TokenRefreshView
 
-import events.urls  # noqa: F401  side effect: registers "events" onto the shared places router
+from events.views import AllEventsViewSet
 from places.urls import router as places_router
 from users.views import EmailNormalizingTokenObtainPairView, LogoutView, RegisterView
+
+places_router.register("events", AllEventsViewSet, basename="event")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
