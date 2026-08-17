@@ -29,3 +29,11 @@ class Place(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def lat(self):
+        return self.location.y
+
+    @property
+    def lng(self):
+        return self.location.x

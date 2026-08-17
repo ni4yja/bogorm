@@ -56,8 +56,8 @@ class TestPlaceDetail:
 
     def test_returns_coordinates(self, api_client, place):
         response = api_client.get(reverse("place-detail", args=[place.id]))
-        assert float(response.data["lat"]) == pytest.approx(place.location.y)
-        assert float(response.data["lng"]) == pytest.approx(place.location.x)
+        assert float(response.data["lat"]) == pytest.approx(place.lat)
+        assert float(response.data["lng"]) == pytest.approx(place.lng)
 
     def test_returns_full_description(self, api_client, place):
         response = api_client.get(reverse("place-detail", args=[place.id]))
@@ -124,6 +124,6 @@ class TestPlaceAdminFormValidation:
         assert form.is_valid(), form.errors
         place = form.save()
         assert place.location is not None
-        assert place.location.x == pytest.approx(VALID_DATA["lng"])
-        assert place.location.y == pytest.approx(VALID_DATA["lat"])
+        assert place.lng == pytest.approx(VALID_DATA["lng"])
+        assert place.lat == pytest.approx(VALID_DATA["lat"])
         assert place.location.srid == 4326
