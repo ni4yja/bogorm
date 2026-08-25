@@ -3,17 +3,12 @@ from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from events.views import AllEventsViewSet
-from places.urls import router as places_router
 from users.views import EmailNormalizingTokenObtainPairView, LogoutView, RegisterView
-
-places_router.register("events", AllEventsViewSet, basename="event")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/v1/", include(places_router.urls)),
+    path("api/v1/", include("config.api_router")),
     path("api/v1/", include("places.urls")),
-    path("api/v1/", include("events.urls")),
     path("api/v1/auth/register/", RegisterView.as_view(), name="register"),
     path(
         "api/v1/auth/login/",
