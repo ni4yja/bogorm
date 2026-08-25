@@ -195,15 +195,13 @@ class TestAllEventsList:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert "category" in response.data
 
-    def test_unknown_category_value_returns_empty_results(
-        self, authenticated_client, place
-    ):
+    def test_rejects_unknown_category_value(self, authenticated_client, place):
         EventFactory(place=place, days_from_now=1, category=10)
 
         response = authenticated_client.get(reverse("event-list"), {"category": 999})
 
-        assert response.status_code == status.HTTP_200_OK
-        assert response.data["results"] == []
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "category" in response.data
 
     def test_returns_nested_place(self, authenticated_client, place, event):
         response = authenticated_client.get(reverse("event-list"))

@@ -2,7 +2,7 @@ import django_filters
 from django_filters.rest_framework import FilterSet
 from rest_framework.exceptions import ValidationError
 
-from .models import Event
+from .models import Event, EventCategory
 
 
 class EventFilterSet(FilterSet):
@@ -14,18 +14,20 @@ class EventFilterSet(FilterSet):
         choices=[("current", "Current")],
         method="noop",
     )
-    # Plain NumberFilter, not an auto-generated ChoiceFilter: any integer is
-    # accepted, matching values just filter to no results instead of 400ing.
-    category = django_filters.NumberFilter()
+    category = django_filters.ChoiceFilter(
+        choices=EventCategory.choices,
+        method="noop",
+    )
 
     class Meta:
         model = Event
         fields = ["status", "week", "category"]
 
     def noop(self, queryset, name, value):
-        # status/week need cross-field logic, so real filtering happens
-        # in `qs` below — these methods only exist so django-filter
-        # validates the choices and shows the fields in the schema.
+        # status/week/category need cross-field logic or run in `qs` below
+        # for consistent error messages — these methods only exist so
+        # django-filter validates the choices and shows the fields in
+        # the schema.
         return queryset
 
     @property
@@ -45,5 +47,11 @@ class EventFilterSet(FilterSet):
             if status_value != "upcoming":
                 raise ValidationError({"week": "Only valid when status is 'upcoming'."})
             queryset = queryset.this_week()
+
+        category_value = self.data.get("category")
+        if category_value == "":
+            raise ValidationError({"category": "Must be a valid category."})
+        if category_value:
+            queryset = queryset.filter(category=category_value)
 
         return queryset
