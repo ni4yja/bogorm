@@ -161,6 +161,11 @@ class TestAllEventsList:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert "status" in response.data
 
+    def test_rejects_empty_status(self, authenticated_client, db):
+        response = authenticated_client.get(reverse("event-list"), {"status": ""})
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "status" in response.data
+
     def test_filters_by_category(self, authenticated_client, place):
         matching_event = EventFactory(place=place, days_from_now=1, category=10)
         EventFactory(place=place, days_from_now=1, category=20)
@@ -190,14 +195,22 @@ class TestAllEventsList:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert "category" in response.data
 
+    def test_rejects_unknown_category_value(self, authenticated_client, place):
+        EventFactory(place=place, days_from_now=1, category=10)
+
+        response = authenticated_client.get(reverse("event-list"), {"category": 999})
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "category" in response.data
+
     def test_returns_nested_place(self, authenticated_client, place, event):
         response = authenticated_client.get(reverse("event-list"))
 
         item = response.data["results"][0]
         assert item["place"]["id"] == str(place.id)
         assert item["place"]["title"] == place.title
-        assert item["place"]["lat"] == pytest.approx(place.location.y)
-        assert item["place"]["lng"] == pytest.approx(place.location.x)
+        assert item["place"]["lat"] == pytest.approx(place.lat)
+        assert item["place"]["lng"] == pytest.approx(place.lng)
 
     def test_pagination_envelope_present(self, authenticated_client, place, event):
         response = authenticated_client.get(reverse("event-list"))

@@ -7,8 +7,8 @@ from users.views import EmailNormalizingTokenObtainPairView, LogoutView, Registe
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/v1/", include("config.api_router")),
     path("api/v1/", include("places.urls")),
-    path("api/v1/", include("events.urls")),
     path("api/v1/auth/register/", RegisterView.as_view(), name="register"),
     path(
         "api/v1/auth/login/",
