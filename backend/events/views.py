@@ -20,6 +20,7 @@ class EventViewSet(ReadOnlyModelViewSet):
 class AllEventsViewSet(ReadOnlyModelViewSet):
     serializer_class = EventListSerializer
     filterset_class = EventFilterSet
+    filter_backends = [DjangoFilterBackend]
 
     def get_queryset(self):
         return Event.objects.select_related("place")
