@@ -19,10 +19,9 @@ class PlaceFactory(factory.django.DjangoModelFactory):
     title = factory.Faker("company")
     description = factory.Faker("text")
     location = factory.LazyFunction(
-        lambda: Point(
-            random.uniform(20.85, 21.27),  # longitude
-            random.uniform(52.10, 52.36),  # latitude
-            srid=4326,
+        lambda: Place.make_point(
+            lat=random.uniform(52.10, 52.36),
+            lng=random.uniform(20.85, 21.27),
         )
     )
     category = PlaceCategory.LIBRARY

@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib import admin
-from django.contrib.gis.geos import Point
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 from .models import Place
@@ -43,10 +42,8 @@ class PlaceAdminForm(forms.ModelForm):
 
     def save(self, commit=True):
         instance = super().save(commit=False)
-        instance.location = Point(
-            self.cleaned_data["lng"],
-            self.cleaned_data["lat"],
-            srid=4326,
+        instance.location = Place.make_point(
+            self.cleaned_data["lat"], self.cleaned_data["lng"]
         )
         if commit:
             instance.save()

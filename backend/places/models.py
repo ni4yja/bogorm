@@ -1,6 +1,7 @@
 import uuid
 
 from django.contrib.gis.db import models
+from django.contrib.gis.geos import Point
 
 
 class PlaceCategory(models.IntegerChoices):
@@ -37,3 +38,7 @@ class Place(models.Model):
     @property
     def lng(self):
         return self.location.x
+
+    @classmethod
+    def make_point(cls, lat, lng):
+        return Point(lng, lat, srid=4326)
