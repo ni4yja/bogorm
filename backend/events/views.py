@@ -28,4 +28,4 @@ class AllEventsViewSet(ReadOnlyModelViewSet):
     def filter_queryset(self, queryset):
         if self.action != "list":
             return queryset
-        return DjangoFilterBackend().filter_queryset(self.request, queryset, self)
+        return super().filter_queryset(queryset)
