@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "places",
     "events",
     "users",
+    "bookmarks",
     "drf_spectacular",
     "corsheaders",
     "rest_framework_simplejwt",
