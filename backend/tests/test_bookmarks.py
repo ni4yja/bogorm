@@ -1,0 +1,84 @@
+from django.urls import reverse
+from rest_framework import status
+
+from bookmarks.models import Bookmark
+from tests.factories import PlaceFactory, UserFactory
+
+# ---------------------------------------------------------------------------
+# GET /api/v1/bookmarks/
+# ---------------------------------------------------------------------------
+
+
+class TestBookmarksList:
+    def test_returns_401_without_auth(self, api_client, db):
+        response = api_client.get(reverse("bookmark-list"))
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_returns_place_bookmark(self, authenticated_client, user, place):
+        Bookmark.objects.create(user=user, place=place)
+
+        response = authenticated_client.get(reverse("bookmark-list"))
+
+        assert response.status_code == status.HTTP_200_OK
+        item = response.data["results"][0]
+        assert item["type"] == "place"
+        assert item["place"]["id"] == str(place.id)
+        assert "event" not in item
+
+    def test_returns_event_bookmark(self, authenticated_client, user, event):
+        Bookmark.objects.create(user=user, event=event)
+
+        response = authenticated_client.get(reverse("bookmark-list"))
+
+        assert response.status_code == status.HTTP_200_OK
+        item = response.data["results"][0]
+        assert item["type"] == "event"
+        assert item["event"]["id"] == str(event.id)
+        assert "place" not in item
+
+    def test_only_returns_current_users_bookmarks(
+        self, authenticated_client, user, place
+    ):
+        Bookmark.objects.create(user=user, place=place)
+        other_user = UserFactory()
+        Bookmark.objects.create(user=other_user, place=PlaceFactory())
+
+        response = authenticated_client.get(reverse("bookmark-list"))
+
+        assert response.data["count"] == 1
+        assert response.data["results"][0]["place"]["id"] == str(place.id)
+
+    def test_filters_by_type_place(self, authenticated_client, user, place, event):
+        Bookmark.objects.create(user=user, place=place)
+        Bookmark.objects.create(user=user, event=event)
+
+        response = authenticated_client.get(reverse("bookmark-list"), {"type": "place"})
+
+        assert response.data["count"] == 1
+        assert response.data["results"][0]["type"] == "place"
+
+    def test_filters_by_type_event(self, authenticated_client, user, place, event):
+        Bookmark.objects.create(user=user, place=place)
+        Bookmark.objects.create(user=user, event=event)
+
+        response = authenticated_client.get(reverse("bookmark-list"), {"type": "event"})
+
+        assert response.data["count"] == 1
+        assert response.data["results"][0]["type"] == "event"
+
+    def test_ordered_by_created_at_desc(self, authenticated_client, user):
+        older = Bookmark.objects.create(user=user, place=PlaceFactory())
+        newer = Bookmark.objects.create(user=user, place=PlaceFactory())
+
+        response = authenticated_client.get(reverse("bookmark-list"))
+
+        ids = [item["id"] for item in response.data["results"]]
+        assert ids == [str(newer.id), str(older.id)]
+
+    def test_pagination_envelope_present(self, authenticated_client, user, place):
+        Bookmark.objects.create(user=user, place=place)
+
+        response = authenticated_client.get(reverse("bookmark-list"))
+
+        for key in ("count", "next", "previous", "results"):
+            assert key in response.data
