@@ -1,11 +1,12 @@
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from places.models import Place
 
 from .filters import EventFilterSet
-from .models import Event
+from .models import Event, EventCategory
 from .serializers import EventListSerializer, EventSerializer
 
 
@@ -29,3 +30,31 @@ class AllEventsViewSet(ReadOnlyModelViewSet):
         if self.action != "list":
             return queryset
         return super().filter_queryset(queryset)
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name="status",
+                type=str,
+                enum=["upcoming", "archived"],
+                default="upcoming",
+                description="Defaults to 'upcoming' if omitted.",
+            ),
+            OpenApiParameter(
+                name="week",
+                type=str,
+                enum=["current"],
+                required=False,
+                description="Only valid when status is 'upcoming'.",
+            ),
+            OpenApiParameter(
+                name="category",
+                type=int,
+                enum=[choice.value for choice in EventCategory],
+                required=False,
+                description="Optional — no filtering applied if omitted.",
+            ),
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
