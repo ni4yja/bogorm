@@ -3,6 +3,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
+from bookmarks.mixins import BookmarkableMixin
 from places.models import Place
 
 from .filters import EventFilterSet
@@ -18,10 +19,11 @@ class EventViewSet(ReadOnlyModelViewSet):
         return Event.objects.upcoming().filter(place=place)
 
 
-class AllEventsViewSet(ReadOnlyModelViewSet):
+class AllEventsViewSet(BookmarkableMixin, ReadOnlyModelViewSet):
     serializer_class = EventListSerializer
     filterset_class = EventFilterSet
     filter_backends = [DjangoFilterBackend]
+    bookmark_field = "event"
 
     def get_queryset(self):
         return Event.objects.select_related("place")
