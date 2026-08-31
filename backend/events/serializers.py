@@ -33,3 +33,9 @@ class EventListSerializer(serializers.ModelSerializer):
             "category",
             "created_at",
         ]
+
+
+class EventMinimalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = ["id", "title", "event_time", "category"]
