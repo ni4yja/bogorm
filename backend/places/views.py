@@ -1,11 +1,15 @@
 from django.contrib.gis.geos import Polygon
 from django.db.models import Count
+from django.shortcuts import get_object_or_404
+from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
+from bookmarks.models import Bookmark
 from events.models import Event
 
 from .models import Place
@@ -20,6 +24,25 @@ class PlaceViewSet(ReadOnlyModelViewSet):
         if self.action == "retrieve":
             return [AllowAny()]
         return [IsAuthenticated()]
+
+    @action(
+        detail=True, methods=["post", "delete"], permission_classes=[IsAuthenticated]
+    )
+    def bookmark(self, request, pk=None):
+        place = get_object_or_404(Place, pk=pk)
+
+        if request.method == "POST":
+            _, created = Bookmark.objects.get_or_create(user=request.user, place=place)
+            return Response(
+                status=status.HTTP_201_CREATED if created else status.HTTP_200_OK
+            )
+
+        deleted_count, _ = Bookmark.objects.filter(
+            user=request.user, place=place
+        ).delete()
+        if deleted_count == 0:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class MapView(APIView):
