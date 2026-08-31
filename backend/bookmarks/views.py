@@ -8,7 +8,7 @@ from .serializers import BookmarkSerializer
 
 class BookmarkViewSet(ReadOnlyModelViewSet):
     serializer_class = BookmarkSerializer
-    http_method_names = ["get"]
+    http_method_names = ["get", "options", "head"]
 
     def get_queryset(self):
         queryset = Bookmark.objects.filter(user=self.request.user).select_related(

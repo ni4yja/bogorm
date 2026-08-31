@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -20,7 +19,7 @@ class BookmarkableMixin:
         detail=True, methods=["post", "delete"], permission_classes=[IsAuthenticated]
     )
     def bookmark(self, request, pk=None):
-        obj = get_object_or_404(self.get_queryset().model, pk=pk)
+        obj = self.get_object()
 
         if request.method == "POST":
             _, created = Bookmark.objects.get_or_create(
