@@ -4,9 +4,10 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
+from bookmarks.models import Bookmark
 from places.admin import PlaceAdminForm
 from places.models import PlaceCategory
-from tests.factories import PlaceFactory
+from tests.factories import PlaceFactory, UserFactory
 
 VALID_DATA = {
     "title": "Test place",
@@ -127,3 +128,60 @@ class TestPlaceAdminFormValidation:
         assert place.lng == pytest.approx(VALID_DATA["lng"])
         assert place.lat == pytest.approx(VALID_DATA["lat"])
         assert place.location.srid == 4326
+
+
+# ---------------------------------------------------------------------------
+# POST/DELETE /api/v1/places/:id/bookmark/
+# ---------------------------------------------------------------------------
+
+
+class TestPlaceBookmark:
+    def test_returns_401_without_auth(self, api_client, place):
+        response = api_client.post(reverse("place-bookmark", args=[place.id]))
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_creates_bookmark(self, authenticated_client, user, place):
+        response = authenticated_client.post(reverse("place-bookmark", args=[place.id]))
+
+        assert response.status_code == status.HTTP_201_CREATED
+        assert Bookmark.objects.filter(user=user, place=place).exists()
+
+    def test_bookmarking_twice_is_idempotent(self, authenticated_client, user, place):
+        authenticated_client.post(reverse("place-bookmark", args=[place.id]))
+        response = authenticated_client.post(reverse("place-bookmark", args=[place.id]))
+
+        assert response.status_code == status.HTTP_200_OK
+        assert Bookmark.objects.filter(user=user, place=place).count() == 1
+
+    def test_404_for_nonexistent_place(self, authenticated_client, db):
+        response = authenticated_client.post(
+            reverse("place-bookmark", args=[uuid.uuid4()])
+        )
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_deletes_bookmark(self, authenticated_client, user, place):
+        Bookmark.objects.create(user=user, place=place)
+
+        response = authenticated_client.delete(
+            reverse("place-bookmark", args=[place.id])
+        )
+
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert not Bookmark.objects.filter(user=user, place=place).exists()
+
+    def test_delete_returns_404_when_not_bookmarked(self, authenticated_client, place):
+        response = authenticated_client.delete(
+            reverse("place-bookmark", args=[place.id])
+        )
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_bookmark_is_scoped_to_user(self, authenticated_client, user, place):
+        other_user = UserFactory()
+        Bookmark.objects.create(user=other_user, place=place)
+
+        response = authenticated_client.delete(
+            reverse("place-bookmark", args=[place.id])
+        )
+
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+        assert Bookmark.objects.filter(user=other_user, place=place).exists()
