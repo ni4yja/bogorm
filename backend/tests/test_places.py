@@ -39,6 +39,25 @@ class TestPlacesList:
         for field in ("id", "title", "category"):
             assert field in item, f"Missing field: {field}"
 
+    def test_result_includes_is_bookmarked_field(self, authenticated_client, place):
+        response = authenticated_client.get(reverse("place-list"))
+        item = response.data["results"][0]
+        assert "is_bookmarked" in item
+
+    def test_is_bookmarked_reflects_actual_state(
+        self, authenticated_client, user, place
+    ):
+        Bookmark.objects.create(user=user, place=place)
+        other_place = PlaceFactory()
+
+        response = authenticated_client.get(reverse("place-list"))
+
+        results = {
+            item["id"]: item["is_bookmarked"] for item in response.data["results"]
+        }
+        assert results[str(place.id)] is True
+        assert results[str(other_place.id)] is False
+
 
 # ---------------------------------------------------------------------------
 # GET /api/v1/places/:id/
@@ -71,6 +90,21 @@ class TestPlaceDetail:
     def test_404_response_has_error_key(self, api_client, db):
         response = api_client.get(reverse("place-detail", args=[uuid.uuid4()]))
         assert "detail" in response.data
+
+    def test_is_bookmarked_true_when_bookmarked(
+        self, authenticated_client, user, place
+    ):
+        Bookmark.objects.create(user=user, place=place)
+
+        response = authenticated_client.get(reverse("place-detail", args=[place.id]))
+
+        assert response.data["is_bookmarked"] is True
+
+    def test_is_bookmarked_false_for_anonymous_user(self, api_client, place):
+        response = api_client.get(reverse("place-detail", args=[place.id]))
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data["is_bookmarked"] is False
 
 
 # ---------------------------------------------------------------------------
