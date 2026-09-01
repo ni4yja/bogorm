@@ -1,4 +1,4 @@
-from django.db.models import Exists, OuterRef
+from django.db.models import Exists, OuterRef, Q
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.generics import get_object_or_404
@@ -28,10 +28,16 @@ class AllEventsViewSet(BookmarkableMixin, ReadOnlyModelViewSet):
     bookmark_field = "event"
 
     def get_queryset(self):
-        return Event.objects.select_related("place").annotate(
-            is_bookmarked=Exists(
-                Bookmark.objects.filter(user=self.request.user, event=OuterRef("pk"))
+        user = self.request.user
+        if user.is_authenticated:
+            is_bookmarked = Exists(
+                Bookmark.objects.filter(user=user, event=OuterRef("pk"))
             )
+        else:
+            is_bookmarked = Q(pk__isnull=True)  # always False, no query needed
+
+        return Event.objects.select_related("place").annotate(
+            is_bookmarked=is_bookmarked
         )
 
     def filter_queryset(self, queryset):
