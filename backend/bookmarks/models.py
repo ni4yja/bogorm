@@ -6,6 +6,8 @@ from django.db import models
 from events.models import Event
 from places.models import Place
 
+BOOKMARK_TYPES = ("place", "event")
+
 
 class Bookmark(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

@@ -3,10 +3,8 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from .models import Bookmark
+from .models import BOOKMARK_TYPES, Bookmark
 from .serializers import BookmarkSerializer
-
-VALID_TYPES = ("place", "event")
 
 
 class BookmarkViewSet(ReadOnlyModelViewSet):
@@ -20,9 +18,9 @@ class BookmarkViewSet(ReadOnlyModelViewSet):
 
         type_param = self.request.query_params.get("type")
         if type_param is not None:
-            if type_param not in VALID_TYPES:
+            if type_param not in BOOKMARK_TYPES:
                 raise ValidationError(
-                    {"type": f"Must be one of: {', '.join(VALID_TYPES)}."}
+                    {"type": f"Must be one of: {', '.join(BOOKMARK_TYPES)}."}
                 )
             queryset = queryset.filter(**{f"{type_param}__isnull": False})
 
