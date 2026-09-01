@@ -1,9 +1,11 @@
+from django.db.models import Exists, OuterRef
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.generics import get_object_or_404
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from bookmarks.mixins import BookmarkableMixin
+from bookmarks.models import Bookmark
 from places.models import Place
 
 from .filters import EventFilterSet
@@ -26,7 +28,11 @@ class AllEventsViewSet(BookmarkableMixin, ReadOnlyModelViewSet):
     bookmark_field = "event"
 
     def get_queryset(self):
-        return Event.objects.select_related("place")
+        return Event.objects.select_related("place").annotate(
+            is_bookmarked=Exists(
+                Bookmark.objects.filter(user=self.request.user, event=OuterRef("pk"))
+            )
+        )
 
     def filter_queryset(self, queryset):
         if self.action != "list":

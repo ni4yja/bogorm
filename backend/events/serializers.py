@@ -21,6 +21,7 @@ class EventSerializer(serializers.ModelSerializer):
 
 class EventListSerializer(serializers.ModelSerializer):
     place = PlaceMinimalSerializer(read_only=True)
+    is_bookmarked = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Event
@@ -32,6 +33,7 @@ class EventListSerializer(serializers.ModelSerializer):
             "event_time",
             "category",
             "created_at",
+            "is_bookmarked",
         ]
 
 
