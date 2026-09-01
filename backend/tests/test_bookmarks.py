@@ -64,6 +64,14 @@ class TestBookmarksList:
         assert response.data["count"] == 1
         assert response.data["results"][0]["type"] == "event"
 
+    def test_rejects_invalid_type_value(self, authenticated_client, user, place):
+        Bookmark.objects.create(user=user, place=place)
+
+        response = authenticated_client.get(reverse("bookmark-list"), {"type": "plum"})
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "type" in response.data
+
     def test_ordered_by_created_at_desc(self, authenticated_client, user):
         older = Bookmark.objects.create(user=user, place=PlaceFactory())
         newer = Bookmark.objects.create(user=user, place=PlaceFactory())

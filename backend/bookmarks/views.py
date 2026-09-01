@@ -1,9 +1,12 @@
 from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from .models import Bookmark
 from .serializers import BookmarkSerializer
+
+VALID_TYPES = ("place", "event")
 
 
 class BookmarkViewSet(ReadOnlyModelViewSet):
@@ -16,10 +19,12 @@ class BookmarkViewSet(ReadOnlyModelViewSet):
         )
 
         type_param = self.request.query_params.get("type")
-        if type_param == "place":
-            queryset = queryset.filter(place__isnull=False)
-        elif type_param == "event":
-            queryset = queryset.filter(event__isnull=False)
+        if type_param is not None:
+            if type_param not in VALID_TYPES:
+                raise ValidationError(
+                    {"type": f"Must be one of: {', '.join(VALID_TYPES)}."}
+                )
+            queryset = queryset.filter(**{f"{type_param}__isnull": False})
 
         return queryset
 
