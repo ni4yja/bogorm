@@ -254,76 +254,72 @@ class TestAllEventsDetail:
 
 
 # ---------------------------------------------------------------------------
-# PUT /api/v1/events/:id/bookmark/
+# PUT/DELETE /api/v1/events/:id/bookmark/
 # ---------------------------------------------------------------------------
 
 
 class TestEventBookmark:
-    def test_returns_401_without_auth(self, api_client, event):
-        response = api_client.put(
-            reverse("event-bookmark", args=[event.id]), {"bookmarked": True}
-        )
+    def test_put_returns_401_without_auth(self, api_client, event):
+        response = api_client.put(reverse("event-bookmark", args=[event.id]))
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_creates_bookmark(self, authenticated_client, user, event):
-        response = authenticated_client.put(
-            reverse("event-bookmark", args=[event.id]), {"bookmarked": True}
-        )
+    def test_delete_returns_401_without_auth(self, api_client, event):
+        response = api_client.delete(reverse("event-bookmark", args=[event.id]))
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_put_creates_bookmark(self, authenticated_client, user, event):
+        response = authenticated_client.put(reverse("event-bookmark", args=[event.id]))
 
         assert response.status_code == status.HTTP_200_OK
         assert response.data == {"bookmarked": True}
         assert Bookmark.objects.filter(user=user, event=event).exists()
 
-    def test_bookmarking_twice_is_idempotent(self, authenticated_client, user, event):
-        authenticated_client.put(
-            reverse("event-bookmark", args=[event.id]), {"bookmarked": True}
-        )
-        response = authenticated_client.put(
-            reverse("event-bookmark", args=[event.id]), {"bookmarked": True}
-        )
+    def test_put_twice_is_idempotent(self, authenticated_client, user, event):
+        authenticated_client.put(reverse("event-bookmark", args=[event.id]))
+        response = authenticated_client.put(reverse("event-bookmark", args=[event.id]))
 
         assert response.status_code == status.HTTP_200_OK
         assert Bookmark.objects.filter(user=user, event=event).count() == 1
 
-    def test_404_for_nonexistent_event(self, authenticated_client, db):
+    def test_put_404_for_nonexistent_event(self, authenticated_client, db):
         response = authenticated_client.put(
-            reverse("event-bookmark", args=[uuid.uuid4()]), {"bookmarked": True}
+            reverse("event-bookmark", args=[uuid.uuid4()])
         )
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
-    def test_removes_bookmark(self, authenticated_client, user, event):
+    def test_delete_removes_bookmark(self, authenticated_client, user, event):
         Bookmark.objects.create(user=user, event=event)
 
-        response = authenticated_client.put(
-            reverse("event-bookmark", args=[event.id]), {"bookmarked": False}
+        response = authenticated_client.delete(
+            reverse("event-bookmark", args=[event.id])
         )
 
         assert response.status_code == status.HTTP_200_OK
         assert response.data == {"bookmarked": False}
         assert not Bookmark.objects.filter(user=user, event=event).exists()
 
-    def test_unbookmarking_when_not_bookmarked_is_idempotent(
+    def test_delete_when_not_bookmarked_is_idempotent(
         self, authenticated_client, event
     ):
-        response = authenticated_client.put(
-            reverse("event-bookmark", args=[event.id]), {"bookmarked": False}
+        response = authenticated_client.delete(
+            reverse("event-bookmark", args=[event.id])
         )
         assert response.status_code == status.HTTP_200_OK
         assert response.data == {"bookmarked": False}
+
+    def test_delete_404_for_nonexistent_event(self, authenticated_client, db):
+        response = authenticated_client.delete(
+            reverse("event-bookmark", args=[uuid.uuid4()])
+        )
+        assert response.status_code == status.HTTP_404_NOT_FOUND
 
     def test_bookmark_is_scoped_to_user(self, authenticated_client, user, event):
         other_user = UserFactory()
         Bookmark.objects.create(user=other_user, event=event)
 
-        response = authenticated_client.put(
-            reverse("event-bookmark", args=[event.id]), {"bookmarked": False}
+        response = authenticated_client.delete(
+            reverse("event-bookmark", args=[event.id])
         )
 
         assert response.status_code == status.HTTP_200_OK
         assert Bookmark.objects.filter(user=other_user, event=event).exists()
-
-    def test_rejects_missing_bookmarked_field(self, authenticated_client, event):
-        response = authenticated_client.put(
-            reverse("event-bookmark", args=[event.id]), {}, format="json"
-        )
-        assert response.status_code == status.HTTP_400_BAD_REQUEST
