@@ -22,8 +22,7 @@ class TestBookmarksList:
         assert response.status_code == status.HTTP_200_OK
         item = response.data["results"][0]
         assert item["type"] == "place"
-        assert item["place"]["id"] == str(place.id)
-        assert "event" not in item
+        assert item["target"]["id"] == str(place.id)
 
     def test_returns_event_bookmark(self, authenticated_client, user, event):
         Bookmark.objects.create(user=user, event=event)
@@ -33,8 +32,7 @@ class TestBookmarksList:
         assert response.status_code == status.HTTP_200_OK
         item = response.data["results"][0]
         assert item["type"] == "event"
-        assert item["event"]["id"] == str(event.id)
-        assert "place" not in item
+        assert item["target"]["id"] == str(event.id)
 
     def test_only_returns_current_users_bookmarks(
         self, authenticated_client, user, place
@@ -46,7 +44,7 @@ class TestBookmarksList:
         response = authenticated_client.get(reverse("bookmark-list"))
 
         assert response.data["count"] == 1
-        assert response.data["results"][0]["place"]["id"] == str(place.id)
+        assert response.data["results"][0]["target"]["id"] == str(place.id)
 
     def test_filters_by_type_place(self, authenticated_client, user, place, event):
         Bookmark.objects.create(user=user, place=place)

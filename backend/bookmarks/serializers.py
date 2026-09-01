@@ -8,20 +8,16 @@ from .models import Bookmark
 
 class BookmarkSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
-    place = PlaceMinimalSerializer(read_only=True)
-    event = EventMinimalSerializer(read_only=True)
+    target = serializers.SerializerMethodField()
 
     class Meta:
         model = Bookmark
-        fields = ["id", "type", "place", "event", "created_at"]
+        fields = ["id", "type", "target", "created_at"]
 
     def get_type(self, obj):
         return "place" if obj.place_id else "event"
 
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        if data["place"] is None:
-            data.pop("place")
-        else:
-            data.pop("event")
-        return data
+    def get_target(self, obj):
+        if obj.place_id:
+            return PlaceMinimalSerializer(obj.place).data
+        return EventMinimalSerializer(obj.event).data
