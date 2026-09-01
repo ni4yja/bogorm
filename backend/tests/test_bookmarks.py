@@ -1,4 +1,7 @@
+from datetime import timedelta
+
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import status
 
 from bookmarks.models import Bookmark
@@ -75,6 +78,8 @@ class TestBookmarksList:
     def test_ordered_by_created_at_desc(self, authenticated_client, user):
         older = Bookmark.objects.create(user=user, place=PlaceFactory())
         newer = Bookmark.objects.create(user=user, place=PlaceFactory())
+        older.created_at = timezone.now() - timedelta(minutes=1)
+        older.save(update_fields=["created_at"])
 
         response = authenticated_client.get(reverse("bookmark-list"))
 
