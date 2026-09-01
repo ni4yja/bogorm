@@ -1,8 +1,14 @@
+from drf_spectacular.utils import OpenApiResponse, extend_schema
+from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Bookmark
+
+
+class BookmarkResponseSerializer(serializers.Serializer):
+    bookmarked = serializers.BooleanField()
 
 
 class BookmarkableMixin:
@@ -18,6 +24,10 @@ class BookmarkableMixin:
 
     bookmark_field = None
 
+    @extend_schema(
+        request=None,
+        responses={200: OpenApiResponse(response=BookmarkResponseSerializer)},
+    )
     @action(
         detail=True, methods=["put", "delete"], permission_classes=[IsAuthenticated]
     )
