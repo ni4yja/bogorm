@@ -1,5 +1,5 @@
 from django.contrib.gis.geos import Polygon
-from django.db.models import Count
+from django.db.models import Count, Exists, OuterRef, Q
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from bookmarks.mixins import BookmarkableMixin
+from bookmarks.models import Bookmark
 from events.models import Event
 
 from .models import Place
@@ -14,9 +15,19 @@ from .serializers import PlaceMapSerializer, PlaceSerializer
 
 
 class PlaceViewSet(BookmarkableMixin, ReadOnlyModelViewSet):
-    queryset = Place.objects.all()
     serializer_class = PlaceSerializer
     bookmark_field = "place"
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated:
+            is_bookmarked = Exists(
+                Bookmark.objects.filter(user=user, place=OuterRef("pk"))
+            )
+        else:
+            is_bookmarked = Q(pk__isnull=True)  # always False, no query needed
+
+        return Place.objects.annotate(is_bookmarked=is_bookmarked)
 
     def get_permissions(self):
         if self.action == "retrieve":
