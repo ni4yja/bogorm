@@ -25,9 +25,7 @@ class BookmarkViewSet(ReadOnlyModelViewSet):
 
     @action(detail=False, methods=["get"])
     def ids(self, request):
-        bookmarks = Bookmark.objects.filter(user=request.user).values_list(
-            "place_id", "event_id"
-        )
+        bookmarks = self.get_queryset().values_list("place_id", "event_id")
         place_ids = [str(place_id) for place_id, _ in bookmarks if place_id]
         event_ids = [str(event_id) for _, event_id in bookmarks if event_id]
 
