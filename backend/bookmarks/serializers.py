@@ -18,6 +18,9 @@ class BookmarkSerializer(serializers.ModelSerializer):
         return "place" if obj.place_id else "event"
 
     def get_target(self, obj):
-        if obj.place_id:
-            return PlaceMinimalSerializer(obj.place).data
-        return EventMinimalSerializer(obj.event).data
+        bookmark_type = self.get_type(obj)
+        if bookmark_type == "place":
+            data = PlaceMinimalSerializer(obj.place).data
+        else:
+            data = EventMinimalSerializer(obj.event).data
+        return {"type": bookmark_type, **data}
