@@ -50,13 +50,20 @@ export interface PaginatedResponse<T> {
   results: T[]
 }
 
-export interface BookmarkPlaceTarget extends PlaceMinimal {
+export interface BookmarkPlaceTarget {
   type: 'place'
+  id: string
+  title: string
+  lat: number
+  lng: number
 }
 
-export interface BookmarkEventTarget extends Event {
+export interface BookmarkEventTarget {
   type: 'event'
-  place: PlaceMinimal
+  id: string
+  title: string
+  event_time: string | null
+  category: number
 }
 
 export type BookmarkTarget = BookmarkPlaceTarget | BookmarkEventTarget
