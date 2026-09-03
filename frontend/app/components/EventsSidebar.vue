@@ -9,9 +9,14 @@ const emit = defineEmits<{
 
 const { events, isLoading, error, fetchWeeklyEvents } = useEventsSidebar()
 const { getCategoryLabel } = useEventCategory()
+const { isBookmarked, registerInitialState, toggleBookmark } = useBookmarks()
 
 const state = ref<SidebarState>('list')
 const selectedEvent = ref<EventListItem | null>(null)
+
+watch(events, (newEvents) => {
+  newEvents.forEach(e => registerInitialState('event', e.id, e.is_bookmarked))
+}, { immediate: true })
 
 onMounted(() => {
   fetchWeeklyEvents()
@@ -49,6 +54,10 @@ function formatEventTime(eventTime: string | null) {
     minute: '2-digit',
   })
 }
+
+async function handleToggleBookmark(eventId: string) {
+  await toggleBookmark('event', eventId)
+}
 </script>
 
 <template>
@@ -71,9 +80,19 @@ function formatEventTime(eventTime: string | null) {
         </div>
 
         <div class="detail-content">
-          <h3 class="event-title-lg">
-            {{ selectedEvent.title }}
-          </h3>
+          <div class="title-row">
+            <h3 class="event-title-lg">
+              {{ selectedEvent.title }}
+            </h3>
+            <button
+              class="bookmark-btn"
+              aria-label="Save event"
+              @click="handleToggleBookmark(selectedEvent.id)"
+            >
+              <IconsBookmarkActive v-if="isBookmarked('event', selectedEvent.id)" class="bookmark-icon" />
+              <IconsBookmark v-else class="bookmark-icon" />
+            </button>
+          </div>
 
           <p v-if="selectedEvent.description" class="description">
             {{ selectedEvent.description }}
@@ -117,26 +136,37 @@ function formatEventTime(eventTime: string | null) {
             Check back later or browse all upcoming events below.
           </p>
         </div>
-        <button
+        <div
           v-for="event in events"
           :key="event.id"
           class="event-item"
-          @click="openDetail(event)"
         >
-          <h4 class="event-title">
-            {{ event.title }}
-          </h4>
-          <div v-if="event.event_time" class="event-meta">
-            <IconsTime class="meta-icon" />
-            {{ formatEventTime(event.event_time) }}
-          </div>
-          <div class="event-meta">
-            <IconsPin class="meta-icon" />
-            <p class="place-title">
-              {{ event.place.title }}
-            </p>
-          </div>
-        </button>
+          <button class="event-item-clickable" @click="openDetail(event)">
+            <div class="event-item-top">
+              <h4 class="event-title">
+                {{ event.title }}
+              </h4>
+            </div>
+            <div v-if="event.event_time" class="event-meta">
+              <IconsTime class="meta-icon" />
+              {{ formatEventTime(event.event_time) }}
+            </div>
+            <div class="event-meta">
+              <IconsPin class="meta-icon" />
+              <p class="place-title">
+                {{ event.place.title }}
+              </p>
+            </div>
+          </button>
+          <button
+            class="bookmark-btn bookmark-btn--list"
+            aria-label="Save event"
+            @click.stop="handleToggleBookmark(event.id)"
+          >
+            <IconsBookmarkActive v-if="isBookmarked('event', event.id)" class="bookmark-icon" />
+            <IconsBookmark v-else class="bookmark-icon" />
+          </button>
+        </div>
       </div>
 
       <NuxtLink to="/events" class="see-all-btn">
@@ -233,19 +263,28 @@ function formatEventTime(eventTime: string | null) {
 
 .event-item {
   display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  text-align: left;
-  background: none;
-  border: none;
+  align-items: flex-start;
+  gap: 0.5rem;
   padding: 0 0 1.25rem;
   border-bottom: 1px solid var(--color-light-grey-40);
-  cursor: pointer;
 }
 
 .event-item:last-child {
   border-bottom: none;
   padding-bottom: 0.5rem;
+}
+
+.event-item-clickable {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
 }
 
 .event-title {
@@ -270,6 +309,24 @@ function formatEventTime(eventTime: string | null) {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.bookmark-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+
+.bookmark-btn--list {
+  margin-top: 0.2rem;
+}
+
+.bookmark-icon {
+  width: 20px;
+  height: 20px;
 }
 
 .see-all-btn {
@@ -351,9 +408,17 @@ function formatEventTime(eventTime: string | null) {
   padding: 1rem 1.5rem 1.5rem;
 }
 
+.title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
 .event-title-lg {
   color: var(--color-primary);
-  margin: 0 0 0.75rem;
+  margin: 0;
 }
 
 .description {

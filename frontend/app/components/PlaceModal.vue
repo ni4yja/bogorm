@@ -12,34 +12,29 @@ defineEmits<{
   close: []
 }>()
 
-const { toggleBookmark } = useBookmarks()
-
-const isPlaceBookmarked = ref(props.place.is_bookmarked)
-const eventBookmarks = ref<Record<string, boolean>>(
-  Object.fromEntries(props.events.map(e => [e.id, e.is_bookmarked])),
-)
-
-watch(() => props.place, (newPlace) => {
-  isPlaceBookmarked.value = newPlace.is_bookmarked
-})
-
-watch(() => props.events, (newEvents) => {
-  eventBookmarks.value = Object.fromEntries(newEvents.map(e => [e.id, e.is_bookmarked]))
-})
-
 const upcomingEvents = computed(() =>
   props.events.filter(e => e.event_time && new Date(e.event_time) > new Date()),
 )
 
+const { isBookmarked, registerInitialState, toggleBookmark } = useBookmarks()
+
+registerInitialState('place', props.place.id, props.place.is_bookmarked)
+props.events.forEach(e => registerInitialState('event', e.id, e.is_bookmarked))
+
+watch(() => props.place, (newPlace) => {
+  registerInitialState('place', newPlace.id, newPlace.is_bookmarked)
+})
+
+watch(() => props.events, (newEvents) => {
+  newEvents.forEach(e => registerInitialState('event', e.id, e.is_bookmarked))
+})
+
 async function handleTogglePlaceBookmark() {
-  const newState = await toggleBookmark('place', props.place.id, isPlaceBookmarked.value)
-  isPlaceBookmarked.value = newState
+  await toggleBookmark('place', props.place.id)
 }
 
 async function handleToggleEventBookmark(eventId: string) {
-  const current = eventBookmarks.value[eventId] ?? false
-  const newState = await toggleBookmark('event', eventId, current)
-  eventBookmarks.value[eventId] = newState
+  await toggleBookmark('event', eventId)
 }
 </script>
 
@@ -71,7 +66,7 @@ async function handleToggleEventBookmark(eventId: string) {
           aria-label="Save place"
           @click="handleTogglePlaceBookmark"
         >
-          <IconsBookmarkActive v-if="isPlaceBookmarked" class="bookmark-icon" />
+          <IconsBookmarkActive v-if="isBookmarked('place', place.id)" class="bookmark-icon" />
           <IconsBookmark v-else class="bookmark-icon" />
         </button>
       </div>
@@ -106,7 +101,7 @@ async function handleToggleEventBookmark(eventId: string) {
               aria-label="Save event"
               @click="handleToggleEventBookmark(event.id)"
             >
-              <IconsBookmarkActive v-if="eventBookmarks[event.id]" class="bookmark-icon" />
+              <IconsBookmarkActive v-if="isBookmarked('event', event.id)" class="bookmark-icon" />
               <IconsBookmark v-else class="bookmark-icon" />
             </button>
           </div>

@@ -1,13 +1,35 @@
 import type { BookmarkItem, PaginatedResponse } from '~/types'
 
+const bookmarkedPlaces = ref<Record<string, boolean>>({})
+const bookmarkedEvents = ref<Record<string, boolean>>({})
+
 export function useBookmarks() {
   const { get, put, del } = useApi()
 
-  const toggleBookmark = async (type: 'place' | 'event', id: string, isBookmarked: boolean) => {
+  const isBookmarked = (type: 'place' | 'event', id: string): boolean => {
+    const store = type === 'place' ? bookmarkedPlaces : bookmarkedEvents
+    return store.value[id] ?? false
+  }
+
+  const setBookmarked = (type: 'place' | 'event', id: string, value: boolean) => {
+    const store = type === 'place' ? bookmarkedPlaces : bookmarkedEvents
+    store.value[id] = value
+  }
+
+  const registerInitialState = (type: 'place' | 'event', id: string, value: boolean) => {
+    const store = type === 'place' ? bookmarkedPlaces : bookmarkedEvents
+    if (!(id in store.value)) {
+      store.value[id] = value
+    }
+  }
+
+  const toggleBookmark = async (type: 'place' | 'event', id: string) => {
+    const current = isBookmarked(type, id)
     const path = `/${type}s/${id}/bookmark/`
-    const response = isBookmarked
+    const response = current
       ? await del<{ bookmarked: boolean }>(path)
       : await put<{ bookmarked: boolean }>(path)
+    setBookmarked(type, id, response.bookmarked)
     return response.bookmarked
   }
 
@@ -15,5 +37,5 @@ export function useBookmarks() {
     return await get<PaginatedResponse<BookmarkItem>>(`/bookmarks/?type=${type}&page=${page}`)
   }
 
-  return { toggleBookmark, fetchBookmarks }
+  return { isBookmarked, registerInitialState, toggleBookmark, fetchBookmarks }
 }
