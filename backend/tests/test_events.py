@@ -90,6 +90,30 @@ class TestEventsList:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert "week" in response.data
 
+    def test_result_includes_is_bookmarked_field(
+        self, authenticated_client, place, event
+    ):
+        response = authenticated_client.get(
+            reverse("place-events-list", kwargs={"place_pk": place.id})
+        )
+        assert "is_bookmarked" in response.data["results"][0]
+
+    def test_is_bookmarked_reflects_actual_state(
+        self, authenticated_client, user, place, event
+    ):
+        Bookmark.objects.create(user=user, event=event)
+        other_event = EventFactory(place=place)
+
+        response = authenticated_client.get(
+            reverse("place-events-list", kwargs={"place_pk": place.id})
+        )
+
+        results = {
+            item["id"]: item["is_bookmarked"] for item in response.data["results"]
+        }
+        assert results[str(event.id)] is True
+        assert results[str(other_event.id)] is False
+
 
 class TestEventDetail:
     def test_returns_200(self, authenticated_client, place, event):
