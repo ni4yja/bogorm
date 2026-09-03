@@ -10,11 +10,34 @@ from .models import BOOKMARK_TYPES, Bookmark
 # `target` is either a place or an event depending on `type`; this proxy
 # tells drf-spectacular to document both real shapes instead of a
 # hand-written stand-in that can drift from what get_target() returns.
+#
+# serializers is a dict (not a list) so the schema's discriminator values
+# ("place"/"event") match what the API actually sends — a list would make
+# drf-spectacular invent component names from the class names instead
+# (e.g. "PlaceMinimal"), which wouldn't match the real "type" value.
 # ---------------------------------------------------------------------------
+
+
+class BookmarkPlaceTargetSerializer(PlaceMinimalSerializer):
+    type = serializers.ChoiceField(choices=["place"], default="place")
+
+    class Meta(PlaceMinimalSerializer.Meta):
+        fields = [*PlaceMinimalSerializer.Meta.fields, "type"]
+
+
+class BookmarkEventTargetSerializer(EventMinimalSerializer):
+    type = serializers.ChoiceField(choices=["event"], default="event")
+
+    class Meta(EventMinimalSerializer.Meta):
+        fields = [*EventMinimalSerializer.Meta.fields, "type"]
+
 
 BookmarkTargetSchema = PolymorphicProxySerializer(
     component_name="BookmarkTarget",
-    serializers=[PlaceMinimalSerializer, EventMinimalSerializer],
+    serializers={
+        "place": BookmarkPlaceTargetSerializer,
+        "event": BookmarkEventTargetSerializer,
+    },
     resource_type_field_name="type",
 )
 
