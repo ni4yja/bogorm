@@ -12,9 +12,35 @@ defineEmits<{
   close: []
 }>()
 
+const { toggleBookmark } = useBookmarks()
+
+const isPlaceBookmarked = ref(props.place.is_bookmarked)
+const eventBookmarks = ref<Record<string, boolean>>(
+  Object.fromEntries(props.events.map(e => [e.id, e.is_bookmarked])),
+)
+
+watch(() => props.place, (newPlace) => {
+  isPlaceBookmarked.value = newPlace.is_bookmarked
+})
+
+watch(() => props.events, (newEvents) => {
+  eventBookmarks.value = Object.fromEntries(newEvents.map(e => [e.id, e.is_bookmarked]))
+})
+
 const upcomingEvents = computed(() =>
   props.events.filter(e => e.event_time && new Date(e.event_time) > new Date()),
 )
+
+async function handleTogglePlaceBookmark() {
+  const newState = await toggleBookmark('place', props.place.id, isPlaceBookmarked.value)
+  isPlaceBookmarked.value = newState
+}
+
+async function handleToggleEventBookmark(eventId: string) {
+  const current = eventBookmarks.value[eventId] ?? false
+  const newState = await toggleBookmark('event', eventId, current)
+  eventBookmarks.value[eventId] = newState
+}
 </script>
 
 <template>
@@ -39,8 +65,14 @@ const upcomingEvents = computed(() =>
         <h2 class="title">
           {{ place.title }}
         </h2>
-        <button v-if="isAuthenticated" class="bookmark-btn" aria-label="Save place">
-          <IconsBookmark class="bookmark-icon" />
+        <button
+          v-if="isAuthenticated"
+          class="bookmark-btn"
+          aria-label="Save place"
+          @click="handleTogglePlaceBookmark"
+        >
+          <IconsBookmarkActive v-if="isPlaceBookmarked" class="bookmark-icon" />
+          <IconsBookmark v-else class="bookmark-icon" />
         </button>
       </div>
 
@@ -69,8 +101,13 @@ const upcomingEvents = computed(() =>
         <div v-for="event in upcomingEvents" :key="event.id" class="event-item">
           <div class="event-title">
             {{ event.title }}
-            <button class="bookmark-btn" aria-label="Save event">
-              <IconsBookmark class="bookmark-icon" />
+            <button
+              class="bookmark-btn"
+              aria-label="Save event"
+              @click="handleToggleEventBookmark(event.id)"
+            >
+              <IconsBookmarkActive v-if="eventBookmarks[event.id]" class="bookmark-icon" />
+              <IconsBookmark v-else class="bookmark-icon" />
             </button>
           </div>
           <div v-if="event.event_time" class="event-time">

@@ -16,6 +16,7 @@ export interface PlaceDetail {
   category: number
   address: string
   website: string
+  is_bookmarked: boolean
 }
 
 export interface PlaceMinimal {
@@ -35,6 +36,7 @@ export interface Event {
   description: string
   event_time: string | null
   category: number
+  is_bookmarked: boolean
 }
 
 export interface EventListItem extends Event {
