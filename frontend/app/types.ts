@@ -47,3 +47,21 @@ export interface PaginatedResponse<T> {
   previous: string | null
   results: T[]
 }
+
+export interface BookmarkPlaceTarget extends PlaceMinimal {
+  type: 'place'
+}
+
+export interface BookmarkEventTarget extends Event {
+  type: 'event'
+  place: PlaceMinimal
+}
+
+export type BookmarkTarget = BookmarkPlaceTarget | BookmarkEventTarget
+
+export interface BookmarkItem {
+  id: string
+  type: 'place' | 'event'
+  target: BookmarkTarget
+  created_at: string
+}

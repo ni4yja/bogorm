@@ -69,7 +69,7 @@ export function useApi() {
   const request = async <T>(
     path: string,
     options: {
-      method?: 'GET' | 'POST'
+      method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
       body?: Record<string, unknown> | (() => Record<string, unknown>)
     } = {},
   ) => {
@@ -97,5 +97,9 @@ export function useApi() {
   const post = <T>(path: string, body: Record<string, unknown> | (() => Record<string, unknown>)) =>
     request<T>(path, { method: 'POST', body })
 
-  return { get, post }
+  const put = <T>(path: string) => request<T>(path, { method: 'PUT' })
+
+  const del = <T>(path: string) => request<T>(path, { method: 'DELETE' })
+
+  return { get, post, put, del }
 }
