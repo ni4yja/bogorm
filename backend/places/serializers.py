@@ -9,6 +9,8 @@ class CoordinatesMixin(serializers.Serializer):
 
 
 class PlaceSerializer(CoordinatesMixin, serializers.ModelSerializer):
+    is_bookmarked = serializers.BooleanField(read_only=True)
+
     class Meta:
         model = Place
         fields = [
@@ -21,6 +23,7 @@ class PlaceSerializer(CoordinatesMixin, serializers.ModelSerializer):
             "address",
             "website",
             "created_at",
+            "is_bookmarked",
         ]
 
 

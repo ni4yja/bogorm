@@ -1,11 +1,13 @@
 from rest_framework_nested import routers
 
+from bookmarks.views import BookmarkViewSet
 from events.views import AllEventsViewSet, EventViewSet
 from places.views import PlaceViewSet
 
 router = routers.DefaultRouter()
 router.register("places", PlaceViewSet, basename="place")
 router.register("events", AllEventsViewSet, basename="event")
+router.register("bookmarks", BookmarkViewSet, basename="bookmark")
 
 places_router_nested = routers.NestedSimpleRouter(router, "places", lookup="place")
 places_router_nested.register("events", EventViewSet, basename="place-events")
