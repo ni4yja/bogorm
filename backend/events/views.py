@@ -18,7 +18,19 @@ class EventViewSet(ReadOnlyModelViewSet):
 
     def get_queryset(self):
         place = get_object_or_404(Place, pk=self.kwargs["place_pk"])
-        return Event.objects.upcoming().filter(place=place)
+        user = self.request.user
+        if user.is_authenticated:
+            is_bookmarked = Exists(
+                Bookmark.objects.filter(user=user, event=OuterRef("pk"))
+            )
+        else:
+            is_bookmarked = Q(pk__isnull=True)  # always False, no query needed
+
+        return (
+            Event.objects.upcoming()
+            .filter(place=place)
+            .annotate(is_bookmarked=is_bookmarked)
+        )
 
 
 class AllEventsViewSet(BookmarkableMixin, ReadOnlyModelViewSet):

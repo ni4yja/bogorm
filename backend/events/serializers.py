@@ -6,6 +6,8 @@ from .models import Event
 
 
 class EventSerializer(serializers.ModelSerializer):
+    is_bookmarked = serializers.BooleanField(read_only=True)
+
     class Meta:
         model = Event
         fields = [
@@ -16,6 +18,7 @@ class EventSerializer(serializers.ModelSerializer):
             "event_time",
             "category",
             "created_at",
+            "is_bookmarked",
         ]
 
 
