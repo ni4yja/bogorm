@@ -60,12 +60,16 @@ async function loadBookmarks() {
 }
 
 async function loadCounts() {
-  const [placesResponse, eventsResponse] = await Promise.all([
-    fetchBookmarks('place', 1),
-    fetchBookmarks('event', 1),
-  ])
-  placesCount.value = placesResponse.count
-  eventsCount.value = eventsResponse.count
+  try {
+    const [placesResponse, eventsResponse] = await Promise.all([
+      fetchBookmarks('place', 1),
+      fetchBookmarks('event', 1),
+    ])
+    placesCount.value = placesResponse.count
+    eventsCount.value = eventsResponse.count
+  }
+  catch {
+  }
 }
 
 function switchTab(tab: Tab) {
