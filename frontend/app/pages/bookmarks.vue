@@ -201,6 +201,14 @@ onMounted(async () => {
       </div>
 
       <div v-if="items.length > 0 && totalPages > 1" class="pagination">
+        <button
+          class="pagination-btn"
+          :disabled="currentPage <= 1"
+          aria-label="Previous page"
+          @click="goToPage(currentPage - 1)"
+        >
+          <IconsArrowLeft class="pagination-icon" />
+        </button>
         <span class="pagination-label">Page {{ currentPage }} of {{ totalPages }}</span>
         <button
           class="pagination-btn"
@@ -392,7 +400,7 @@ onMounted(async () => {
 .pagination {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 1rem;
   margin-top: 1.5rem;
 }

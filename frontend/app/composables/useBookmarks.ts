@@ -1,10 +1,10 @@
 import type { BookmarkItem, PaginatedResponse } from '~/types'
 
-const bookmarkedPlaces = useState<Record<string, boolean>>('bookmarkedPlaces', () => ({}))
-const bookmarkedEvents = useState<Record<string, boolean>>('bookmarkedEvents', () => ({}))
-
 export function useBookmarks() {
   const { get, put, del } = useApi()
+
+  const bookmarkedPlaces = useState<Record<string, boolean>>('bookmarkedPlaces', () => ({}))
+  const bookmarkedEvents = useState<Record<string, boolean>>('bookmarkedEvents', () => ({}))
 
   const isBookmarked = (type: 'place' | 'event', id: string): boolean => {
     const store = type === 'place' ? bookmarkedPlaces : bookmarkedEvents
