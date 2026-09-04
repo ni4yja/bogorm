@@ -32,6 +32,11 @@ async function loadBookmarks() {
     if (requestId !== latestRequestId)
       return
 
+    if (response.results.length === 0 && currentPage.value > 1) {
+      currentPage.value -= 1
+      return loadBookmarks()
+    }
+
     items.value = response.results
     totalCount.value = response.count
 
