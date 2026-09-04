@@ -14,6 +14,7 @@ const { formatEventTime } = useEventFormat()
 
 const state = ref<SidebarState>('list')
 const selectedEvent = ref<EventListItem | null>(null)
+const pendingIds = ref<Set<string>>(new Set())
 
 watch(events, (newEvents) => {
   newEvents.forEach(e => registerInitialState('event', e.id, e.is_bookmarked))
@@ -44,8 +45,16 @@ function toggleCollapse() {
   state.value = state.value === 'collapsed' ? 'list' : 'collapsed'
 }
 
-async function handleToggleBookmark(eventId: string, eventTitle: string) {
-  await toggleBookmark('event', eventId, eventTitle)
+async function handleToggleBookmark(eventId: string, title: string) {
+  if (pendingIds.value.has(eventId))
+    return
+  pendingIds.value.add(eventId)
+  try {
+    await toggleBookmark('event', eventId, title)
+  }
+  finally {
+    pendingIds.value.delete(eventId)
+  }
 }
 </script>
 
@@ -75,6 +84,7 @@ async function handleToggleBookmark(eventId: string, eventTitle: string) {
             </h3>
             <button
               class="bookmark-btn"
+              :disabled="pendingIds.has(selectedEvent.id)"
               aria-label="Save event"
               @click="handleToggleBookmark(selectedEvent.id, selectedEvent.title)"
             >

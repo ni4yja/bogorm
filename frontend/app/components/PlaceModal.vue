@@ -12,6 +12,8 @@ defineEmits<{
   close: []
 }>()
 
+const pendingIds = ref<Set<string>>(new Set())
+
 const upcomingEvents = computed(() =>
   props.events.filter(e => e.event_time && new Date(e.event_time) > new Date()),
 )
@@ -30,11 +32,27 @@ watch(() => props.events, (newEvents) => {
 })
 
 async function handleTogglePlaceBookmark() {
-  await toggleBookmark('place', props.place.id, props.place.title)
+  if (pendingIds.value.has(props.place.id))
+    return
+  pendingIds.value.add(props.place.id)
+  try {
+    await toggleBookmark('place', props.place.id, props.place.title)
+  }
+  finally {
+    pendingIds.value.delete(props.place.id)
+  }
 }
 
-async function handleToggleEventBookmark(eventId: string, eventTitle: string) {
-  await toggleBookmark('event', eventId, eventTitle)
+async function handleToggleEventBookmark(eventId: string, title: string) {
+  if (pendingIds.value.has(eventId))
+    return
+  pendingIds.value.add(eventId)
+  try {
+    await toggleBookmark('event', eventId, title)
+  }
+  finally {
+    pendingIds.value.delete(eventId)
+  }
 }
 </script>
 
@@ -63,6 +81,7 @@ async function handleToggleEventBookmark(eventId: string, eventTitle: string) {
         <button
           v-if="isAuthenticated"
           class="bookmark-btn"
+          :disabled="pendingIds.has(place.id)"
           aria-label="Save place"
           @click="handleTogglePlaceBookmark"
         >
@@ -98,6 +117,7 @@ async function handleToggleEventBookmark(eventId: string, eventTitle: string) {
             {{ event.title }}
             <button
               class="bookmark-btn"
+              :disabled="pendingIds.has(event.id)"
               aria-label="Save event"
               @click="handleToggleEventBookmark(event.id, event.title)"
             >

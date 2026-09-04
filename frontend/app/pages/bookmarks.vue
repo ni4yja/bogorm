@@ -15,6 +15,7 @@ const totalCount = ref(0)
 const placesCount = ref(0)
 const eventsCount = ref(0)
 const items = ref<BookmarkItem[]>([])
+const pendingIds = ref<Set<string>>(new Set())
 const isLoading = ref(false)
 const error = ref('')
 
@@ -94,8 +95,17 @@ function goToPage(page: number) {
 }
 
 async function handleToggleBookmark(type: Tab, id: string) {
-  await toggleBookmark(type, id)
-  await loadBookmarks()
+  if (pendingIds.value.has(id))
+    return
+
+  pendingIds.value.add(id)
+  try {
+    await toggleBookmark(type, id)
+    await loadBookmarks()
+  }
+  finally {
+    pendingIds.value.delete(id)
+  }
 }
 
 function isPlaceTarget(target: BookmarkItem['target']): target is BookmarkPlaceTarget {
@@ -173,6 +183,7 @@ onMounted(async () => {
               </h3>
               <button
                 class="bookmark-btn"
+                :disabled="pendingIds.has(item.target.id)"
                 aria-label="Remove bookmark"
                 @click="handleToggleBookmark(item.type, item.target.id)"
               >
