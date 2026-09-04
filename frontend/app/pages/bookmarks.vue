@@ -12,6 +12,7 @@ type Tab = 'place' | 'event'
 const activeTab = ref<Tab>('place')
 const currentPage = ref(1)
 const totalCount = ref(0)
+const pageSize = ref(20)
 const placesCount = ref(0)
 const eventsCount = ref(0)
 const items = ref<BookmarkItem[]>([])
@@ -19,7 +20,7 @@ const pendingIds = ref<Set<string>>(new Set())
 const isLoading = ref(false)
 const error = ref('')
 
-const totalPages = computed(() => Math.max(1, Math.ceil(totalCount.value / 20)))
+const totalPages = computed(() => Math.max(1, Math.ceil(totalCount.value / pageSize.value)))
 
 let latestRequestId = 0
 const countsError = ref(false)
@@ -42,6 +43,10 @@ async function loadBookmarks() {
 
     items.value = response.results
     totalCount.value = response.count
+
+    if (currentPage.value === 1 && response.results.length > 0) {
+      pageSize.value = response.results.length
+    }
 
     for (const item of response.results) {
       registerInitialState(item.type, item.target.id, true)
@@ -75,6 +80,11 @@ async function loadCounts() {
     const activeResponse = activeTab.value === 'place' ? placesResponse : eventsResponse
     items.value = activeResponse.results
     totalCount.value = activeResponse.count
+
+    if (activeResponse.results.length > 0) {
+      pageSize.value = activeResponse.results.length
+    }
+
     for (const item of activeResponse.results) {
       registerInitialState(item.type, item.target.id, true)
     }
