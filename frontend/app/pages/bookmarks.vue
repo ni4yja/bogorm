@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { BookmarkEventTarget, BookmarkItem, BookmarkPlaceTarget } from '~/types'
+import type { BookmarkEventTarget, BookmarkItem, BookmarkPlaceTarget, PaginatedResponse } from '~/types'
 
 definePageMeta({ layout: 'default' })
 
 const route = useRoute()
-const { fetchBookmarks, toggleBookmark, isBookmarked, registerInitialState } = useBookmarks()
+const { fetchBookmarks, toggleBookmark, isBookmarked, isPending, registerInitialState } = useBookmarks()
 const { getCategoryLabel } = useEventCategory()
 const { formatEventTime } = useEventFormat()
 
@@ -15,19 +15,34 @@ const activeTab = ref<Tab>(
 )
 
 const currentPage = ref(1)
-const totalCount = ref(0)
 const pageSize = ref(20)
 const placesCount = ref(0)
 const eventsCount = ref(0)
 const items = ref<BookmarkItem[]>([])
-const pendingIds = ref<Set<string>>(new Set())
 const isLoading = ref(false)
 const error = ref('')
 
-const totalPages = computed(() => Math.max(1, Math.ceil(totalCount.value / pageSize.value)))
+const currentCount = computed(() => activeTab.value === 'place' ? placesCount.value : eventsCount.value)
+const totalPages = computed(() => Math.max(1, Math.ceil(currentCount.value / pageSize.value)))
 
 let latestRequestId = 0
-const countsError = ref(false)
+
+function applyPage(type: Tab, response: PaginatedResponse<BookmarkItem>) {
+  for (const item of response.results) {
+    registerInitialState(item.type, item.target.id, true)
+  }
+
+  if (type === 'place')
+    placesCount.value = response.count
+  else
+    eventsCount.value = response.count
+
+  if (type === activeTab.value) {
+    items.value = response.results
+    if (currentPage.value === 1 && response.results.length > 0)
+      pageSize.value = response.results.length
+  }
+}
 
 async function loadBookmarks() {
   const requestId = ++latestRequestId
@@ -45,21 +60,7 @@ async function loadBookmarks() {
       return loadBookmarks()
     }
 
-    items.value = response.results
-    totalCount.value = response.count
-
-    if (currentPage.value === 1 && response.results.length > 0) {
-      pageSize.value = response.results.length
-    }
-
-    for (const item of response.results) {
-      registerInitialState(item.type, item.target.id, true)
-    }
-
-    if (activeTab.value === 'place')
-      placesCount.value = response.count
-    else
-      eventsCount.value = response.count
+    applyPage(activeTab.value, response)
   }
   catch {
     if (requestId === latestRequestId)
@@ -72,29 +73,23 @@ async function loadBookmarks() {
 }
 
 async function loadCounts() {
-  countsError.value = false
+  const requestId = ++latestRequestId
+  error.value = ''
   try {
     const [placesResponse, eventsResponse] = await Promise.all([
       fetchBookmarks('place', 1),
       fetchBookmarks('event', 1),
     ])
-    placesCount.value = placesResponse.count
-    eventsCount.value = eventsResponse.count
 
-    const activeResponse = activeTab.value === 'place' ? placesResponse : eventsResponse
-    items.value = activeResponse.results
-    totalCount.value = activeResponse.count
+    if (requestId !== latestRequestId)
+      return
 
-    if (activeResponse.results.length > 0) {
-      pageSize.value = activeResponse.results.length
-    }
-
-    for (const item of activeResponse.results) {
-      registerInitialState(item.type, item.target.id, true)
-    }
+    applyPage('place', placesResponse)
+    applyPage('event', eventsResponse)
   }
   catch {
-    countsError.value = true
+    if (requestId === latestRequestId)
+      error.value = 'Could not load bookmarks'
   }
 }
 
@@ -112,16 +107,26 @@ function goToPage(page: number) {
 }
 
 async function handleToggleBookmark(type: Tab, id: string) {
-  if (pendingIds.value.has(id))
+  const nowBookmarked = await toggleBookmark(type, id)
+  if (nowBookmarked || type !== activeTab.value)
     return
 
-  pendingIds.value.add(id)
-  try {
-    await toggleBookmark(type, id)
+  const wasFullPage = items.value.length === pageSize.value
+  const isLastPage = currentPage.value >= totalPages.value
+
+  items.value = items.value.filter(item => item.target.id !== id)
+  if (type === 'place')
+    placesCount.value = Math.max(0, placesCount.value - 1)
+  else
+    eventsCount.value = Math.max(0, eventsCount.value - 1)
+
+  if (items.value.length === 0 && currentPage.value > 1) {
+    currentPage.value -= 1
     await loadBookmarks()
   }
-  finally {
-    pendingIds.value.delete(id)
+  else if (wasFullPage && !isLastPage) {
+    // removing an item from a full, non-last page needs a refetch to pull the next item forward
+    await loadBookmarks()
   }
 }
 
@@ -172,7 +177,7 @@ onMounted(async () => {
       <div v-if="isLoading" class="state-message">
         Loading…
       </div>
-      <div v-else-if="error || countsError" class="state-message">
+      <div v-else-if="error" class="state-message">
         Could not load bookmarks. Please try again.
       </div>
       <div v-else-if="items.length === 0" class="empty-state">
@@ -199,7 +204,7 @@ onMounted(async () => {
               </h3>
               <button
                 class="bookmark-btn"
-                :disabled="pendingIds.has(item.target.id)"
+                :disabled="isPending(item.type, item.target.id)"
                 aria-label="Remove bookmark"
                 @click="handleToggleBookmark(item.type, item.target.id)"
               >
