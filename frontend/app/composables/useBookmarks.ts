@@ -1,7 +1,7 @@
 import type { BookmarkItem, PaginatedResponse } from '~/types'
 
-const bookmarkedPlaces = ref<Record<string, boolean>>({})
-const bookmarkedEvents = ref<Record<string, boolean>>({})
+const bookmarkedPlaces = useState<Record<string, boolean>>('bookmarkedPlaces', () => ({}))
+const bookmarkedEvents = useState<Record<string, boolean>>('bookmarkedEvents', () => ({}))
 
 export function useBookmarks() {
   const { get, put, del } = useApi()
