@@ -26,17 +26,25 @@ export function useBookmarks() {
   const toggleBookmark = async (type: 'place' | 'event', id: string, title?: string) => {
     const current = isBookmarked(type, id)
     const path = `/${type}s/${id}/bookmark/`
-    const response = current
-      ? await del<{ bookmarked: boolean }>(path)
-      : await put<{ bookmarked: boolean }>(path)
-    setBookmarked(type, id, response.bookmarked)
 
-    if (response.bookmarked && title) {
-      const { show } = useToast()
-      show(`${title} saved to bookmarks`, { label: 'View bookmarks', to: '/bookmarks' })
+    try {
+      const response = current
+        ? await del<{ bookmarked: boolean }>(path)
+        : await put<{ bookmarked: boolean }>(path)
+      setBookmarked(type, id, response.bookmarked)
+
+      if (response.bookmarked && title) {
+        const { show } = useToast()
+        show(`${title} saved to bookmarks`, { label: 'View bookmarks', to: '/bookmarks' })
+      }
+
+      return response.bookmarked
     }
-
-    return response.bookmarked
+    catch {
+      const { show } = useToast()
+      show('Could not update bookmark. Please try again.')
+      return current
+    }
   }
 
   const fetchBookmarks = async (type: 'place' | 'event', page = 1) => {

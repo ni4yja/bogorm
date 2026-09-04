@@ -12,6 +12,8 @@ defineEmits<{
   close: []
 }>()
 
+const { formatEventTime } = useEventFormat()
+
 const pendingIds = ref<Set<string>>(new Set())
 
 const upcomingEvents = computed(() =>
@@ -127,13 +129,7 @@ async function handleToggleEventBookmark(eventId: string, title: string) {
           </div>
           <div v-if="event.event_time" class="event-time">
             <IconsTime class="meta-icon" />
-            {{ new Date(event.event_time).toLocaleString('uk-UA', {
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit',
-            }) }}
+            {{ formatEventTime(event.event_time) }}
           </div>
         </div>
       </div>
