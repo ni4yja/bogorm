@@ -44,8 +44,8 @@ function toggleCollapse() {
   state.value = state.value === 'collapsed' ? 'list' : 'collapsed'
 }
 
-async function handleToggleBookmark(eventId: string) {
-  await toggleBookmark('event', eventId)
+async function handleToggleBookmark(eventId: string, eventTitle: string) {
+  await toggleBookmark('event', eventId, eventTitle)
 }
 </script>
 
@@ -76,7 +76,7 @@ async function handleToggleBookmark(eventId: string) {
             <button
               class="bookmark-btn"
               aria-label="Save event"
-              @click="handleToggleBookmark(selectedEvent.id)"
+              @click="handleToggleBookmark(selectedEvent.id, selectedEvent.title)"
             >
               <IconsBookmarkActive v-if="isBookmarked('event', selectedEvent.id)" class="bookmark-icon" />
               <IconsBookmark v-else class="bookmark-icon" />
@@ -150,7 +150,7 @@ async function handleToggleBookmark(eventId: string) {
           <button
             class="bookmark-btn bookmark-btn--list"
             aria-label="Save event"
-            @click.stop="handleToggleBookmark(event.id)"
+            @click.stop="handleToggleBookmark(event.id, event.title)"
           >
             <IconsBookmarkActive v-if="isBookmarked('event', event.id)" class="bookmark-icon" />
             <IconsBookmark v-else class="bookmark-icon" />

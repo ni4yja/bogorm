@@ -23,13 +23,19 @@ export function useBookmarks() {
     }
   }
 
-  const toggleBookmark = async (type: 'place' | 'event', id: string) => {
+  const toggleBookmark = async (type: 'place' | 'event', id: string, title?: string) => {
     const current = isBookmarked(type, id)
     const path = `/${type}s/${id}/bookmark/`
     const response = current
       ? await del<{ bookmarked: boolean }>(path)
       : await put<{ bookmarked: boolean }>(path)
     setBookmarked(type, id, response.bookmarked)
+
+    if (response.bookmarked && title) {
+      const { show } = useToast()
+      show(`${title} saved to bookmarks`, { label: 'View bookmarks', to: '/bookmarks' })
+    }
+
     return response.bookmarked
   }
 

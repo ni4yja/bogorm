@@ -30,11 +30,11 @@ watch(() => props.events, (newEvents) => {
 })
 
 async function handleTogglePlaceBookmark() {
-  await toggleBookmark('place', props.place.id)
+  await toggleBookmark('place', props.place.id, props.place.title)
 }
 
-async function handleToggleEventBookmark(eventId: string) {
-  await toggleBookmark('event', eventId)
+async function handleToggleEventBookmark(eventId: string, eventTitle: string) {
+  await toggleBookmark('event', eventId, eventTitle)
 }
 </script>
 
@@ -99,7 +99,7 @@ async function handleToggleEventBookmark(eventId: string) {
             <button
               class="bookmark-btn"
               aria-label="Save event"
-              @click="handleToggleEventBookmark(event.id)"
+              @click="handleToggleEventBookmark(event.id, event.title)"
             >
               <IconsBookmarkActive v-if="isBookmarked('event', event.id)" class="bookmark-icon" />
               <IconsBookmark v-else class="bookmark-icon" />
