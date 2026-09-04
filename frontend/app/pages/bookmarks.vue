@@ -22,6 +22,7 @@ const error = ref('')
 const totalPages = computed(() => Math.max(1, Math.ceil(totalCount.value / 20)))
 
 let latestRequestId = 0
+const countsError = ref(false)
 
 async function loadBookmarks() {
   const requestId = ++latestRequestId
@@ -62,6 +63,7 @@ async function loadBookmarks() {
 }
 
 async function loadCounts() {
+  countsError.value = false
   try {
     const [placesResponse, eventsResponse] = await Promise.all([
       fetchBookmarks('place', 1),
@@ -78,6 +80,7 @@ async function loadCounts() {
     }
   }
   catch {
+    countsError.value = true
   }
 }
 
@@ -155,10 +158,9 @@ onMounted(async () => {
       <div v-if="isLoading" class="state-message">
         Loading…
       </div>
-      <div v-else-if="error" class="state-message">
-        {{ error }}
+      <div v-else-if="error || countsError" class="state-message">
+        Could not load bookmarks. Please try again.
       </div>
-
       <div v-else-if="items.length === 0" class="empty-state">
         <IconsPin v-if="activeTab === 'place'" class="empty-icon" />
         <IconsCalendar v-else class="empty-icon" />
