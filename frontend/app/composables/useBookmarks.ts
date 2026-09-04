@@ -5,26 +5,37 @@ export function useBookmarks() {
 
   const bookmarkedPlaces = useState<Record<string, boolean>>('bookmarkedPlaces', () => ({}))
   const bookmarkedEvents = useState<Record<string, boolean>>('bookmarkedEvents', () => ({}))
+  const pendingIds = useState<Record<string, boolean>>('bookmarkPendingIds', () => ({}))
+
+  const getStore = (type: 'place' | 'event') => type === 'place' ? bookmarkedPlaces : bookmarkedEvents
 
   const isBookmarked = (type: 'place' | 'event', id: string): boolean => {
-    const store = type === 'place' ? bookmarkedPlaces : bookmarkedEvents
-    return store.value[id] ?? false
+    return getStore(type).value[id] ?? false
   }
 
   const setBookmarked = (type: 'place' | 'event', id: string, value: boolean) => {
-    const store = type === 'place' ? bookmarkedPlaces : bookmarkedEvents
-    store.value[id] = value
+    getStore(type).value[id] = value
   }
 
   const registerInitialState = (type: 'place' | 'event', id: string, value: boolean) => {
-    const store = type === 'place' ? bookmarkedPlaces : bookmarkedEvents
+    const store = getStore(type)
     if (!(id in store.value)) {
       store.value[id] = value
     }
   }
 
+  const isPending = (type: 'place' | 'event', id: string): boolean => {
+    return pendingIds.value[`${type}:${id}`] ?? false
+  }
+
   const toggleBookmark = async (type: 'place' | 'event', id: string, title?: string) => {
     const current = isBookmarked(type, id)
+    const key = `${type}:${id}`
+    if (pendingIds.value[key]) {
+      return current
+    }
+
+    pendingIds.value[key] = true
     const path = `/${type}s/${id}/bookmark/`
 
     try {
@@ -45,11 +56,14 @@ export function useBookmarks() {
       show('Could not update bookmark. Please try again.')
       return current
     }
+    finally {
+      delete pendingIds.value[key]
+    }
   }
 
   const fetchBookmarks = async (type: 'place' | 'event', page = 1) => {
     return await get<PaginatedResponse<BookmarkItem>>(`/bookmarks/?type=${type}&page=${page}`)
   }
 
-  return { isBookmarked, registerInitialState, toggleBookmark, fetchBookmarks }
+  return { isBookmarked, isPending, registerInitialState, toggleBookmark, fetchBookmarks }
 }
