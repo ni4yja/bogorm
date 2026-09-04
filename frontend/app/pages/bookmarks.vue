@@ -19,12 +19,19 @@ const error = ref('')
 
 const totalPages = computed(() => Math.max(1, Math.ceil(totalCount.value / 20)))
 
+let latestRequestId = 0
+
 async function loadBookmarks() {
+  const requestId = ++latestRequestId
   isLoading.value = true
   error.value = ''
 
   try {
     const response = await fetchBookmarks(activeTab.value, currentPage.value)
+
+    if (requestId !== latestRequestId)
+      return
+
     items.value = response.results
     totalCount.value = response.count
 
@@ -38,10 +45,12 @@ async function loadBookmarks() {
       eventsCount.value = response.count
   }
   catch {
-    error.value = 'Could not load bookmarks'
+    if (requestId === latestRequestId)
+      error.value = 'Could not load bookmarks'
   }
   finally {
-    isLoading.value = false
+    if (requestId === latestRequestId)
+      isLoading.value = false
   }
 }
 
