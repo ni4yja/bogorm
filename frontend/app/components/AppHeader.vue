@@ -1,6 +1,5 @@
 <script setup lang="ts">
-const { isAuthenticated, logout } = useAuth()
-const router = useRouter()
+const { isAuthenticated, logoutAndRedirect } = useAuth()
 
 const isDropdownOpen = ref(false)
 const isMounted = ref(false)
@@ -10,15 +9,14 @@ onClickOutside(accountRef, () => {
   isDropdownOpen.value = false
 })
 
+async function handleLogout() {
+  isDropdownOpen.value = false
+  await logoutAndRedirect()
+}
+
 onMounted(() => {
   isMounted.value = true
 })
-
-async function handleLogout() {
-  isDropdownOpen.value = false
-  await logout()
-  await router.push('/')
-}
 </script>
 
 <template>
@@ -45,7 +43,11 @@ async function handleLogout() {
       </button>
 
       <div v-if="isDropdownOpen" class="dropdown">
-        <button class="dropdown-item" @click="handleLogout">
+        <NuxtLink to="/bookmarks" class="dropdown-item" @click="isDropdownOpen = false">
+          <IconsBookmarkActive class="dropdown-icon" />
+          Bookmarks
+        </NuxtLink>
+        <button class="dropdown-item dropdown-item--logout" @click="handleLogout">
           <IconsLogOut class="dropdown-icon" />
           Log Out
         </button>
@@ -151,38 +153,48 @@ async function handleLogout() {
 
 .dropdown {
   position: absolute;
-  top: calc(100% + 0.5rem);
+  top: calc(100% + 0.75rem);
   right: 0;
   background: var(--color-white);
-  border: 1px solid var(--color-light-grey-40);
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  min-width: 160px;
-  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  min-width: 220px;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .dropdown-item {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.75rem;
   text-align: left;
-  padding: 0.65rem 1rem;
+  padding: 0.75rem 1rem;
   background: none;
   border: none;
+  border-radius: 10px;
   cursor: pointer;
   font-family: 'Inter', sans-serif;
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--color-primary);
+  text-decoration: none;
 }
 
 .dropdown-item:hover {
   background: var(--color-light-grey-40);
 }
 
+.dropdown-item--logout {
+  border: 1.5px solid var(--color-primary);
+  justify-content: center;
+  margin-top: 0.25rem;
+}
+
 .dropdown-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
 }
 </style>

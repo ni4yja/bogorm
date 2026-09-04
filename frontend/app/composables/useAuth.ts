@@ -1,6 +1,7 @@
 export function useAuth() {
   const { accessToken, refreshToken } = useAuthTokens()
   const { post } = useApi()
+  const router = useRouter()
 
   const isAuthenticated = computed(() => !!accessToken.value)
 
@@ -30,5 +31,10 @@ export function useAuth() {
     refreshToken.value = null
   }
 
-  return { isAuthenticated, login, register, logout }
+  const logoutAndRedirect = async () => {
+    await logout()
+    await router.push('/')
+  }
+
+  return { isAuthenticated, login, register, logout, logoutAndRedirect }
 }

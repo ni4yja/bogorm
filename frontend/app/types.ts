@@ -16,6 +16,7 @@ export interface PlaceDetail {
   category: number
   address: string
   website: string
+  is_bookmarked: boolean
 }
 
 export interface PlaceMinimal {
@@ -35,6 +36,7 @@ export interface Event {
   description: string
   event_time: string | null
   category: number
+  is_bookmarked: boolean
 }
 
 export interface EventListItem extends Event {
@@ -46,4 +48,29 @@ export interface PaginatedResponse<T> {
   next: string | null
   previous: string | null
   results: T[]
+}
+
+export interface BookmarkPlaceTarget {
+  type: 'place'
+  id: string
+  title: string
+  lat: number
+  lng: number
+}
+
+export interface BookmarkEventTarget {
+  type: 'event'
+  id: string
+  title: string
+  event_time: string | null
+  category: number
+}
+
+export type BookmarkTarget = BookmarkPlaceTarget | BookmarkEventTarget
+
+export interface BookmarkItem {
+  id: string
+  type: 'place' | 'event'
+  target: BookmarkTarget
+  created_at: string
 }

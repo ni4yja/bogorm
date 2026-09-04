@@ -12,9 +12,50 @@ defineEmits<{
   close: []
 }>()
 
+const { formatEventTime } = useEventFormat()
+
+const pendingIds = ref<Set<string>>(new Set())
+
 const upcomingEvents = computed(() =>
   props.events.filter(e => e.event_time && new Date(e.event_time) > new Date()),
 )
+
+const { isBookmarked, registerInitialState, toggleBookmark } = useBookmarks()
+
+registerInitialState('place', props.place.id, props.place.is_bookmarked)
+props.events.forEach(e => registerInitialState('event', e.id, e.is_bookmarked))
+
+watch(() => props.place, (newPlace) => {
+  registerInitialState('place', newPlace.id, newPlace.is_bookmarked)
+})
+
+watch(() => props.events, (newEvents) => {
+  newEvents.forEach(e => registerInitialState('event', e.id, e.is_bookmarked))
+})
+
+async function handleTogglePlaceBookmark() {
+  if (pendingIds.value.has(props.place.id))
+    return
+  pendingIds.value.add(props.place.id)
+  try {
+    await toggleBookmark('place', props.place.id, props.place.title)
+  }
+  finally {
+    pendingIds.value.delete(props.place.id)
+  }
+}
+
+async function handleToggleEventBookmark(eventId: string, title: string) {
+  if (pendingIds.value.has(eventId))
+    return
+  pendingIds.value.add(eventId)
+  try {
+    await toggleBookmark('event', eventId, title)
+  }
+  finally {
+    pendingIds.value.delete(eventId)
+  }
+}
 </script>
 
 <template>
@@ -39,8 +80,15 @@ const upcomingEvents = computed(() =>
         <h2 class="title">
           {{ place.title }}
         </h2>
-        <button v-if="isAuthenticated" class="bookmark-btn" aria-label="Save place">
-          <IconsBookmark class="bookmark-icon" />
+        <button
+          v-if="isAuthenticated"
+          class="bookmark-btn"
+          :disabled="pendingIds.has(place.id)"
+          aria-label="Save place"
+          @click="handleTogglePlaceBookmark"
+        >
+          <IconsBookmarkActive v-if="isBookmarked('place', place.id)" class="bookmark-icon" />
+          <IconsBookmark v-else class="bookmark-icon" />
         </button>
       </div>
 
@@ -69,19 +117,19 @@ const upcomingEvents = computed(() =>
         <div v-for="event in upcomingEvents" :key="event.id" class="event-item">
           <div class="event-title">
             {{ event.title }}
-            <button class="bookmark-btn" aria-label="Save event">
-              <IconsBookmark class="bookmark-icon" />
+            <button
+              class="bookmark-btn"
+              :disabled="pendingIds.has(event.id)"
+              aria-label="Save event"
+              @click="handleToggleEventBookmark(event.id, event.title)"
+            >
+              <IconsBookmarkActive v-if="isBookmarked('event', event.id)" class="bookmark-icon" />
+              <IconsBookmark v-else class="bookmark-icon" />
             </button>
           </div>
           <div v-if="event.event_time" class="event-time">
             <IconsTime class="meta-icon" />
-            {{ new Date(event.event_time).toLocaleString('uk-UA', {
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit',
-            }) }}
+            {{ formatEventTime(event.event_time) }}
           </div>
         </div>
       </div>
