@@ -35,7 +35,7 @@ export function useBookmarks() {
 
       if (response.bookmarked && title) {
         const { show } = useToast()
-        show(`${title} saved to bookmarks`, { label: 'View bookmarks', to: '/bookmarks' })
+        show(`${title} saved to bookmarks`, { label: 'View bookmarks', to: `/bookmarks?type=${type}` })
       }
 
       return response.bookmarked

@@ -3,13 +3,17 @@ import type { BookmarkEventTarget, BookmarkItem, BookmarkPlaceTarget } from '~/t
 
 definePageMeta({ layout: 'default' })
 
+const route = useRoute()
 const { fetchBookmarks, toggleBookmark, isBookmarked, registerInitialState } = useBookmarks()
 const { getCategoryLabel } = useEventCategory()
 const { formatEventTime } = useEventFormat()
 
 type Tab = 'place' | 'event'
 
-const activeTab = ref<Tab>('place')
+const activeTab = ref<Tab>(
+  route.query.type === 'event' ? 'event' : 'place',
+)
+
 const currentPage = ref(1)
 const totalCount = ref(0)
 const pageSize = ref(20)
