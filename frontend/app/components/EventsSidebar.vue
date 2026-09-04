@@ -10,6 +10,7 @@ const emit = defineEmits<{
 const { events, isLoading, error, fetchWeeklyEvents } = useEventsSidebar()
 const { getCategoryLabel } = useEventCategory()
 const { isBookmarked, registerInitialState, toggleBookmark } = useBookmarks()
+const { formatEventTime } = useEventFormat()
 
 const state = ref<SidebarState>('list')
 const selectedEvent = ref<EventListItem | null>(null)
@@ -41,18 +42,6 @@ defineExpose({ closeDetail })
 
 function toggleCollapse() {
   state.value = state.value === 'collapsed' ? 'list' : 'collapsed'
-}
-
-function formatEventTime(eventTime: string | null) {
-  if (!eventTime)
-    return ''
-  return new Date(eventTime).toLocaleString('pl-PL', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
 }
 
 async function handleToggleBookmark(eventId: string) {

@@ -1,6 +1,5 @@
 <script setup lang="ts">
-const { isAuthenticated, logout } = useAuth()
-const router = useRouter()
+const { isAuthenticated, logoutAndRedirect } = useAuth()
 
 const isDropdownOpen = ref(false)
 const isMounted = ref(false)
@@ -10,15 +9,14 @@ onClickOutside(accountRef, () => {
   isDropdownOpen.value = false
 })
 
+async function handleLogout() {
+  isDropdownOpen.value = false
+  await logoutAndRedirect()
+}
+
 onMounted(() => {
   isMounted.value = true
 })
-
-async function handleLogout() {
-  isDropdownOpen.value = false
-  await logout()
-  await router.push('/')
-}
 </script>
 
 <template>

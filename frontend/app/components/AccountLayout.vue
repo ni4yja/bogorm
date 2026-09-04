@@ -1,16 +1,10 @@
 <script setup lang="ts">
 const route = useRoute()
-const { logout } = useAuth()
-const router = useRouter()
+const { logoutAndRedirect } = useAuth()
 
 const navItems = [
   { label: 'Bookmarks', to: '/bookmarks', icon: 'IconsBookmark' },
 ]
-
-async function handleLogout() {
-  await logout()
-  await router.push('/')
-}
 </script>
 
 <template>
@@ -29,7 +23,7 @@ async function handleLogout() {
         </NuxtLink>
       </nav>
 
-      <button class="logout-btn" @click="handleLogout">
+      <button class="logout-btn" @click="logoutAndRedirect">
         <IconsLogOut class="logout-icon" />
         Log Out
       </button>

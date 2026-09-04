@@ -5,6 +5,7 @@ definePageMeta({ layout: 'default' })
 
 const { fetchBookmarks, toggleBookmark, isBookmarked, registerInitialState } = useBookmarks()
 const { getCategoryLabel } = useEventCategory()
+const { formatEventTime } = useEventFormat()
 
 type Tab = 'place' | 'event'
 
@@ -67,6 +68,13 @@ async function loadCounts() {
     ])
     placesCount.value = placesResponse.count
     eventsCount.value = eventsResponse.count
+
+    const activeResponse = activeTab.value === 'place' ? placesResponse : eventsResponse
+    items.value = activeResponse.results
+    totalCount.value = activeResponse.count
+    for (const item of activeResponse.results) {
+      registerInitialState(item.type, item.target.id, true)
+    }
   }
   catch {
   }
@@ -90,18 +98,6 @@ async function handleToggleBookmark(type: Tab, id: string) {
   await loadBookmarks()
 }
 
-function formatEventTime(eventTime: string | null) {
-  if (!eventTime)
-    return ''
-  return new Date(eventTime).toLocaleString('pl-PL', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
-}
-
 function isPlaceTarget(target: BookmarkItem['target']): target is BookmarkPlaceTarget {
   return target.type === 'place'
 }
@@ -111,8 +107,9 @@ function isEventTarget(target: BookmarkItem['target']): target is BookmarkEventT
 }
 
 onMounted(async () => {
+  isLoading.value = true
   await loadCounts()
-  await loadBookmarks()
+  isLoading.value = false
 })
 </script>
 
