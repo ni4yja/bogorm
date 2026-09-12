@@ -22,6 +22,7 @@ SEED_COMMANDS_ENABLED = False
 # Application definition
 
 INSTALLED_APPS = [
+    "modeltranslation",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -102,7 +103,16 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "pl"
+
+LANGUAGES = [
+    ("pl", "Polski"),
+    ("en", "English"),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / "locale",
+]
 
 TIME_ZONE = "UTC"
 
@@ -146,24 +156,3 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "Interactive literary map",
     "VERSION": "1.0.0",
 }
-
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
-
-LANGUAGE_CODE = "pl"
-
-LANGUAGES = [
-    ("pl", "Polski"),
-    ("en", "English"),
-]
-
-LOCALE_PATHS = [
-    BASE_DIR / "locale",
-]
-
-TIME_ZONE = "UTC"
-
-USE_I18N = True
-
-USE_TZ = True
