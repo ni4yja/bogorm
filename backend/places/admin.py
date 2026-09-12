@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib import admin
 from django.core.validators import MaxValueValidator, MinValueValidator
+from modeltranslation.admin import TranslationAdmin
 
 from .models import Place
 
@@ -51,6 +52,6 @@ class PlaceAdminForm(forms.ModelForm):
 
 
 @admin.register(Place)
-class PlaceAdmin(admin.ModelAdmin):
+class PlaceAdmin(TranslationAdmin):
     form = PlaceAdminForm
     list_display = ["title", "category", "created_at"]
