@@ -34,7 +34,7 @@ jobs:
       - name: Install GDAL
         run: |
           for i in 1 2 3 4 5; do
-            sudo apt-get update && sudo apt-get install -y gdal-bin libgdal-dev && break
+            sudo apt-get update && sudo apt-get install -y gdal-bin libgdal-dev gettext && break
             echo "Attempt $i failed, retrying in 20s..."
             sleep 20
           done
@@ -44,7 +44,12 @@ jobs:
 
       - name: Compile translations
         working-directory: backend
-        run: find . -name "*.po" -exec sh -c 'msgfmt -o "${1%.po}.mo" "$1"' _ {} \;
+        run: |
+          msgfmt --version
+          for po in $(find . -name "*.po"); do
+            msgfmt -o "${po%.po}.mo" "$po"
+          done
+          ls locale/pl/LC_MESSAGES/
 
       - name: Run tests
         env:
