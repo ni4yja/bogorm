@@ -4,17 +4,18 @@ from datetime import timedelta
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from places.models import Place
 
 
 class EventCategory(models.IntegerChoices):
-    BOOK_PRESENTATION = 10, "Book Presentation"
-    AUTHOR_MEETING = 20, "Author Meeting"
-    DISCUSSION = 30, "Discussion"
-    LECTURE = 40, "Lecture"
-    BOOK_CLUB = 50, "Book Club"
-    OTHER = 60, "Other"
+    BOOK_PRESENTATION = 10, _("Book Presentation")
+    AUTHOR_MEETING = 20, _("Author Meeting")
+    DISCUSSION = 30, _("Discussion")
+    LECTURE = 40, _("Lecture")
+    BOOK_CLUB = 50, _("Book Club")
+    OTHER = 60, _("Other")
 
 
 class EventQuerySet(models.QuerySet):
