@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y \
     gdal-bin \
     libgdal-dev \
     libgeos-dev \
+    gettext \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
