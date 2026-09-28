@@ -42,6 +42,10 @@ jobs:
       - name: Install dependencies
         run: pip install -r backend/requirements/local.txt
 
+      - name: Compile translations
+        working-directory: backend
+        run: find . -name "*.po" -exec sh -c 'msgfmt -o "${1%.po}.mo" "$1"' _ {} \;
+
       - name: Run tests
         env:
           SECRET_KEY: test-secret-key
