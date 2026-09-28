@@ -1,4 +1,5 @@
 import django_filters
+from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import FilterSet
 from rest_framework.exceptions import ValidationError
 
@@ -36,7 +37,7 @@ class EventFilterSet(FilterSet):
 
         status_value = self.data.get("status")
         if status_value == "":
-            raise ValidationError({"status": ["Must be 'upcoming' or 'archived'."]})
+            raise ValidationError({"status": [_("Must be 'upcoming' or 'archived'.")]})
         status_value = status_value or "upcoming"
         queryset = (
             queryset.upcoming() if status_value == "upcoming" else queryset.archived()
@@ -46,13 +47,13 @@ class EventFilterSet(FilterSet):
         if week_value == "current":
             if status_value != "upcoming":
                 raise ValidationError(
-                    {"week": ["Only valid when status is 'upcoming'."]}
+                    {"week": [_("Only valid when status is 'upcoming'.")]}
                 )
             queryset = queryset.this_week()
 
         category_value = self.data.get("category")
         if category_value == "":
-            raise ValidationError({"category": ["Must be a valid category."]})
+            raise ValidationError({"category": [_("Must be a valid category.")]})
         if category_value:
             queryset = queryset.filter(category=category_value)
 

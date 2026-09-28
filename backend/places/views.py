@@ -1,5 +1,6 @@
 from django.contrib.gis.geos import Polygon
 from django.db.models import Count, Exists, OuterRef, Q
+from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -41,12 +42,12 @@ class MapView(APIView):
     def get(self, request):
         bbox = request.query_params.get("bbox")
         if not bbox:
-            raise ValidationError("bbox query parameter is required")
+            raise ValidationError(_("bbox query parameter is required"))
 
         try:
             min_lng, min_lat, max_lng, max_lat = map(float, bbox.split(","))
         except ValueError:
-            raise ValidationError("bbox must be: minLng,minLat,maxLng,maxLat")
+            raise ValidationError(_("bbox must be: minLng,minLat,maxLng,maxLat"))
 
         bounds = Polygon.from_bbox((min_lng, min_lat, max_lng, max_lat))
         bounds.srid = 4326

@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
@@ -20,7 +21,12 @@ class BookmarkViewSet(ReadOnlyModelViewSet):
         if type_param is not None:
             if type_param not in BOOKMARK_TYPES:
                 raise ValidationError(
-                    {"type": f"Must be one of: {', '.join(BOOKMARK_TYPES)}."}
+                    {
+                        "type": [
+                            _("Must be one of: %(types)s.")
+                            % {"types": ", ".join(BOOKMARK_TYPES)}
+                        ]
+                    }
                 )
             queryset = queryset.filter(**{f"{type_param}__isnull": False})
 
