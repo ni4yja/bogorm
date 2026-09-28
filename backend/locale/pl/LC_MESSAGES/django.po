@@ -1,0 +1,94 @@
+# Polish translations for Bogorm.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Bogorm\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-28 15:45+0000\n"
+"PO-Revision-Date: 2026-09-28 16:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && "
+"(n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && "
+"n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+
+#: bookmarks/views.py:26
+#, python-format
+msgid "Must be one of: %(types)s."
+msgstr "Dozwolone wartości: %(types)s."
+
+#: events/filters.py:40
+msgid "Must be 'upcoming' or 'archived'."
+msgstr "Dozwolone wartości: 'upcoming' lub 'archived'."
+
+#: events/filters.py:50
+msgid "Only valid when status is 'upcoming'."
+msgstr "Dozwolone tylko, gdy status to 'upcoming'."
+
+#: events/filters.py:56
+msgid "Must be a valid category."
+msgstr "Podaj poprawną kategorię."
+
+#: events/models.py:13
+msgid "Book Presentation"
+msgstr "Prezentacja książki"
+
+#: events/models.py:14
+msgid "Author Meeting"
+msgstr "Spotkanie autorskie"
+
+#: events/models.py:15
+msgid "Discussion"
+msgstr "Dyskusja"
+
+#: events/models.py:16
+msgid "Lecture"
+msgstr "Wykład"
+
+#: events/models.py:17
+msgid "Book Club"
+msgstr "Klub książki"
+
+#: events/models.py:18 places/models.py:14
+msgid "Other"
+msgstr "Inne"
+
+#: places/models.py:9
+msgid "Library"
+msgstr "Biblioteka"
+
+#: places/models.py:10
+msgid "Bookshop"
+msgstr "Księgarnia"
+
+#: places/models.py:11
+msgid "Cultural Centre"
+msgstr "Centrum kultury"
+
+#: places/models.py:12
+msgid "Café"
+msgstr "Kawiarnia"
+
+#: places/models.py:13
+msgid "Museum"
+msgstr "Muzeum"
+
+#: places/views.py:45
+msgid "bbox query parameter is required"
+msgstr "Parametr zapytania bbox jest wymagany"
+
+#: places/views.py:50
+msgid "bbox must be: minLng,minLat,maxLng,maxLat"
+msgstr "bbox musi mieć format: minLng,minLat,maxLng,maxLat"
+
+#: users/views.py:29
+msgid "refresh token is required"
+msgstr "Token odświeżania jest wymagany"
+
+#: users/views.py:38
+msgid "invalid or already blacklisted token"
+msgstr "Nieprawidłowy token lub token jest już na czarnej liście"
