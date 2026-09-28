@@ -17,3 +17,5 @@ ARG REQUIREMENTS=requirements/production.txt
 RUN pip install -r $REQUIREMENTS
 
 COPY . .
+
+RUN find . -name "*.po" -exec sh -c 'msgfmt -o "${1%.po}.mo" "$1"' _ {} \;
