@@ -18,4 +18,4 @@ RUN pip install -r $REQUIREMENTS
 
 COPY . .
 
-RUN for po in $(find . -name "*.po"); do msgfmt -o "${po%.po}.mo" "$po"; done
+RUN set -e; for po in $(find . -name "*.po"); do msgfmt -o "${po%.po}.mo" "$po"; done
