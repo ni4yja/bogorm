@@ -45,6 +45,7 @@ jobs:
       - name: Compile translations
         working-directory: backend
         run: |
+          set -e
           msgfmt --version
           for po in $(find . -name "*.po"); do
             msgfmt -o "${po%.po}.mo" "$po"
