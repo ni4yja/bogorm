@@ -18,4 +18,8 @@ RUN pip install -r $REQUIREMENTS
 
 COPY . .
 
-RUN set -e; for po in $(find . -name "*.po"); do msgfmt -o "${po%.po}.mo" "$po"; done
+RUN SECRET_KEY=build-only \
+    DATABASE_URL=postgis://x:x@localhost/x \
+    DJANGO_SETTINGS_MODULE=config.settings.local \
+    PYTHONPATH=/app \
+    django-admin compilemessages
