@@ -21,5 +21,4 @@ COPY . .
 RUN SECRET_KEY=build-only \
     DATABASE_URL=postgis://x:x@localhost/x \
     DJANGO_SETTINGS_MODULE=config.settings.local \
-    PYTHONPATH=/app \
-    django-admin compilemessages
+    python manage.py compilemessages
