@@ -34,13 +34,21 @@ jobs:
       - name: Install GDAL
         run: |
           for i in 1 2 3 4 5; do
-            sudo apt-get update && sudo apt-get install -y gdal-bin libgdal-dev && break
+            sudo apt-get update && sudo apt-get install -y gdal-bin libgdal-dev gettext && break
             echo "Attempt $i failed, retrying in 20s..."
             sleep 20
           done
 
       - name: Install dependencies
         run: pip install -r backend/requirements/local.txt
+
+      - name: Compile translations
+        working-directory: backend
+        env:
+          SECRET_KEY: test-secret-key
+          DATABASE_URL: postgis://bogorm:bogorm@localhost:5432/bogorm
+          DJANGO_SETTINGS_MODULE: config.settings.test
+        run: python manage.py compilemessages
 
       - name: Run tests
         env:

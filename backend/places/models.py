@@ -2,15 +2,16 @@ import uuid
 
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point
+from django.utils.translation import gettext_lazy as _
 
 
 class PlaceCategory(models.IntegerChoices):
-    LIBRARY = 10, "Library"
-    BOOKSHOP = 20, "Bookshop"
-    CULTURAL_CENTRE = 30, "Cultural Centre"
-    CAFE = 40, "Café"
-    MUSEUM = 50, "Museum"
-    OTHER = 60, "Other"
+    LIBRARY = 10, _("Library")
+    BOOKSHOP = 20, _("Bookshop")
+    CULTURAL_CENTRE = 30, _("Cultural Centre")
+    CAFE = 40, _("Café")
+    MUSEUM = 50, _("Museum")
+    OTHER = 60, _("Other")
 
 
 class Place(models.Model):

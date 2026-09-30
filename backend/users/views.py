@@ -1,3 +1,4 @@
+from django.utils.translation import gettext as _
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -25,7 +26,7 @@ class LogoutView(APIView):
         refresh_token = request.data.get("refresh")
         if not refresh_token:
             return Response(
-                {"error": "refresh token is required"},
+                {"error": _("refresh token is required")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -34,7 +35,7 @@ class LogoutView(APIView):
             token.blacklist()
         except TokenError:
             return Response(
-                {"error": "invalid or already blacklisted token"},
+                {"error": _("invalid or already blacklisted token")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
