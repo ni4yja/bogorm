@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { isAuthenticated, logoutAndRedirect } = useAuth()
+const { t } = useI18n()
 
 const isDropdownOpen = ref(false)
 const isMounted = ref(false)
@@ -29,10 +30,10 @@ onMounted(() => {
 
     <nav v-else-if="!isAuthenticated" class="nav">
       <NuxtLink to="/register" class="btn btn-primary">
-        Sign Up
+        {{ t('header.signUp') }}
       </NuxtLink>
       <NuxtLink to="/login" class="btn btn-outline">
-        <IconsLogIn class="btn-icon" /> Log In
+        <IconsLogIn class="btn-icon" /> {{ t('header.logIn') }}
       </NuxtLink>
     </nav>
 
@@ -45,11 +46,11 @@ onMounted(() => {
       <div v-if="isDropdownOpen" class="dropdown">
         <NuxtLink to="/bookmarks" class="dropdown-item" @click="isDropdownOpen = false">
           <IconsBookmarkActive class="dropdown-icon" />
-          Bookmarks
+          {{ t('header.bookmarks') }}
         </NuxtLink>
         <button class="dropdown-item dropdown-item--logout" @click="handleLogout">
           <IconsLogOut class="dropdown-icon" />
-          Log Out
+          {{ t('header.logOut') }}
         </button>
       </div>
     </div>
