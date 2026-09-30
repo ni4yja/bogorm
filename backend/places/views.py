@@ -1,6 +1,6 @@
 from django.contrib.gis.geos import Polygon
 from django.db.models import Count, Exists, OuterRef, Q
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext as _
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
