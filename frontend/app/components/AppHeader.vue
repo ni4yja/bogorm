@@ -26,32 +26,36 @@ onMounted(() => {
       Bogorm
     </NuxtLink>
 
-    <div v-if="!isMounted" class="nav-placeholder" />
+    <div class="header-right">
+      <LanguageSwitcher />
 
-    <nav v-else-if="!isAuthenticated" class="nav">
-      <NuxtLink to="/register" class="btn btn-primary">
-        {{ t('header.signUp') }}
-      </NuxtLink>
-      <NuxtLink to="/login" class="btn btn-outline">
-        <IconsLogIn class="btn-icon" /> {{ t('header.logIn') }}
-      </NuxtLink>
-    </nav>
+      <div v-if="!isMounted" class="nav-placeholder" />
 
-    <div v-else ref="accountRef" class="account">
-      <button class="account-trigger" @click="isDropdownOpen = !isDropdownOpen">
-        <IconsProfile class="avatar-icon" />
-        <IconsChevronDown class="chevron" :class="{ open: isDropdownOpen }" />
-      </button>
-
-      <div v-if="isDropdownOpen" class="dropdown">
-        <NuxtLink to="/bookmarks" class="dropdown-item" @click="isDropdownOpen = false">
-          <IconsBookmarkActive class="dropdown-icon" />
-          {{ t('header.bookmarks') }}
+      <nav v-else-if="!isAuthenticated" class="nav">
+        <NuxtLink to="/register" class="btn btn-primary">
+          {{ t('header.signUp') }}
         </NuxtLink>
-        <button class="dropdown-item dropdown-item--logout" @click="handleLogout">
-          <IconsLogOut class="dropdown-icon" />
-          {{ t('header.logOut') }}
+        <NuxtLink to="/login" class="btn btn-outline">
+          <IconsLogIn class="btn-icon" /> {{ t('header.logIn') }}
+        </NuxtLink>
+      </nav>
+
+      <div v-else ref="accountRef" class="account">
+        <button class="account-trigger" @click="isDropdownOpen = !isDropdownOpen">
+          <IconsProfile class="avatar-icon" />
+          <IconsChevronDown class="chevron" :class="{ open: isDropdownOpen }" />
         </button>
+
+        <div v-if="isDropdownOpen" class="dropdown">
+          <NuxtLink to="/bookmarks" class="dropdown-item" @click="isDropdownOpen = false">
+            <IconsBookmarkActive class="dropdown-icon" />
+            {{ t('header.bookmarks') }}
+          </NuxtLink>
+          <button class="dropdown-item dropdown-item--logout" @click="handleLogout">
+            <IconsLogOut class="dropdown-icon" />
+            {{ t('header.logOut') }}
+          </button>
+        </div>
       </div>
     </div>
   </header>
@@ -70,6 +74,12 @@ onMounted(() => {
   padding: var(--spacing-xs) var(--spacing-md);
   height: var(--header-height);
   background: var(--color-white);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .logo {
