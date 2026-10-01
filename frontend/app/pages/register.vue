@@ -2,6 +2,7 @@
 definePageMeta({ layout: 'auth' })
 
 const { register } = useAuth()
+const { t } = useI18n()
 
 const email = ref('')
 const username = ref('')
@@ -9,39 +10,39 @@ const password = ref('')
 
 const { error, isLoading, handleSubmit } = useAuthForm(
   () => register(email.value, username.value, password.value),
-  'Could not create account. Please check your details.',
+  t('register.errorDefault'),
 )
 </script>
 
 <template>
-  <AuthLayout title="Sign up" subtitle="Create your Bogorm account">
+  <AuthLayout :title="t('register.title')" :subtitle="t('register.subtitle')">
     <form class="auth-form" @submit.prevent="handleSubmit">
-      <label class="label" for="email">Email</label>
+      <label class="label" for="email">{{ t('register.emailLabel') }}</label>
       <input
         id="email"
         v-model="email"
         type="email"
-        placeholder="name@example.com"
+        :placeholder="t('register.emailPlaceholder')"
         class="input"
         required
       >
 
-      <label class="label" for="username">Username</label>
+      <label class="label" for="username">{{ t('register.usernameLabel') }}</label>
       <input
         id="username"
         v-model="username"
         type="text"
-        placeholder="your_username"
+        :placeholder="t('register.usernamePlaceholder')"
         class="input"
         required
       >
 
-      <label class="label" for="password">Password</label>
+      <label class="label" for="password">{{ t('register.passwordLabel') }}</label>
       <input
         id="password"
         v-model="password"
         type="password"
-        placeholder="min 8 characters"
+        :placeholder="t('register.passwordPlaceholder')"
         class="input"
         minlength="8"
         required
@@ -52,13 +53,13 @@ const { error, isLoading, handleSubmit } = useAuthForm(
       </p>
 
       <button type="submit" class="btn-submit" :disabled="isLoading">
-        {{ isLoading ? 'Signing up…' : 'Sign up' }}
+        {{ isLoading ? t('register.submitting') : t('register.submit') }}
       </button>
     </form>
 
     <p class="switch-link">
-      Already have an account? <NuxtLink to="/login">
-        Log in
+      {{ t('register.hasAccount') }} <NuxtLink to="/login">
+        {{ t('register.logInLink') }}
       </NuxtLink>
     </p>
   </AuthLayout>

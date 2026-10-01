@@ -17,5 +17,35 @@
     "emptySubtitle": "Sprawdź później lub przeglądaj wszystkie nadchodzące wydarzenia poniżej.",
     "seeAll": "Zobacz wszystkie nadchodzące wydarzenia",
     "loadError": "Nie udało się wczytać wydarzeń"
+  },
+  "authLayout": {
+    "backToMap": "← Powrót do mapy"
+  },
+  "login": {
+    "title": "Zaloguj się",
+    "subtitle": "Witaj z powrotem w Bogorm",
+    "emailLabel": "Email",
+    "emailPlaceholder": "nazwa@przykład.com",
+    "passwordLabel": "Hasło",
+    "submit": "Zaloguj się",
+    "submitting": "Logowanie…",
+    "errorDefault": "Nieprawidłowy email lub hasło",
+    "noAccount": "Nie masz konta?",
+    "signUpLink": "Zarejestruj się"
+  },
+  "register": {
+    "title": "Zarejestruj się",
+    "subtitle": "Utwórz swoje konto Bogorm",
+    "emailLabel": "Email",
+    "emailPlaceholder": "nazwa@przykład.com",
+    "usernameLabel": "Nazwa użytkownika",
+    "usernamePlaceholder": "twoja_nazwa",
+    "passwordLabel": "Hasło",
+    "passwordPlaceholder": "min. 8 znaków",
+    "submit": "Zarejestruj się",
+    "submitting": "Rejestracja…",
+    "errorDefault": "Nie udało się utworzyć konta. Sprawdź wprowadzone dane.",
+    "hasAccount": "Masz już konto?",
+    "logInLink": "Zaloguj się"
   }
 }

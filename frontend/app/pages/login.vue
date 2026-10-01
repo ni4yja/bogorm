@@ -2,30 +2,31 @@
 definePageMeta({ layout: 'auth' })
 
 const { login } = useAuth()
+const { t } = useI18n()
 
 const email = ref('')
 const password = ref('')
 
 const { error, isLoading, handleSubmit } = useAuthForm(
   () => login(email.value, password.value),
-  'Invalid email or password',
+  t('login.errorDefault'),
 )
 </script>
 
 <template>
-  <AuthLayout title="Log in" subtitle="Welcome back to Bogorm">
+  <AuthLayout :title="t('login.title')" :subtitle="t('login.subtitle')">
     <form class="auth-form" @submit.prevent="handleSubmit">
-      <label class="label" for="email">Email</label>
+      <label class="label" for="email">{{ t('login.emailLabel') }}</label>
       <input
         id="email"
         v-model="email"
         type="email"
-        placeholder="name@example.com"
+        :placeholder="t('login.emailPlaceholder')"
         class="input"
         required
       >
 
-      <label class="label" for="password">Password</label>
+      <label class="label" for="password">{{ t('login.passwordLabel') }}</label>
       <input
         id="password"
         v-model="password"
@@ -40,13 +41,13 @@ const { error, isLoading, handleSubmit } = useAuthForm(
       </p>
 
       <button type="submit" class="btn-submit" :disabled="isLoading">
-        {{ isLoading ? 'Logging in…' : 'Log in' }}
+        {{ isLoading ? t('login.submitting') : t('login.submit') }}
       </button>
     </form>
 
     <p class="switch-link">
-      No account? <NuxtLink to="/register">
-        Sign up
+      {{ t('login.noAccount') }} <NuxtLink to="/register">
+        {{ t('login.signUpLink') }}
       </NuxtLink>
     </p>
   </AuthLayout>

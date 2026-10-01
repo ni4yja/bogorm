@@ -17,5 +17,35 @@
     "emptySubtitle": "Check back later or browse all upcoming events below.",
     "seeAll": "See All Upcoming Events",
     "loadError": "Could not load events"
+  },
+  "authLayout": {
+    "backToMap": "← Back to map"
+  },
+  "login": {
+    "title": "Log in",
+    "subtitle": "Welcome back to Bogorm",
+    "emailLabel": "Email",
+    "emailPlaceholder": "name@example.com",
+    "passwordLabel": "Password",
+    "submit": "Log in",
+    "submitting": "Logging in…",
+    "errorDefault": "Invalid email or password",
+    "noAccount": "No account?",
+    "signUpLink": "Sign up"
+  },
+  "register": {
+    "title": "Sign up",
+    "subtitle": "Create your Bogorm account",
+    "emailLabel": "Email",
+    "emailPlaceholder": "name@example.com",
+    "usernameLabel": "Username",
+    "usernamePlaceholder": "your_username",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "min 8 characters",
+    "submit": "Sign up",
+    "submitting": "Signing up…",
+    "errorDefault": "Could not create account. Please check your details.",
+    "hasAccount": "Already have an account?",
+    "logInLink": "Log in"
   }
 }
