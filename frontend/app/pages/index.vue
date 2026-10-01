@@ -86,9 +86,14 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
         />
         <EventsSidebar v-if="isAuthenticated" ref="sidebarRef" @select-event="handleSelectEvent" />
         <div v-if="isBannerVisible && !isAuthenticated" class="unauth-banner">
-          <p>
-            {{ t('home.unauthBannerPrefix') }}, <strong>{{ t('home.unauthBannerBold1') }}</strong>{{ t('home.unauthBannerMiddle') }} <strong>{{ t('home.unauthBannerBold2') }}</strong>.
-          </p>
+          <i18n-t keypath="home.unauthBanner" tag="p" scope="global">
+            <template #bold1>
+              <strong>{{ t('home.unauthBannerBold1') }}</strong>
+            </template>
+            <template #bold2>
+              <strong>{{ t('home.unauthBannerBold2') }}</strong>
+            </template>
+          </i18n-t>
           <NuxtLink to="/register" class="btn-full">
             {{ t('home.fullExperience') }}
           </NuxtLink>

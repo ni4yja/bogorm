@@ -1,4 +1,8 @@
-export function useAuthForm(action: () => Promise<unknown>, errorMessage: string) {
+// ponytail: errorMessage is resolved lazily (string | () => string) instead of
+// a pre-resolved string, so a t('...') passed in stays reactive to locale
+// switches — it's read at the moment the error actually fires, not captured
+// once when the page mounts.
+export function useAuthForm(action: () => Promise<unknown>, errorMessage: string | (() => string)) {
   const router = useRouter()
 
   const error = ref('')
@@ -13,7 +17,7 @@ export function useAuthForm(action: () => Promise<unknown>, errorMessage: string
       await router.push('/')
     }
     catch {
-      error.value = errorMessage
+      error.value = typeof errorMessage === 'function' ? errorMessage() : errorMessage
     }
     finally {
       isLoading.value = false

@@ -10,7 +10,7 @@ const password = ref('')
 
 const { error, isLoading, handleSubmit } = useAuthForm(
   () => register(email.value, username.value, password.value),
-  t('register.errorDefault'),
+  () => t('register.errorDefault'),
 )
 </script>
 

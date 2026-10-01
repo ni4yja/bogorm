@@ -80,9 +80,8 @@
   "home": {
     "heroTitle": "Reading doesn't have to be a lonely habit!",
     "heroSubtitle": "Discover places, events, and people around books. It's totally free. And absolutely fun!",
-    "unauthBannerPrefix": "Without an account",
+    "unauthBanner": "Without an account, {bold1}. To check events' details, note your impressions, and stay up-to-date with literary life of Warsaw, you need to {bold2}.",
     "unauthBannerBold1": "you can only view the map with places",
-    "unauthBannerMiddle": ". To check events' details, note your impressions, and stay up-to-date with literary life of Warsaw, you need to",
     "unauthBannerBold2": "sign up to our platform",
     "fullExperience": "Get The Full Experience"
   },

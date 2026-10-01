@@ -4,7 +4,13 @@ export function useApi() {
   const config = useRuntimeConfig()
   const { accessToken, refreshToken } = useAuthTokens()
   const router = useRouter()
-  const { locale } = useI18n()
+  // ponytail: useNuxtApp().$i18n instead of useI18n() — useI18n() needs Vue's
+  // component instance (getCurrentInstance()), which is gone after an `await`
+  // inside an async setup/lifecycle callback. useApi() gets called that way
+  // (useMapMarkers() inside index.vue's async onMounted), so useI18n() would
+  // throw "Must be called at the top of a setup function" there. $i18n reads
+  // through Nuxt's app context instead, which survives post-await calls.
+  const { $i18n } = useNuxtApp()
 
   const AUTH_PATHS = ['/auth/login/', '/auth/register/', '/auth/refresh/']
   const isAuthPath = (path: string) => AUTH_PATHS.some(p => path.startsWith(p))
@@ -63,7 +69,7 @@ export function useApi() {
 
   const getHeaders = (path: string): Record<string, string> => {
     const headers: Record<string, string> = {
-      'Accept-Language': locale.value,
+      'Accept-Language': $i18n.locale.value,
     }
 
     if (!isAuthPath(path) && accessToken.value) {

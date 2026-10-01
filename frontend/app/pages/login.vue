@@ -9,7 +9,7 @@ const password = ref('')
 
 const { error, isLoading, handleSubmit } = useAuthForm(
   () => login(email.value, password.value),
-  t('login.errorDefault'),
+  () => t('login.errorDefault'),
 )
 </script>
 
