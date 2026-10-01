@@ -3,12 +3,14 @@ defineProps<{
   title: string
   subtitle: string
 }>()
+
+const { t } = useI18n()
 </script>
 
 <template>
   <div class="auth-page">
     <NuxtLink to="/" class="back-link">
-      ← Back to map
+      {{ t('authLayout.backToMap') }}
     </NuxtLink>
 
     <div class="auth-card">

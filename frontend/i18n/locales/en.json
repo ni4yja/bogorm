@@ -1,0 +1,91 @@
+{
+  "header": {
+    "signUp": "Sign Up",
+    "logIn": "Log In",
+    "bookmarks": "Bookmarks",
+    "logOut": "Log Out"
+  },
+  "placeModal": {
+    "upcomingEventsCount": "{count} Upcoming Event | {count} Upcoming Events",
+    "upcomingEvents": "Upcoming Events:"
+  },
+  "eventsSidebar": {
+    "backToWeek": "To All Events This Week",
+    "title": "Events This Week",
+    "loading": "Loading…",
+    "emptyTitle": "No events this week",
+    "emptySubtitle": "Check back later or browse all upcoming events below.",
+    "seeAll": "See All Upcoming Events",
+    "loadError": "Could not load events"
+  },
+  "authLayout": {
+    "backToMap": "← Back to map"
+  },
+  "login": {
+    "title": "Log in",
+    "subtitle": "Welcome back to Bogorm",
+    "emailLabel": "Email",
+    "emailPlaceholder": "name{'@'}example.com",
+    "passwordLabel": "Password",
+    "submit": "Log in",
+    "submitting": "Logging in…",
+    "errorDefault": "Invalid email or password",
+    "noAccount": "No account?",
+    "signUpLink": "Sign up"
+  },
+  "register": {
+    "title": "Sign up",
+    "subtitle": "Create your Bogorm account",
+    "emailLabel": "Email",
+    "emailPlaceholder": "name{'@'}example.com",
+    "usernameLabel": "Username",
+    "usernamePlaceholder": "your_username",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "min 8 characters",
+    "submit": "Sign up",
+    "submitting": "Signing up…",
+    "errorDefault": "Could not create account. Please check your details.",
+    "hasAccount": "Already have an account?",
+    "logInLink": "Log in"
+  },
+  "accountLayout": {
+    "bookmarks": "Bookmarks",
+    "logOut": "Log Out"
+  },
+  "bookmarks": {
+    "title": "Bookmarks",
+    "subtitle": "This is the place for your saved places and events",
+    "placesTab": "Places ({count})",
+    "eventsTab": "Events ({count})",
+    "loading": "Loading…",
+    "loadError": "Could not load bookmarks. Please try again.",
+    "emptyTitlePlaces": "Looks like you saved no places yet!",
+    "emptyTitleEvents": "Looks like you saved no events yet!",
+    "emptySubtitlePlaces": "Explore places on map and save them to your bookmarks!",
+    "emptySubtitleEvents": "Explore events on map and save them to your bookmarks!",
+    "placeBadge": "Place",
+    "pageLabel": "Page {current} of {total}",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "removeBookmark": "Remove bookmark"
+  },
+  "eventCategory": {
+    "10": "Book Presentation",
+    "20": "Author Meeting",
+    "30": "Discussion",
+    "40": "Lecture",
+    "50": "Book Club",
+    "60": "Other"
+  },
+  "home": {
+    "heroTitle": "Reading doesn't have to be a lonely habit!",
+    "heroSubtitle": "Discover places, events, and people around books. It's totally free. And absolutely fun!",
+    "unauthBanner": "Without an account, {bold1}. To check events' details, note your impressions, and stay up-to-date with literary life of Warsaw, you need to {bold2}.",
+    "unauthBannerBold1": "you can only view the map with places",
+    "unauthBannerBold2": "sign up to our platform",
+    "fullExperience": "Get The Full Experience"
+  },
+  "events": {
+    "comingSoon": "Events page is coming soon."
+  }
+}

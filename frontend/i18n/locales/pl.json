@@ -1,0 +1,91 @@
+{
+  "header": {
+    "signUp": "Zarejestruj się",
+    "logIn": "Zaloguj się",
+    "bookmarks": "Zakładki",
+    "logOut": "Wyloguj się"
+  },
+  "placeModal": {
+    "upcomingEventsCount": "{count} nadchodzące wydarzenie | {count} nadchodzące wydarzenia | {count} nadchodzących wydarzeń",
+    "upcomingEvents": "Nadchodzące wydarzenia:"
+  },
+  "eventsSidebar": {
+    "backToWeek": "Do wszystkich wydarzeń tego tygodnia",
+    "title": "Wydarzenia w tym tygodniu",
+    "loading": "Wczytywanie…",
+    "emptyTitle": "Brak wydarzeń w tym tygodniu",
+    "emptySubtitle": "Sprawdź później lub przeglądaj wszystkie nadchodzące wydarzenia poniżej.",
+    "seeAll": "Zobacz wszystkie nadchodzące wydarzenia",
+    "loadError": "Nie udało się wczytać wydarzeń"
+  },
+  "authLayout": {
+    "backToMap": "← Powrót do mapy"
+  },
+  "login": {
+    "title": "Zaloguj się",
+    "subtitle": "Witaj z powrotem w Bogorm",
+    "emailLabel": "Email",
+    "emailPlaceholder": "nazwa{'@'}przykład.com",
+    "passwordLabel": "Hasło",
+    "submit": "Zaloguj się",
+    "submitting": "Logowanie…",
+    "errorDefault": "Nieprawidłowy email lub hasło",
+    "noAccount": "Nie masz konta?",
+    "signUpLink": "Zarejestruj się"
+  },
+  "register": {
+    "title": "Zarejestruj się",
+    "subtitle": "Utwórz swoje konto Bogorm",
+    "emailLabel": "Email",
+    "emailPlaceholder": "nazwa{'@'}przykład.com",
+    "usernameLabel": "Nazwa użytkownika",
+    "usernamePlaceholder": "twoja_nazwa",
+    "passwordLabel": "Hasło",
+    "passwordPlaceholder": "min. 8 znaków",
+    "submit": "Zarejestruj się",
+    "submitting": "Rejestracja…",
+    "errorDefault": "Nie udało się utworzyć konta. Sprawdź wprowadzone dane.",
+    "hasAccount": "Masz już konto?",
+    "logInLink": "Zaloguj się"
+  },
+  "accountLayout": {
+    "bookmarks": "Zakładki",
+    "logOut": "Wyloguj się"
+  },
+  "bookmarks": {
+    "title": "Zakładki",
+    "subtitle": "To miejsce dla twoich zapisanych miejsc i wydarzeń",
+    "placesTab": "Miejsca ({count})",
+    "eventsTab": "Wydarzenia ({count})",
+    "loading": "Wczytywanie…",
+    "loadError": "Nie udało się wczytać zakładek. Spróbuj ponownie.",
+    "emptyTitlePlaces": "Wygląda na to, że nie zapisałaś jeszcze żadnych miejsc!",
+    "emptyTitleEvents": "Wygląda na to, że nie zapisałaś jeszcze żadnych wydarzeń!",
+    "emptySubtitlePlaces": "Odkrywaj miejsca na mapie i zapisuj je w zakładkach!",
+    "emptySubtitleEvents": "Odkrywaj wydarzenia na mapie i zapisuj je w zakładkach!",
+    "placeBadge": "Miejsce",
+    "pageLabel": "Strona {current} z {total}",
+    "previousPage": "Poprzednia strona",
+    "nextPage": "Następna strona",
+    "removeBookmark": "Usuń zakładkę"
+  },
+  "eventCategory": {
+    "10": "Prezentacja książki",
+    "20": "Spotkanie autorskie",
+    "30": "Dyskusja",
+    "40": "Wykład",
+    "50": "Klub książki",
+    "60": "Inne"
+  },
+  "home": {
+    "heroTitle": "Czytanie nie musi być samotnym zajęciem!",
+    "heroSubtitle": "Odkrywaj miejsca, wydarzenia i ludzi wokół książek. To całkowicie bezpłatne. I absolutnie świetna zabawa!",
+    "unauthBanner": "Bez konta, {bold1}. Aby sprawdzić szczegóły wydarzeń, zapisywać wrażenia i być na bieżąco z życiem literackim Warszawy, {bold2}.",
+    "unauthBannerBold1": "możesz oglądać tylko mapę z miejscami",
+    "unauthBannerBold2": "zarejestruj się na naszej platformie",
+    "fullExperience": "Odkryj pełne możliwości"
+  },
+  "events": {
+    "comingSoon": "Strona wydarzeń wkrótce się pojawi."
+  }
+}
