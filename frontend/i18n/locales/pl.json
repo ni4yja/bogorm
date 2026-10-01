@@ -25,7 +25,7 @@
     "title": "Zaloguj się",
     "subtitle": "Witaj z powrotem w Bogorm",
     "emailLabel": "Email",
-    "emailPlaceholder": "nazwa@przykład.com",
+    "emailPlaceholder": "nazwa{'@'}przykład.com",
     "passwordLabel": "Hasło",
     "submit": "Zaloguj się",
     "submitting": "Logowanie…",
@@ -37,7 +37,7 @@
     "title": "Zarejestruj się",
     "subtitle": "Utwórz swoje konto Bogorm",
     "emailLabel": "Email",
-    "emailPlaceholder": "nazwa@przykład.com",
+    "emailPlaceholder": "nazwa{'@'}przykład.com",
     "usernameLabel": "Nazwa użytkownika",
     "usernamePlaceholder": "twoja_nazwa",
     "passwordLabel": "Hasło",
@@ -85,5 +85,8 @@
     "unauthBannerMiddle": ". Aby sprawdzić szczegóły wydarzeń, zapisywać wrażenia i być na bieżąco z życiem literackim Warszawy, musisz",
     "unauthBannerBold2": "zarejestrować się na naszej platformie",
     "fullExperience": "Odkryj pełne możliwości"
+  },
+  "events": {
+    "comingSoon": "Strona wydarzeń wkrótce się pojawi."
   }
 }

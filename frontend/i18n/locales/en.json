@@ -25,7 +25,7 @@
     "title": "Log in",
     "subtitle": "Welcome back to Bogorm",
     "emailLabel": "Email",
-    "emailPlaceholder": "name@example.com",
+    "emailPlaceholder": "name{'@'}example.com",
     "passwordLabel": "Password",
     "submit": "Log in",
     "submitting": "Logging in…",
@@ -37,7 +37,7 @@
     "title": "Sign up",
     "subtitle": "Create your Bogorm account",
     "emailLabel": "Email",
-    "emailPlaceholder": "name@example.com",
+    "emailPlaceholder": "name{'@'}example.com",
     "usernameLabel": "Username",
     "usernamePlaceholder": "your_username",
     "passwordLabel": "Password",
@@ -85,5 +85,8 @@
     "unauthBannerMiddle": ". To check events' details, note your impressions, and stay up-to-date with literary life of Warsaw, you need to",
     "unauthBannerBold2": "sign up to our platform",
     "fullExperience": "Get The Full Experience"
+  },
+  "events": {
+    "comingSoon": "Events page is coming soon."
   }
 }
