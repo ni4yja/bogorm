@@ -201,12 +201,16 @@ function handleToggleBookmark(eventId: string, title: string) {
 
 .header-title {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.6rem;
   margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.3;
 }
 
 .header-icon {
+  margin-top: 0.15rem;
   width: 20px;
   height: 20px;
   color: var(--color-primary);
