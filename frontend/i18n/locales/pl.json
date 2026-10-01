@@ -4,5 +4,9 @@
     "logIn": "Zaloguj się",
     "bookmarks": "Zakładki",
     "logOut": "Wyloguj się"
+  },
+  "placeModal": {
+    "upcomingEventsCount": "{count} nadchodzące wydarzenie | {count} nadchodzące wydarzenia | {count} nadchodzących wydarzeń",
+    "upcomingEvents": "Nadchodzące wydarzenia:"
   }
 }

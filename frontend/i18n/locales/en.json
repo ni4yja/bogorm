@@ -4,5 +4,9 @@
     "logIn": "Log In",
     "bookmarks": "Bookmarks",
     "logOut": "Log Out"
+  },
+  "placeModal": {
+    "upcomingEventsCount": "{count} Upcoming Event | {count} Upcoming Events",
+    "upcomingEvents": "Upcoming Events:"
   }
 }
