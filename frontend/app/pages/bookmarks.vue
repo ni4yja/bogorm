@@ -3,6 +3,7 @@ import type { BookmarkEventTarget, BookmarkItem, BookmarkPlaceTarget, PaginatedR
 
 definePageMeta({ layout: 'default' })
 
+const { t } = useI18n()
 const route = useRoute()
 const { fetchBookmarks, toggleBookmark, isBookmarked, isPending, registerInitialState } = useBookmarks()
 const { getCategoryLabel } = useEventCategory()
@@ -114,7 +115,7 @@ async function handleToggleBookmark(type: Tab, id: string) {
   const wasFullPage = items.value.length === pageSize.value
   const isLastPage = currentPage.value >= totalPages.value
 
-  items.value = items.value.filter(item => item.target.id !== id)
+  items.value = items.value.filter((item: BookmarkItem) => item.target.id !== id)
   if (type === 'place')
     placesCount.value = Math.max(0, placesCount.value - 1)
   else
@@ -149,10 +150,10 @@ onMounted(async () => {
   <AccountLayout>
     <div class="bookmarks-page">
       <h1 class="page-title">
-        Bookmarks
+        {{ t('bookmarks.title') }}
       </h1>
       <p class="page-subtitle">
-        This is the place for your saved places and events
+        {{ t('bookmarks.subtitle') }}
       </p>
 
       <div class="tabs">
@@ -162,7 +163,7 @@ onMounted(async () => {
           @click="switchTab('place')"
         >
           <IconsPin class="tab-icon" />
-          Places ({{ placesCount }})
+          {{ t('bookmarks.placesTab', { count: placesCount }) }}
         </button>
         <button
           class="tab"
@@ -170,24 +171,24 @@ onMounted(async () => {
           @click="switchTab('event')"
         >
           <IconsCalendar class="tab-icon" />
-          Events ({{ eventsCount }})
+          {{ t('bookmarks.eventsTab', { count: eventsCount }) }}
         </button>
       </div>
 
       <div v-if="isLoading" class="state-message">
-        Loading…
+        {{ t('bookmarks.loading') }}
       </div>
       <div v-else-if="error" class="state-message">
-        Could not load bookmarks. Please try again.
+        {{ t('bookmarks.loadError') }}
       </div>
       <div v-else-if="items.length === 0" class="empty-state">
         <IconsPin v-if="activeTab === 'place'" class="empty-icon" />
         <IconsCalendar v-else class="empty-icon" />
         <p class="empty-title">
-          Looks like you saved no {{ activeTab === 'place' ? 'places' : 'events' }} yet!
+          {{ activeTab === 'place' ? t('bookmarks.emptyTitlePlaces') : t('bookmarks.emptyTitleEvents') }}
         </p>
         <p class="empty-subtitle">
-          Explore {{ activeTab === 'place' ? 'places' : 'events' }} on map and save them to your bookmarks!
+          {{ activeTab === 'place' ? t('bookmarks.emptySubtitlePlaces') : t('bookmarks.emptySubtitleEvents') }}
         </p>
       </div>
 
@@ -205,7 +206,7 @@ onMounted(async () => {
               <button
                 class="bookmark-btn"
                 :disabled="isPending(item.type, item.target.id)"
-                aria-label="Remove bookmark"
+                :aria-label="t('bookmarks.removeBookmark')"
                 @click="handleToggleBookmark(item.type, item.target.id)"
               >
                 <IconsBookmarkActive v-if="isBookmarked(item.type, item.target.id)" class="bookmark-icon" />
@@ -223,7 +224,7 @@ onMounted(async () => {
             </div>
 
             <div v-if="isPlaceTarget(item.target)" class="card-badges">
-              <span class="badge">Place</span>
+              <span class="badge">{{ t('bookmarks.placeBadge') }}</span>
             </div>
           </div>
         </div>
@@ -233,16 +234,16 @@ onMounted(async () => {
         <button
           class="pagination-btn"
           :disabled="currentPage <= 1"
-          aria-label="Previous page"
+          :aria-label="t('bookmarks.previousPage')"
           @click="goToPage(currentPage - 1)"
         >
           <IconsArrowLeft class="pagination-icon" />
         </button>
-        <span class="pagination-label">Page {{ currentPage }} of {{ totalPages }}</span>
+        <span class="pagination-label">{{ t('bookmarks.pageLabel', { current: currentPage, total: totalPages }) }}</span>
         <button
           class="pagination-btn"
           :disabled="currentPage >= totalPages"
-          aria-label="Next page"
+          :aria-label="t('bookmarks.nextPage')"
           @click="goToPage(currentPage + 1)"
         >
           <IconsArrowLeft class="pagination-icon pagination-icon--next" />

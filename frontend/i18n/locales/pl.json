@@ -47,5 +47,26 @@
     "errorDefault": "Nie udało się utworzyć konta. Sprawdź wprowadzone dane.",
     "hasAccount": "Masz już konto?",
     "logInLink": "Zaloguj się"
+  },
+  "accountLayout": {
+    "bookmarks": "Zakładki",
+    "logOut": "Wyloguj się"
+  },
+  "bookmarks": {
+    "title": "Zakładki",
+    "subtitle": "To miejsce dla twoich zapisanych miejsc i wydarzeń",
+    "placesTab": "Miejsca ({count})",
+    "eventsTab": "Wydarzenia ({count})",
+    "loading": "Wczytywanie…",
+    "loadError": "Nie udało się wczytać zakładek. Spróbuj ponownie.",
+    "emptyTitlePlaces": "Wygląda na to, że nie zapisałaś jeszcze żadnych miejsc!",
+    "emptyTitleEvents": "Wygląda na to, że nie zapisałaś jeszcze żadnych wydarzeń!",
+    "emptySubtitlePlaces": "Odkrywaj miejsca na mapie i zapisuj je w zakładkach!",
+    "emptySubtitleEvents": "Odkrywaj wydarzenia na mapie i zapisuj je w zakładkach!",
+    "placeBadge": "Miejsce",
+    "pageLabel": "Strona {current} z {total}",
+    "previousPage": "Poprzednia strona",
+    "nextPage": "Następna strona",
+    "removeBookmark": "Usuń zakładkę"
   }
 }

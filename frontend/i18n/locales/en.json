@@ -47,5 +47,26 @@
     "errorDefault": "Could not create account. Please check your details.",
     "hasAccount": "Already have an account?",
     "logInLink": "Log in"
+  },
+  "accountLayout": {
+    "bookmarks": "Bookmarks",
+    "logOut": "Log Out"
+  },
+  "bookmarks": {
+    "title": "Bookmarks",
+    "subtitle": "This is the place for your saved places and events",
+    "placesTab": "Places ({count})",
+    "eventsTab": "Events ({count})",
+    "loading": "Loading…",
+    "loadError": "Could not load bookmarks. Please try again.",
+    "emptyTitlePlaces": "Looks like you saved no places yet!",
+    "emptyTitleEvents": "Looks like you saved no events yet!",
+    "emptySubtitlePlaces": "Explore places on map and save them to your bookmarks!",
+    "emptySubtitleEvents": "Explore events on map and save them to your bookmarks!",
+    "placeBadge": "Place",
+    "pageLabel": "Page {current} of {total}",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "removeBookmark": "Remove bookmark"
   }
 }
