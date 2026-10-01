@@ -68,5 +68,22 @@
     "previousPage": "Poprzednia strona",
     "nextPage": "Następna strona",
     "removeBookmark": "Usuń zakładkę"
+  },
+  "eventCategory": {
+    "10": "Prezentacja książki",
+    "20": "Spotkanie autorskie",
+    "30": "Dyskusja",
+    "40": "Wykład",
+    "50": "Klub książki",
+    "60": "Inne"
+  },
+  "home": {
+    "heroTitle": "Czytanie nie musi być samotnym zajęciem!",
+    "heroSubtitle": "Odkrywaj miejsca, wydarzenia i ludzi wokół książek. To całkowicie bezpłatne. I absolutnie świetna zabawa!",
+    "unauthBannerPrefix": "Bez konta",
+    "unauthBannerBold1": "możesz oglądać tylko mapę z miejscami",
+    "unauthBannerMiddle": ". Aby sprawdzić szczegóły wydarzeń, zapisywać wrażenia i być na bieżąco z życiem literackim Warszawy, musisz",
+    "unauthBannerBold2": "zarejestrować się na naszej platformie",
+    "fullExperience": "Odkryj pełne możliwości"
   }
 }

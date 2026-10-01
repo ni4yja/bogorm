@@ -2,6 +2,7 @@
 import type { Event, PlaceDetail } from '~/types'
 
 definePageMeta({ layout: 'default' })
+const { t } = useI18n()
 
 const { isAuthenticated } = useAuth()
 const isBannerVisible = ref(true)
@@ -16,12 +17,12 @@ let mapInstance: Awaited<ReturnType<typeof useLeafletMap>>['map'] | null = null
 let highlightMarkerFn: ((placeId: string) => void) | null = null
 let clearHighlightFn: (() => void) | null = null
 
-watch(selectedPlace, (place) => {
+watch(selectedPlace, (place: PlaceDetail | null) => {
   if (place)
     sidebarRef.value?.closeDetail()
 })
 
-watch(isAuthenticated, (authenticated) => {
+watch(isAuthenticated, (authenticated: boolean) => {
   if (!authenticated)
     clearHighlightFn?.()
 })
@@ -64,11 +65,10 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
   <div class="page">
     <section class="hero">
       <h1>
-        Reading doesn't have to be a lonely habit!
+        {{ t('home.heroTitle') }}
       </h1>
       <p class="hero-subtitle">
-        Discover places, events, and people around books.<br>
-        It's totally free. And absolutely fun!
+        {{ t('home.heroSubtitle') }}
       </p>
     </section>
 
@@ -87,12 +87,10 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
         <EventsSidebar v-if="isAuthenticated" ref="sidebarRef" @select-event="handleSelectEvent" />
         <div v-if="isBannerVisible && !isAuthenticated" class="unauth-banner">
           <p>
-            Without an account, <strong>you can only view the map with places</strong>.
-            To check events' details, note your impressions, and stay up-to-date with literary
-            life of Warsaw, you need to <strong>sign up to our platform</strong>.
+            {{ t('home.unauthBannerPrefix') }}, <strong>{{ t('home.unauthBannerBold1') }}</strong>{{ t('home.unauthBannerMiddle') }} <strong>{{ t('home.unauthBannerBold2') }}</strong>.
           </p>
           <NuxtLink to="/register" class="btn-full">
-            Get The Full Experience
+            {{ t('home.fullExperience') }}
           </NuxtLink>
         </div>
       </ClientOnly>
