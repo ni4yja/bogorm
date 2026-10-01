@@ -1,13 +1,13 @@
 <script setup lang="ts">
-const { t } = useI18n()
-
 import type { EventListItem } from '~/types'
-
-type SidebarState = 'list' | 'detail' | 'collapsed'
 
 const emit = defineEmits<{
   selectEvent: [place: { id: string, lat: number, lng: number }]
 }>()
+
+const { t } = useI18n()
+
+type SidebarState = 'list' | 'detail' | 'collapsed'
 
 const { events, isLoading, error, fetchWeeklyEvents } = useEventsSidebar()
 const { getCategoryLabel } = useEventCategory()
@@ -126,17 +126,6 @@ function handleToggleBookmark(eventId: string, title: string) {
           </p>
           <p class="empty-subtitle">
             {{ t('eventsSidebar.emptySubtitle') }}
-          </p>
-        </div>
-        <div v-else-if="error" class="state-message">
-          {{ error }}
-        </div>
-        <div v-else-if="events.length === 0" class="empty-state">
-          <p class="empty-title">
-            No events this week
-          </p>
-          <p class="empty-subtitle">
-            Check back later or browse all upcoming events below.
           </p>
         </div>
         <div

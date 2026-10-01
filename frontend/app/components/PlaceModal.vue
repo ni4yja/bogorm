@@ -94,8 +94,8 @@ function handleToggleEventBookmark(eventId: string, title: string) {
 
       <div v-if="isAuthenticated && upcomingEvents.length > 0" class="events-section">
         <div class="events-header">
-            <IconsCalendar class="events-header-icon" />
-            {{ t('placeModal.upcomingEvents') }}
+          <IconsCalendar class="events-header-icon" />
+          {{ t('placeModal.upcomingEvents') }}
         </div>
         <div v-for="event in upcomingEvents" :key="event.id" class="event-item">
           <div class="event-title">
