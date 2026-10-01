@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { t } = useI18n()
+
 import type { EventListItem } from '~/types'
 
 type SidebarState = 'list' | 'detail' | 'collapsed'
@@ -15,8 +17,8 @@ const { formatEventTime } = useEventFormat()
 const state = ref<SidebarState>('list')
 const selectedEvent = ref<EventListItem | null>(null)
 
-watch(events, (newEvents) => {
-  newEvents.forEach(e => registerInitialState('event', e.id, e.is_bookmarked))
+watch(events, (newEvents: EventListItem[]) => {
+  newEvents.forEach((e: EventListItem) => registerInitialState('event', e.id, e.is_bookmarked))
 }, { immediate: true })
 
 onMounted(() => {
@@ -54,7 +56,7 @@ function handleToggleBookmark(eventId: string, title: string) {
     <template v-if="state === 'detail' && selectedEvent">
       <button class="back-row" @click="closeDetail">
         <IconsArrowLeft class="back-icon" />
-        To All Events This Week
+        {{ t('eventsSidebar.backToWeek') }}
       </button>
 
       <div class="detail-scroll">
@@ -106,14 +108,25 @@ function handleToggleBookmark(eventId: string, title: string) {
       <button class="header-row" @click="toggleCollapse">
         <h3 class="header-title">
           <IconsCalendar class="header-icon" />
-          Events This Week
+          {{ t('eventsSidebar.title') }}
         </h3>
         <IconsChevronDown class="chevron" :class="{ open: state === 'list' }" />
       </button>
 
       <div v-if="state === 'list'" class="events-list">
         <div v-if="isLoading" class="state-message">
-          Loading…
+          {{ t('eventsSidebar.loading') }}
+        </div>
+        <div v-else-if="error" class="state-message">
+          {{ error }}
+        </div>
+        <div v-else-if="events.length === 0" class="empty-state">
+          <p class="empty-title">
+            {{ t('eventsSidebar.emptyTitle') }}
+          </p>
+          <p class="empty-subtitle">
+            {{ t('eventsSidebar.emptySubtitle') }}
+          </p>
         </div>
         <div v-else-if="error" class="state-message">
           {{ error }}
@@ -161,7 +174,7 @@ function handleToggleBookmark(eventId: string, title: string) {
 
       <NuxtLink to="/events" class="see-all-btn">
         <IconsCalendar class="see-all-icon" />
-        See All Upcoming Events
+        {{ t('eventsSidebar.seeAll') }}
       </NuxtLink>
     </template>
   </div>

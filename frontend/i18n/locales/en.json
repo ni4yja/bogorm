@@ -8,5 +8,14 @@
   "placeModal": {
     "upcomingEventsCount": "{count} Upcoming Event | {count} Upcoming Events",
     "upcomingEvents": "Upcoming Events:"
+  },
+  "eventsSidebar": {
+    "backToWeek": "To All Events This Week",
+    "title": "Events This Week",
+    "loading": "Loading…",
+    "emptyTitle": "No events this week",
+    "emptySubtitle": "Check back later or browse all upcoming events below.",
+    "seeAll": "See All Upcoming Events",
+    "loadError": "Could not load events"
   }
 }

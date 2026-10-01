@@ -8,5 +8,14 @@
   "placeModal": {
     "upcomingEventsCount": "{count} nadchodzące wydarzenie | {count} nadchodzące wydarzenia | {count} nadchodzących wydarzeń",
     "upcomingEvents": "Nadchodzące wydarzenia:"
+  },
+  "eventsSidebar": {
+    "backToWeek": "Do wszystkich wydarzeń tego tygodnia",
+    "title": "Wydarzenia w tym tygodniu",
+    "loading": "Wczytywanie…",
+    "emptyTitle": "Brak wydarzeń w tym tygodniu",
+    "emptySubtitle": "Sprawdź później lub przeglądaj wszystkie nadchodzące wydarzenia poniżej.",
+    "seeAll": "Zobacz wszystkie nadchodzące wydarzenia",
+    "loadError": "Nie udało się wczytać wydarzeń"
   }
 }
