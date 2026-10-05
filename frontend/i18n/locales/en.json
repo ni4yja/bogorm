@@ -67,7 +67,10 @@
     "pageLabel": "Page {current} of {total}",
     "previousPage": "Previous page",
     "nextPage": "Next page",
-    "removeBookmark": "Remove bookmark"
+    "removeBookmark": "Remove bookmark",
+    "savedToast": "{title} saved to bookmarks",
+    "viewBookmarks": "View bookmarks",
+    "updateError": "Could not update bookmark. Please try again."
   },
   "eventCategory": {
     "10": "Book Presentation",

@@ -21,7 +21,7 @@ const placesCount = ref(0)
 const eventsCount = ref(0)
 const items = ref<BookmarkItem[]>([])
 const isLoading = ref(false)
-const error = ref('')
+const hasError = ref(false)
 
 const currentCount = computed(() => activeTab.value === 'place' ? placesCount.value : eventsCount.value)
 const totalPages = computed(() => Math.max(1, Math.ceil(currentCount.value / pageSize.value)))
@@ -48,7 +48,7 @@ function applyPage(type: Tab, response: PaginatedResponse<BookmarkItem>) {
 async function loadBookmarks() {
   const requestId = ++latestRequestId
   isLoading.value = true
-  error.value = ''
+  hasError.value = false
 
   try {
     const response = await fetchBookmarks(activeTab.value, currentPage.value)
@@ -65,7 +65,7 @@ async function loadBookmarks() {
   }
   catch {
     if (requestId === latestRequestId)
-      error.value = 'Could not load bookmarks'
+      hasError.value = true
   }
   finally {
     if (requestId === latestRequestId)
@@ -75,7 +75,7 @@ async function loadBookmarks() {
 
 async function loadCounts() {
   const requestId = ++latestRequestId
-  error.value = ''
+  hasError.value = false
   try {
     const [placesResponse, eventsResponse] = await Promise.all([
       fetchBookmarks('place', 1),
@@ -90,7 +90,7 @@ async function loadCounts() {
   }
   catch {
     if (requestId === latestRequestId)
-      error.value = 'Could not load bookmarks'
+      hasError.value = true
   }
 }
 
@@ -178,7 +178,7 @@ onMounted(async () => {
       <div v-if="isLoading" class="state-message">
         {{ t('bookmarks.loading') }}
       </div>
-      <div v-else-if="error" class="state-message">
+      <div v-else-if="hasError" class="state-message">
         {{ t('bookmarks.loadError') }}
       </div>
       <div v-else-if="items.length === 0" class="empty-state">

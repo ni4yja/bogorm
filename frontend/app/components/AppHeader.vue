@@ -22,9 +22,9 @@ onMounted(() => {
 
 <template>
   <header class="header">
-    <NuxtLink to="/" class="logo">
+    <NuxtLinkLocale to="/" class="logo">
       Bogorm
-    </NuxtLink>
+    </NuxtLinkLocale>
 
     <div class="header-right">
       <LanguageSwitcher />
@@ -32,12 +32,12 @@ onMounted(() => {
       <div v-if="!isMounted" class="nav-placeholder" />
 
       <nav v-else-if="!isAuthenticated" class="nav">
-        <NuxtLink to="/register" class="btn btn-primary">
+        <NuxtLinkLocale to="/register" class="btn btn-primary">
           {{ t('header.signUp') }}
-        </NuxtLink>
-        <NuxtLink to="/login" class="btn btn-outline">
+        </NuxtLinkLocale>
+        <NuxtLinkLocale to="/login" class="btn btn-outline">
           <IconsLogIn class="btn-icon" /> {{ t('header.logIn') }}
-        </NuxtLink>
+        </NuxtLinkLocale>
       </nav>
 
       <div v-else ref="accountRef" class="account">
@@ -47,10 +47,10 @@ onMounted(() => {
         </button>
 
         <div v-if="isDropdownOpen" class="dropdown">
-          <NuxtLink to="/bookmarks" class="dropdown-item" @click="isDropdownOpen = false">
+          <NuxtLinkLocale to="/bookmarks" class="dropdown-item" @click="isDropdownOpen = false">
             <IconsBookmarkActive class="dropdown-icon" />
             {{ t('header.bookmarks') }}
-          </NuxtLink>
+          </NuxtLinkLocale>
           <button class="dropdown-item dropdown-item--logout" @click="handleLogout">
             <IconsLogOut class="dropdown-icon" />
             {{ t('header.logOut') }}

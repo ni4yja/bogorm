@@ -3,14 +3,7 @@ let refreshPromise: Promise<void> | null = null
 export function useApi() {
   const config = useRuntimeConfig()
   const { accessToken, refreshToken } = useAuthTokens()
-  const router = useRouter()
-  // ponytail: useNuxtApp().$i18n instead of useI18n() — useI18n() needs Vue's
-  // component instance (getCurrentInstance()), which is gone after an `await`
-  // inside an async setup/lifecycle callback. useApi() gets called that way
-  // (useMapMarkers() inside index.vue's async onMounted), so useI18n() would
-  // throw "Must be called at the top of a setup function" there. $i18n reads
-  // through Nuxt's app context instead, which survives post-await calls.
-  const { $i18n } = useNuxtApp()
+  const { $i18n, $localePath } = useNuxtApp()
 
   const AUTH_PATHS = ['/auth/login/', '/auth/register/', '/auth/refresh/']
   const isAuthPath = (path: string) => AUTH_PATHS.some(p => path.startsWith(p))
@@ -63,6 +56,7 @@ export function useApi() {
         await refreshPromise
       }
       catch {
+        // refresh failed: tokens are already cleared, the request below will 401 and redirect
       }
     }
   }
@@ -99,7 +93,7 @@ export function useApi() {
     }
     catch (error: any) {
       if (!isAuthPath(path) && error?.response?.status === 401) {
-        await router.push('/login')
+        await navigateTo($localePath('/login'))
       }
       throw error
     }

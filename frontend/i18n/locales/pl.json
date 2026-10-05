@@ -59,15 +59,18 @@
     "eventsTab": "Wydarzenia ({count})",
     "loading": "Wczytywanie…",
     "loadError": "Nie udało się wczytać zakładek. Spróbuj ponownie.",
-    "emptyTitlePlaces": "Wygląda na to, że nie zapisałaś jeszcze żadnych miejsc!",
-    "emptyTitleEvents": "Wygląda na to, że nie zapisałaś jeszcze żadnych wydarzeń!",
+    "emptyTitlePlaces": "Nie masz jeszcze zapisanych miejsc",
+    "emptyTitleEvents": "Nie masz jeszcze zapisanych wydarzeń",
     "emptySubtitlePlaces": "Odkrywaj miejsca na mapie i zapisuj je w zakładkach!",
     "emptySubtitleEvents": "Odkrywaj wydarzenia na mapie i zapisuj je w zakładkach!",
     "placeBadge": "Miejsce",
     "pageLabel": "Strona {current} z {total}",
     "previousPage": "Poprzednia strona",
     "nextPage": "Następna strona",
-    "removeBookmark": "Usuń zakładkę"
+    "removeBookmark": "Usuń zakładkę",
+    "savedToast": "Zapisano: {title}",
+    "viewBookmarks": "Zobacz zapisane",
+    "updateError": "Nie udało się zaktualizować zakładki. Spróbuj ponownie."
   },
   "eventCategory": {
     "10": "Prezentacja książki",

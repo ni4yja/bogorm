@@ -1,7 +1,7 @@
 export function useAuth() {
   const { accessToken, refreshToken } = useAuthTokens()
   const { post } = useApi()
-  const router = useRouter()
+  const localePath = useLocalePath()
 
   const isAuthenticated = computed(() => !!accessToken.value)
 
@@ -25,6 +25,7 @@ export function useAuth() {
         await post('/auth/logout/', { refresh: refreshToken.value })
       }
       catch {
+        // logout is best-effort: clear local tokens even if the request fails
       }
     }
     accessToken.value = null
@@ -33,7 +34,7 @@ export function useAuth() {
 
   const logoutAndRedirect = async () => {
     await logout()
-    await router.push('/')
+    await navigateTo(localePath('/'))
   }
 
   return { isAuthenticated, login, register, logout, logoutAndRedirect }
