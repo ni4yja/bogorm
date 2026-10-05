@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { isAuthenticated, logoutAndRedirect } = useAuth()
+const { t } = useI18n()
 
 const isDropdownOpen = ref(false)
 const isMounted = ref(false)
@@ -21,36 +22,40 @@ onMounted(() => {
 
 <template>
   <header class="header">
-    <NuxtLink to="/" class="logo">
+    <NuxtLinkLocale to="/" class="logo">
       Bogorm
-    </NuxtLink>
+    </NuxtLinkLocale>
 
-    <div v-if="!isMounted" class="nav-placeholder" />
+    <div class="header-right">
+      <LanguageSwitcher />
 
-    <nav v-else-if="!isAuthenticated" class="nav">
-      <NuxtLink to="/register" class="btn btn-primary">
-        Sign Up
-      </NuxtLink>
-      <NuxtLink to="/login" class="btn btn-outline">
-        <IconsLogIn class="btn-icon" /> Log In
-      </NuxtLink>
-    </nav>
+      <div v-if="!isMounted" class="nav-placeholder" />
 
-    <div v-else ref="accountRef" class="account">
-      <button class="account-trigger" @click="isDropdownOpen = !isDropdownOpen">
-        <IconsProfile class="avatar-icon" />
-        <IconsChevronDown class="chevron" :class="{ open: isDropdownOpen }" />
-      </button>
+      <nav v-else-if="!isAuthenticated" class="nav">
+        <NuxtLinkLocale to="/register" class="btn btn-primary">
+          {{ t('header.signUp') }}
+        </NuxtLinkLocale>
+        <NuxtLinkLocale to="/login" class="btn btn-outline">
+          <IconsLogIn class="btn-icon" /> {{ t('header.logIn') }}
+        </NuxtLinkLocale>
+      </nav>
 
-      <div v-if="isDropdownOpen" class="dropdown">
-        <NuxtLink to="/bookmarks" class="dropdown-item" @click="isDropdownOpen = false">
-          <IconsBookmarkActive class="dropdown-icon" />
-          Bookmarks
-        </NuxtLink>
-        <button class="dropdown-item dropdown-item--logout" @click="handleLogout">
-          <IconsLogOut class="dropdown-icon" />
-          Log Out
+      <div v-else ref="accountRef" class="account">
+        <button class="account-trigger" @click="isDropdownOpen = !isDropdownOpen">
+          <IconsProfile class="avatar-icon" />
+          <IconsChevronDown class="chevron" :class="{ open: isDropdownOpen }" />
         </button>
+
+        <div v-if="isDropdownOpen" class="dropdown">
+          <NuxtLinkLocale to="/bookmarks" class="dropdown-item" @click="isDropdownOpen = false">
+            <IconsBookmarkActive class="dropdown-icon" />
+            {{ t('header.bookmarks') }}
+          </NuxtLinkLocale>
+          <button class="dropdown-item dropdown-item--logout" @click="handleLogout">
+            <IconsLogOut class="dropdown-icon" />
+            {{ t('header.logOut') }}
+          </button>
+        </div>
       </div>
     </div>
   </header>
@@ -69,6 +74,12 @@ onMounted(() => {
   padding: var(--spacing-xs) var(--spacing-md);
   height: var(--header-height);
   background: var(--color-white);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
 }
 
 .logo {

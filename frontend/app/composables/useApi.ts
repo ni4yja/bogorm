@@ -3,7 +3,7 @@ let refreshPromise: Promise<void> | null = null
 export function useApi() {
   const config = useRuntimeConfig()
   const { accessToken, refreshToken } = useAuthTokens()
-  const router = useRouter()
+  const { $i18n, $localePath } = useNuxtApp()
 
   const AUTH_PATHS = ['/auth/login/', '/auth/register/', '/auth/refresh/']
   const isAuthPath = (path: string) => AUTH_PATHS.some(p => path.startsWith(p))
@@ -56,14 +56,21 @@ export function useApi() {
         await refreshPromise
       }
       catch {
+        // refresh failed: tokens are already cleared, the request below will 401 and redirect
       }
     }
   }
 
-  const getAuthHeaders = (path: string): Record<string, string> => {
-    if (isAuthPath(path) || !accessToken.value)
-      return {}
-    return { Authorization: `Bearer ${accessToken.value}` }
+  const getHeaders = (path: string): Record<string, string> => {
+    const headers: Record<string, string> = {
+      'Accept-Language': $i18n.locale.value,
+    }
+
+    if (!isAuthPath(path) && accessToken.value) {
+      headers.Authorization = `Bearer ${accessToken.value}`
+    }
+
+    return headers
   }
 
   const request = async <T>(
@@ -81,12 +88,12 @@ export function useApi() {
       return await $fetch<T>(`${config.public.apiBase}${path}`, {
         method: options.method,
         body: resolvedBody,
-        headers: getAuthHeaders(path),
+        headers: getHeaders(path),
       })
     }
     catch (error: any) {
       if (!isAuthPath(path) && error?.response?.status === 401) {
-        await router.push('/login')
+        await navigateTo($localePath('/login'))
       }
       throw error
     }

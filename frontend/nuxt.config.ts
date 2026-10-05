@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     '@vueuse/nuxt',
+    '@nuxtjs/i18n',
   ],
 
   runtimeConfig: {
@@ -38,5 +39,16 @@ export default defineNuxtConfig({
         'leaflet',
       ],
     },
+  },
+
+  i18n: {
+    locales: [
+      { code: 'pl', language: 'pl-PL', name: 'Polski', file: 'pl.json' },
+      { code: 'en', language: 'en-GB', name: 'English', file: 'en.json' },
+    ],
+    defaultLocale: 'pl',
+    strategy: 'prefix_except_default',
+    langDir: 'locales/',
+    vueI18n: 'i18n.config.ts',
   },
 })

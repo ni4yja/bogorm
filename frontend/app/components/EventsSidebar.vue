@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import type { EventListItem } from '~/types'
 
-type SidebarState = 'list' | 'detail' | 'collapsed'
-
 const emit = defineEmits<{
   selectEvent: [place: { id: string, lat: number, lng: number }]
 }>()
+
+const { t } = useI18n()
+
+type SidebarState = 'list' | 'detail' | 'collapsed'
 
 const { events, isLoading, error, fetchWeeklyEvents } = useEventsSidebar()
 const { getCategoryLabel } = useEventCategory()
@@ -15,8 +17,8 @@ const { formatEventTime } = useEventFormat()
 const state = ref<SidebarState>('list')
 const selectedEvent = ref<EventListItem | null>(null)
 
-watch(events, (newEvents) => {
-  newEvents.forEach(e => registerInitialState('event', e.id, e.is_bookmarked))
+watch(events, (newEvents: EventListItem[]) => {
+  newEvents.forEach((e: EventListItem) => registerInitialState('event', e.id, e.is_bookmarked))
 }, { immediate: true })
 
 onMounted(() => {
@@ -54,7 +56,7 @@ function handleToggleBookmark(eventId: string, title: string) {
     <template v-if="state === 'detail' && selectedEvent">
       <button class="back-row" @click="closeDetail">
         <IconsArrowLeft class="back-icon" />
-        To All Events This Week
+        {{ t('eventsSidebar.backToWeek') }}
       </button>
 
       <div class="detail-scroll">
@@ -76,7 +78,7 @@ function handleToggleBookmark(eventId: string, title: string) {
             <button
               class="bookmark-btn"
               :disabled="isPending('event', selectedEvent.id)"
-              aria-label="Save event"
+              :aria-label="t('a11y.saveEvent')"
               @click="handleToggleBookmark(selectedEvent.id, selectedEvent.title)"
             >
               <IconsBookmarkActive v-if="isBookmarked('event', selectedEvent.id)" class="bookmark-icon" />
@@ -106,24 +108,24 @@ function handleToggleBookmark(eventId: string, title: string) {
       <button class="header-row" @click="toggleCollapse">
         <h3 class="header-title">
           <IconsCalendar class="header-icon" />
-          Events This Week
+          {{ t('eventsSidebar.title') }}
         </h3>
         <IconsChevronDown class="chevron" :class="{ open: state === 'list' }" />
       </button>
 
       <div v-if="state === 'list'" class="events-list">
         <div v-if="isLoading" class="state-message">
-          Loading…
+          {{ t('eventsSidebar.loading') }}
         </div>
         <div v-else-if="error" class="state-message">
           {{ error }}
         </div>
         <div v-else-if="events.length === 0" class="empty-state">
           <p class="empty-title">
-            No events this week
+            {{ t('eventsSidebar.emptyTitle') }}
           </p>
           <p class="empty-subtitle">
-            Check back later or browse all upcoming events below.
+            {{ t('eventsSidebar.emptySubtitle') }}
           </p>
         </div>
         <div
@@ -150,7 +152,7 @@ function handleToggleBookmark(eventId: string, title: string) {
           </button>
           <button
             class="bookmark-btn bookmark-btn--list"
-            aria-label="Save event"
+            :aria-label="t('a11y.saveEvent')"
             @click.stop="handleToggleBookmark(event.id, event.title)"
           >
             <IconsBookmarkActive v-if="isBookmarked('event', event.id)" class="bookmark-icon" />
@@ -159,10 +161,10 @@ function handleToggleBookmark(eventId: string, title: string) {
         </div>
       </div>
 
-      <NuxtLink to="/events" class="see-all-btn">
+      <NuxtLinkLocale to="/events" class="see-all-btn">
         <IconsCalendar class="see-all-icon" />
-        See All Upcoming Events
-      </NuxtLink>
+        {{ t('eventsSidebar.seeAll') }}
+      </NuxtLinkLocale>
     </template>
   </div>
 </template>
@@ -199,12 +201,16 @@ function handleToggleBookmark(eventId: string, title: string) {
 
 .header-title {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.6rem;
   margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.3;
 }
 
 .header-icon {
+  margin-top: 0.15rem;
   width: 20px;
   height: 20px;
   color: var(--color-primary);

@@ -12,22 +12,23 @@ defineEmits<{
   close: []
 }>()
 
+const { t } = useI18n()
 const { formatEventTime } = useEventFormat()
 
 const upcomingEvents = computed(() =>
-  props.events.filter(e => e.event_time && new Date(e.event_time) > new Date()),
+  props.events.filter((e: Event) => e.event_time && new Date(e.event_time) > new Date()),
 )
 
 const { isBookmarked, isPending, registerInitialState, toggleBookmark } = useBookmarks()
 
 registerInitialState('place', props.place.id, props.place.is_bookmarked)
-props.events.forEach(e => registerInitialState('event', e.id, e.is_bookmarked))
+props.events.forEach((e: Event) => registerInitialState('event', e.id, e.is_bookmarked))
 
-watch(() => props.place, (newPlace) => {
+watch(() => props.place, (newPlace: PlaceDetail) => {
   registerInitialState('place', newPlace.id, newPlace.is_bookmarked)
 })
 
-watch(() => props.events, (newEvents) => {
+watch(() => props.events, (newEvents: Event[]) => {
   newEvents.forEach(e => registerInitialState('event', e.id, e.is_bookmarked))
 })
 
@@ -42,7 +43,7 @@ function handleToggleEventBookmark(eventId: string, title: string) {
 
 <template>
   <div class="modal">
-    <button class="close" aria-label="Close" @click="$emit('close')">
+    <button class="close" :aria-label="t('a11y.close')" @click="$emit('close')">
       <IconsClose />
     </button>
 
@@ -53,7 +54,7 @@ function handleToggleEventBookmark(eventId: string, title: string) {
     <div v-if="eventCount > 0 && !isAuthenticated" class="badges">
       <div class="badge badge--events">
         <IconsCalendar class="badge-icon" />
-        {{ eventCount }} Upcoming Event{{ eventCount > 1 ? 's' : '' }}
+        {{ t('placeModal.upcomingEventsCount', eventCount) }}
       </div>
     </div>
 
@@ -66,7 +67,7 @@ function handleToggleEventBookmark(eventId: string, title: string) {
           v-if="isAuthenticated"
           class="bookmark-btn"
           :disabled="isPending('place', place.id)"
-          aria-label="Save place"
+          :aria-label="t('a11y.savePlace')"
           @click="handleTogglePlaceBookmark"
         >
           <IconsBookmarkActive v-if="isBookmarked('place', place.id)" class="bookmark-icon" />
@@ -94,7 +95,7 @@ function handleToggleEventBookmark(eventId: string, title: string) {
       <div v-if="isAuthenticated && upcomingEvents.length > 0" class="events-section">
         <div class="events-header">
           <IconsCalendar class="events-header-icon" />
-          Upcoming Events:
+          {{ t('placeModal.upcomingEvents') }}
         </div>
         <div v-for="event in upcomingEvents" :key="event.id" class="event-item">
           <div class="event-title">
@@ -102,7 +103,7 @@ function handleToggleEventBookmark(eventId: string, title: string) {
             <button
               class="bookmark-btn"
               :disabled="isPending('event', event.id)"
-              aria-label="Save event"
+              :aria-label="t('a11y.saveEvent')"
               @click="handleToggleEventBookmark(event.id, event.title)"
             >
               <IconsBookmarkActive v-if="isBookmarked('event', event.id)" class="bookmark-icon" />

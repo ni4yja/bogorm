@@ -1,10 +1,11 @@
 <script setup lang="ts">
 const route = useRoute()
 const { logoutAndRedirect } = useAuth()
+const { t } = useI18n()
 
-const navItems = [
-  { label: 'Bookmarks', to: '/bookmarks', icon: 'IconsBookmark' },
-]
+const navItems = computed(() => [
+  { label: t('accountLayout.bookmarks'), to: '/bookmarks', icon: 'IconsBookmark' },
+])
 </script>
 
 <template>
@@ -25,7 +26,7 @@ const navItems = [
 
       <button class="logout-btn" @click="logoutAndRedirect">
         <IconsLogOut class="logout-icon" />
-        Log Out
+        {{ t('accountLayout.logOut') }}
       </button>
     </aside>
 

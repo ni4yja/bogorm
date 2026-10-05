@@ -1,10 +1,12 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'default' })
+
+const { t } = useI18n()
 </script>
 
 <template>
   <div class="placeholder">
-    <p>Events page is coming soon.</p>
+    <p>{{ t('events.comingSoon') }}</p>
   </div>
 </template>
 

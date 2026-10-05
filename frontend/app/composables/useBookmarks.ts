@@ -2,6 +2,9 @@ import type { BookmarkItem, PaginatedResponse } from '~/types'
 
 export function useBookmarks() {
   const { get, put, del } = useApi()
+  const { t } = useI18n()
+  const localePath = useLocalePath()
+  const { show } = useToast()
 
   const bookmarkedPlaces = useState<Record<string, boolean>>('bookmarkedPlaces', () => ({}))
   const bookmarkedEvents = useState<Record<string, boolean>>('bookmarkedEvents', () => ({}))
@@ -45,15 +48,16 @@ export function useBookmarks() {
       setBookmarked(type, id, response.bookmarked)
 
       if (response.bookmarked && title) {
-        const { show } = useToast()
-        show(`${title} saved to bookmarks`, { label: 'View bookmarks', to: `/bookmarks?type=${type}` })
+        show(t('bookmarks.savedToast', { title }), {
+          label: t('bookmarks.viewBookmarks'),
+          to: localePath({ path: '/bookmarks', query: { type } }),
+        })
       }
 
       return response.bookmarked
     }
     catch {
-      const { show } = useToast()
-      show('Could not update bookmark. Please try again.')
+      show(t('bookmarks.updateError'))
       return current
     }
     finally {
