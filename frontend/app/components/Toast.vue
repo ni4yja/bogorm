@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 const { toast, hide } = useToast()
 </script>
 
@@ -9,7 +10,7 @@ const { toast, hide } = useToast()
       <NuxtLink v-if="toast.actionTo" :to="toast.actionTo" class="toast-action" @click="hide">
         {{ toast.actionLabel }}
       </NuxtLink>
-      <button class="toast-close" aria-label="Dismiss" @click="hide">
+      <button class="toast-close" :aria-label="t('a11y.dismiss')" @click="hide">
         <IconsClose />
       </button>
     </div>

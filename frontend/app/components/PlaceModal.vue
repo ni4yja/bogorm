@@ -43,7 +43,7 @@ function handleToggleEventBookmark(eventId: string, title: string) {
 
 <template>
   <div class="modal">
-    <button class="close" aria-label="Close" @click="$emit('close')">
+    <button class="close" :aria-label="t('a11y.close')" @click="$emit('close')">
       <IconsClose />
     </button>
 
@@ -67,7 +67,7 @@ function handleToggleEventBookmark(eventId: string, title: string) {
           v-if="isAuthenticated"
           class="bookmark-btn"
           :disabled="isPending('place', place.id)"
-          aria-label="Save place"
+          :aria-label="t('a11y.savePlace')"
           @click="handleTogglePlaceBookmark"
         >
           <IconsBookmarkActive v-if="isBookmarked('place', place.id)" class="bookmark-icon" />
@@ -103,7 +103,7 @@ function handleToggleEventBookmark(eventId: string, title: string) {
             <button
               class="bookmark-btn"
               :disabled="isPending('event', event.id)"
-              aria-label="Save event"
+              :aria-label="t('a11y.saveEvent')"
               @click="handleToggleEventBookmark(event.id, event.title)"
             >
               <IconsBookmarkActive v-if="isBookmarked('event', event.id)" class="bookmark-icon" />

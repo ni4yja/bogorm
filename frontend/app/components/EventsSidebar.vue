@@ -78,7 +78,7 @@ function handleToggleBookmark(eventId: string, title: string) {
             <button
               class="bookmark-btn"
               :disabled="isPending('event', selectedEvent.id)"
-              aria-label="Save event"
+              :aria-label="t('a11y.saveEvent')"
               @click="handleToggleBookmark(selectedEvent.id, selectedEvent.title)"
             >
               <IconsBookmarkActive v-if="isBookmarked('event', selectedEvent.id)" class="bookmark-icon" />
@@ -152,7 +152,7 @@ function handleToggleBookmark(eventId: string, title: string) {
           </button>
           <button
             class="bookmark-btn bookmark-btn--list"
-            aria-label="Save event"
+            :aria-label="t('a11y.saveEvent')"
             @click.stop="handleToggleBookmark(event.id, event.title)"
           >
             <IconsBookmarkActive v-if="isBookmarked('event', event.id)" class="bookmark-icon" />
@@ -161,10 +161,10 @@ function handleToggleBookmark(eventId: string, title: string) {
         </div>
       </div>
 
-      <NuxtLink to="/events" class="see-all-btn">
+      <NuxtLinkLocale to="/events" class="see-all-btn">
         <IconsCalendar class="see-all-icon" />
         {{ t('eventsSidebar.seeAll') }}
-      </NuxtLink>
+      </NuxtLinkLocale>
     </template>
   </div>
 </template>

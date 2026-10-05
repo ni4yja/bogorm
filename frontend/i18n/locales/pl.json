@@ -82,7 +82,7 @@
   },
   "home": {
     "heroTitle": "Czytanie nie musi być samotnym zajęciem!",
-    "heroSubtitle": "Odkrywaj miejsca, wydarzenia i ludzi wokół książek. To całkowicie bezpłatne. I absolutnie świetna zabawa!",
+    "heroSubtitle": "Odkrywaj miejsca, wydarzenia i ludzi wokół książek. Wszystko bezpłatnie. I sporo radości.",
     "unauthBanner": "Bez konta, {bold1}. Aby sprawdzić szczegóły wydarzeń, zapisywać wrażenia i być na bieżąco z życiem literackim Warszawy, {bold2}.",
     "unauthBannerBold1": "możesz oglądać tylko mapę z miejscami",
     "unauthBannerBold2": "zarejestruj się na naszej platformie",
@@ -90,5 +90,11 @@
   },
   "events": {
     "comingSoon": "Strona wydarzeń wkrótce się pojawi."
+  },
+  "a11y": {
+    "saveEvent": "Zapisz wydarzenie",
+    "savePlace": "Zapisz miejsce",
+    "close": "Zamknij",
+    "dismiss": "Odrzuć"
   }
 }

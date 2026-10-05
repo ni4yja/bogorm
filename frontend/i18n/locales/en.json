@@ -90,5 +90,11 @@
   },
   "events": {
     "comingSoon": "Events page is coming soon."
+  },
+  "a11y": {
+    "saveEvent": "Save event",
+    "savePlace": "Save place",
+    "close": "Close",
+    "dismiss": "Dismiss"
   }
 }
