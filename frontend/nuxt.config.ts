@@ -20,6 +20,14 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      script: [
+        {
+          'src': 'https://stats.bogorm.app/stats.js',
+          'defer': true,
+          'data-website-id': '388d495c-4e33-4dcb-9d93-34cfa4577fc1',
+          'data-domains': 'bogorm.app',
+        },
+      ],
       link: [
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
