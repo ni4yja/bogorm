@@ -3,6 +3,7 @@ from datetime import timedelta
 from django.contrib.gis.geos import Point
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.cache import has_vary_header
 from rest_framework import status
 
 from tests.factories import EventFactory, PlaceFactory, WarsawPlaceFactory
@@ -58,3 +59,9 @@ class TestMapEndpoint:
     def test_returns_400_for_invalid_bbox(self, api_client, db):
         response = api_client.get(reverse("map"), {"bbox": "invalid"})
         assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_varies_on_accept_language(self, api_client, db):
+        # /map is public and cacheable, and titles depend on the language.
+        # Without this header a shared cache could serve the wrong language.
+        response = api_client.get(reverse("map"), {"bbox": WARSAW_BBOX})
+        assert has_vary_header(response, "Accept-Language")
