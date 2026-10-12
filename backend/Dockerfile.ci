@@ -1,0 +1,21 @@
+# CI base image: Python + GDAL + project dependencies, no app code.
+# Built by .github/workflows/ci-image.yml, used by ci.yml as the test job container.
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1
+ENV PIP_ROOT_USER_ACTION=ignore
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gdal-bin \
+    libgdal-dev \
+    libgeos-dev \
+    gettext \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Pre-install dependencies so CI only installs what a PR adds or changes.
+COPY requirements/ /tmp/requirements/
+RUN pip install --no-cache-dir -r /tmp/requirements/local.txt \
+    && rm -rf /tmp/requirements
