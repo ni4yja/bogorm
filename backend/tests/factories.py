@@ -38,7 +38,6 @@ class EventFactory(factory.django.DjangoModelFactory):
     place = factory.SubFactory(PlaceFactory)
     title = factory.Faker("sentence", nb_words=4)
     description = factory.Faker("text")
-    event_time = factory.LazyFunction(lambda: timezone.now() + timedelta(days=30))
     category = EventCategory.OTHER
 
     class Params:
@@ -54,8 +53,9 @@ class UserFactory(factory.django.DjangoModelFactory):
         model = get_user_model()
         skip_postgeneration_save = True
 
-    username = factory.Faker("user_name")
-    email = factory.Faker("email")
+    # Sequence instead of Faker: both fields are unique, random values can collide
+    username = factory.Sequence(lambda n: f"reader{n}")
+    email = factory.Sequence(lambda n: f"reader{n}@bogorm.app")
 
     @classmethod
     def _create(cls, model_class, *args, **kwargs):
