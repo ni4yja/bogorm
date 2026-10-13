@@ -1,13 +1,25 @@
+from django.db import transaction
 from django.utils.translation import gettext as _
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, status
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.token_blacklist.models import (
+    BlacklistedToken,
+    OutstandingToken,
+)
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .serializers import EmailNormalizingTokenObtainPairSerializer, RegisterSerializer
+from .serializers import (
+    DeleteAccountSerializer,
+    EmailNormalizingTokenObtainPairSerializer,
+    MeSerializer,
+    RegisterSerializer,
+)
 
 
 class RegisterView(generics.CreateAPIView):
@@ -40,3 +52,36 @@ class LogoutView(APIView):
             )
 
         return Response(status=status.HTTP_205_RESET_CONTENT)
+
+
+class MeView(generics.RetrieveDestroyAPIView):
+    serializer_class = MeSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+    @extend_schema(request=DeleteAccountSerializer, responses={204: None})
+    def delete(self, request, *args, **kwargs):
+        user = self.get_object()
+
+        # Staff accounts are managed in Django Admin only
+        if user.is_staff:
+            raise PermissionDenied(_("Staff accounts cannot be deleted via the API."))
+
+        serializer = DeleteAccountSerializer(
+            data=request.data, context={"request": request}
+        )
+        serializer.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+            # Blacklist every refresh token so none can be used after deletion.
+            # OutstandingToken.user is SET_NULL, so blacklist rows survive the delete.
+            outstanding = OutstandingToken.objects.filter(user=user)
+            BlacklistedToken.objects.bulk_create(
+                [BlacklistedToken(token=token) for token in outstanding],
+                ignore_conflicts=True,
+            )
+            user.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
