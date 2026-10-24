@@ -42,13 +42,13 @@ const invitees = computed(() => [
 
       <!-- What / why / quote -->
       <section class="cell span-4 stack">
-        <span class="label">01</span>
+        <span class="label label--index">01</span>
         <h2>{{ t('about.what.title') }}</h2>
         <p>{{ t('about.what.text') }}</p>
         <p>{{ t('about.what.free') }}</p>
       </section>
       <section class="cell span-5 stack">
-        <span class="label">02</span>
+        <span class="label label--index">02</span>
         <h2>{{ t('about.why.title') }}</h2>
         <p>{{ t('about.why.text1') }}</p>
         <p>{{ t('about.why.text2') }}</p>
@@ -62,7 +62,7 @@ const invitees = computed(() => [
         <img src="/images/liuba.jpg" :alt="t('about.who.photoAlt')" width="720" height="960" loading="lazy">
       </div>
       <section class="cell span-8 stack">
-        <span class="label">03</span>
+        <span class="label label--index">03</span>
         <h2>{{ t('about.who.title') }}</h2>
         <p>{{ t('about.who.text1') }}</p>
         <i18n-t keypath="about.who.text2" tag="p" scope="global">
@@ -84,7 +84,7 @@ const invitees = computed(() => [
       <!-- Partners -->
       <div class="cell span-12 partners-head">
         <div class="stack">
-          <span class="label">04</span>
+          <span class="label label--index">04</span>
           <h2 class="partners-title">
             {{ t('about.partners.title') }}
           </h2>
@@ -118,9 +118,9 @@ const invitees = computed(() => [
           <h2>{{ t('about.contact.title') }}</h2>
           <p>{{ t('about.contact.text') }}</p>
         </div>
-        <p class="contact-email">
+        <a :href="`mailto:${t('about.contact.email')}`" class="contact-email">
           {{ t('about.contact.email') }}
-        </p>
+        </a>
       </section>
     </div>
   </main>
@@ -140,7 +140,7 @@ const invitees = computed(() => [
   gap: 1px;
   background: var(--color-light-grey-40);
   border: 1px solid var(--color-light-grey-40);
-  border-radius: 16px;
+  border-radius: 0;
   overflow: hidden;
 }
 
@@ -186,6 +186,17 @@ const invitees = computed(() => [
   color: var(--color-light-grey-40);
 }
 
+.label--index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: var(--color-yellow);
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
 .muted {
   font-size: 16px;
   color: var(--color-black);
@@ -198,6 +209,7 @@ const invitees = computed(() => [
 
 .hero-title {
   font-weight: 300;
+  letter-spacing: 0.01em;
 }
 
 .map-link {
@@ -323,9 +335,15 @@ const invitees = computed(() => [
 
 .contact-email {
   flex: 1 1 260px;
-  font-size: 19px;
+  font-size: 32px;
   font-weight: 500;
+  color: var(--color-yellow);
+  text-decoration: none;
   overflow-wrap: anywhere;
+}
+
+.contact-email:hover {
+  text-decoration: underline;
 }
 
 @media (max-width: 640px) {
