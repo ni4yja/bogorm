@@ -11,9 +11,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .serializers import (
+    CurrentUserSerializer,
     DeleteAccountSerializer,
     EmailNormalizingTokenObtainPairSerializer,
-    MeSerializer,
     RegisterSerializer,
 )
 from .tokens import blacklist_all_tokens
@@ -51,8 +51,8 @@ class LogoutView(APIView):
         return Response(status=status.HTTP_205_RESET_CONTENT)
 
 
-class MeView(generics.RetrieveDestroyAPIView):
-    serializer_class = MeSerializer
+class CurrentUserView(generics.RetrieveDestroyAPIView):
+    serializer_class = CurrentUserSerializer
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
