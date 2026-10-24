@@ -188,7 +188,7 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
   text-align: center;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1440px) {
   #map {
     height: 480px;
   }

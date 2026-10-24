@@ -23,7 +23,7 @@
   --badge-radius: 24px;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1440px) {
   :root {
     --header-height: 72px;
     --spacing-md: 28px;
@@ -79,7 +79,7 @@ h4 {
   font-size: 19px;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1440px) {
   h1 {
     font-size: 44px;
   }

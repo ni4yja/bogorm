@@ -215,7 +215,7 @@ onMounted(() => {
   flex-shrink: 0;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1440px) {
   .header-right {
     gap: 1rem;
   }
