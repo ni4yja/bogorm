@@ -66,6 +66,15 @@
       "button": "Delete account"
     }
   },
+  "deleteAccount": {
+    "title": "Delete your account?",
+    "warning": "Your account and all saved places and events will be deleted for good. This can't be undone.",
+    "passwordLabel": "Enter your password to confirm",
+    "cancel": "Cancel",
+    "confirm": "Delete account",
+    "deleting": "Deleting…",
+    "genericError": "Couldn't delete your account. Please try again."
+  },
   "bookmarks": {
     "title": "Bookmarks",
     "subtitle": "This is the place for your saved places and events",

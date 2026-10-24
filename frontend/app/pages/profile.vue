@@ -9,7 +9,6 @@ const { fetchCurrentUser } = useAuth()
 const user = ref<CurrentUser | null>(null)
 const isLoading = ref(true)
 const hasError = ref(false)
-// Opened by the danger zone button; the modal itself comes in the next step
 const isDeleteModalOpen = ref(false)
 
 onMounted(async () => {
@@ -64,6 +63,7 @@ onMounted(async () => {
         </section>
       </template>
     </div>
+    <DeleteAccountModal v-if="isDeleteModalOpen" @close="isDeleteModalOpen = false" />
   </AccountLayout>
 </template>
 

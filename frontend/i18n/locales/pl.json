@@ -66,6 +66,15 @@
       "button": "Usuń konto"
     }
   },
+  "deleteAccount": {
+    "title": "Usunąć konto?",
+    "warning": "Konto i wszystkie zapisane miejsca i wydarzenia zostaną usunięte na zawsze. Tego nie można cofnąć.",
+    "passwordLabel": "Wpisz hasło, aby potwierdzić",
+    "cancel": "Anuluj",
+    "confirm": "Usuń konto",
+    "deleting": "Usuwanie…",
+    "genericError": "Nie udało się usunąć konta. Spróbuj ponownie."
+  },
   "bookmarks": {
     "title": "Zakładki",
     "subtitle": "To miejsce dla twoich zapisanych miejsc i wydarzeń",
