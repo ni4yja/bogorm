@@ -26,21 +26,23 @@ onMounted(() => {
       Bogorm
     </NuxtLinkLocale>
 
-    <div class="header-right">
+    <nav class="primary-nav">
       <NuxtLinkLocale to="/about" class="nav-link">
         {{ t('header.about') }}
       </NuxtLinkLocale>
+    </nav>
 
+    <div class="header-right">
       <LanguageSwitcher />
 
       <div v-if="!isMounted" class="nav-placeholder" />
 
       <nav v-else-if="!isAuthenticated" class="nav">
+        <NuxtLinkLocale to="/login" class="nav-link">
+          {{ t('header.logIn') }}
+        </NuxtLinkLocale>
         <NuxtLinkLocale to="/register" class="btn btn-primary">
           {{ t('header.signUp') }}
-        </NuxtLinkLocale>
-        <NuxtLinkLocale to="/login" class="btn btn-outline">
-          <IconsLogIn class="btn-icon" /> {{ t('header.logIn') }}
         </NuxtLinkLocale>
       </nav>
 
@@ -76,12 +78,16 @@ onMounted(() => {
   left: 0;
   right: 0;
   z-index: 1000;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   padding: var(--spacing-xs) var(--spacing-md);
   height: var(--header-height);
   background: var(--color-white);
+}
+
+.primary-nav {
+  justify-self: center;
 }
 
 .header-right {
@@ -89,10 +95,12 @@ onMounted(() => {
   align-items: center;
   flex-wrap: wrap;
   justify-content: flex-end;
+  justify-self: end;
   gap: 2rem;
 }
 
 .logo {
+  justify-self: start;
   font-family: 'Merriweather', serif;
   font-weight: 700;
   font-size: 1.1rem;
@@ -139,21 +147,10 @@ onMounted(() => {
   white-space: nowrap;
 }
 
-.btn-icon {
-  width: 16px;
-  height: 16px;
-}
-
 .btn-primary {
   background: var(--color-primary);
   color: var(--color-white);
   border: 1.5px solid transparent;
-}
-
-.btn-outline {
-  background: transparent;
-  border: 1.5px solid var(--color-primary);
-  color: var(--color-primary);
 }
 
 .account {
@@ -243,9 +240,20 @@ onMounted(() => {
 
 @media (max-width: 640px) {
   .header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     height: auto;
     min-height: var(--header-height);
     align-items: flex-start;
+  }
+
+  .primary-nav {
+    order: 3;
+    flex-basis: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.4rem;
   }
 
   .header-right {

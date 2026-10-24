@@ -1,7 +1,6 @@
 <script setup lang="ts">
-const SITE_URL = 'https://bogorm.app'
-
 const { t } = useI18n()
+const { public: { i18n: { baseUrl: SITE_URL } } } = useRuntimeConfig()
 
 // lang/dir on <html>, plus canonical, hreflang alternates and og:locale
 const localeHead = useLocaleHead({ dir: true, lang: true, seo: true })
@@ -25,6 +24,7 @@ useSeoMeta({
   ogImageHeight: 630,
   ogImageAlt: () => t('site.ogImageAlt'),
   twitterCard: 'summary_large_image',
+  twitterImage: `${SITE_URL}/og-image.png`,
 })
 </script>
 

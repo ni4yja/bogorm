@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'default' })
 
-const { t } = useI18n()
+const { t, tm, rt } = useI18n()
 
 useSeoMeta({
   title: () => t('about.metaTitle'),
@@ -13,6 +13,7 @@ useSeoMeta({
 const ARTICLE_URL = 'https://anywhere.pl/polecane/po-cichu-na-glos-razem-o-czytaniu-ktore-laczy-ludzi/'
 const AUTHOR_URL = 'https://liubuntu.tech'
 const DESIGNER_URL = 'https://www.linkedin.com/in/anastasiia-kirman-4b35b72a4/'
+const CONTACT_EMAIL = 'liubuntu@proton.me'
 
 const benefits = computed(() => [
   { title: t('about.partners.visibilityTitle'), text: t('about.partners.visibilityText') },
@@ -20,12 +21,7 @@ const benefits = computed(() => [
   { title: t('about.partners.networkTitle'), text: t('about.partners.networkText') },
 ])
 
-const invitees = computed(() => [
-  t('about.partners.inviteBookshops'),
-  t('about.partners.inviteLibraries'),
-  t('about.partners.inviteClubs'),
-  t('about.partners.inviteOrganisers'),
-])
+const invitees = computed(() => tm('about.partners.invite').map(item => rt(item)))
 </script>
 
 <template>
@@ -120,7 +116,7 @@ const invitees = computed(() => [
           <h2>{{ t('about.contact.title') }}</h2>
           <p>{{ t('about.contact.text') }}</p>
         </div>
-        <a :href="`mailto:${t('about.contact.email')}`" class="contact-email">
+        <a :href="`mailto:${CONTACT_EMAIL}`" class="contact-email">
           {{ t('about.contact.email') }}
         </a>
       </section>

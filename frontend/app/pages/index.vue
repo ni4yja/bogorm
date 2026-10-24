@@ -88,9 +88,6 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
         />
         <EventsSidebar v-if="isAuthenticated" ref="sidebarRef" @select-event="handleSelectEvent" />
         <div v-if="isBannerVisible && !isBannerDismissed && !isAuthenticated" class="unauth-banner">
-          <button class="banner-close" :aria-label="t('a11y.dismiss')" @click="isBannerDismissed = true">
-            <IconsClose class="banner-close-icon" />
-          </button>
           <i18n-t keypath="home.unauthBanner" tag="p" scope="global">
             <template #bold1>
               <strong>{{ t('home.unauthBannerBold1') }}</strong>
@@ -102,6 +99,9 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
           <NuxtLinkLocale to="/register" class="btn-full">
             {{ t('home.fullExperience') }}
           </NuxtLinkLocale>
+          <button class="banner-close" :aria-label="t('a11y.dismiss')" @click="isBannerDismissed = true">
+            <IconsClose class="banner-close-icon" />
+          </button>
         </div>
       </ClientOnly>
     </section>
@@ -157,13 +157,15 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
 }
 
 .unauth-banner {
+  --banner-close-size: 44px;
+  --banner-close-offset: 0.5rem;
   position: absolute;
   bottom: 1.5rem;
   left: 1.5rem;
   right: 1.5rem;
   background: #fff;
   border-radius: 12px;
-  padding: var(--spacing-xs) calc(var(--spacing-md) + 32px) var(--spacing-xs) var(--spacing-md);
+  padding: var(--spacing-xs) var(--spacing-md);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -180,11 +182,9 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
 }
 
 .banner-close {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  width: 44px;
-  height: 44px;
+  flex-shrink: 0;
+  width: var(--banner-close-size);
+  height: var(--banner-close-size);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -236,11 +236,17 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
     left: 0.75rem;
     right: 0.75rem;
     bottom: 0.75rem;
-    padding: var(--spacing-xs) calc(var(--spacing-xs) + 36px) var(--spacing-xs) var(--spacing-xs);
+    padding: var(--spacing-xs) calc(var(--banner-close-offset) + var(--banner-close-size)) var(--spacing-xs) var(--spacing-xs);
   }
 
   .btn-full {
     white-space: normal;
+  }
+
+  .banner-close {
+    position: absolute;
+    top: var(--banner-close-offset);
+    right: var(--banner-close-offset);
   }
 }
 </style>
