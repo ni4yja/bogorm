@@ -4,7 +4,8 @@
     "logIn": "Log In",
     "bookmarks": "Bookmarks",
     "logOut": "Log Out",
-    "profile": "Profile"
+    "profile": "Profile",
+    "about": "About"
   },
   "placeModal": {
     "upcomingEventsCount": "{count} Upcoming Event | {count} Upcoming Events",

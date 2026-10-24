@@ -27,6 +27,10 @@ onMounted(() => {
     </NuxtLinkLocale>
 
     <div class="header-right">
+      <NuxtLinkLocale to="/about" class="nav-link">
+        {{ t('header.about') }}
+      </NuxtLinkLocale>
+
       <LanguageSwitcher />
 
       <div v-if="!isMounted" class="nav-placeholder" />
@@ -94,6 +98,18 @@ onMounted(() => {
   font-size: 1.1rem;
   color: var(--color-primary);
   text-decoration: none;
+}
+
+.nav-link {
+  font-size: 0.9rem;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.nav-link:hover,
+.nav-link.router-link-exact-active {
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 .nav-placeholder {
@@ -247,6 +263,10 @@ onMounted(() => {
     justify-content: flex-end;
     display: flex;
     gap: 0.4rem;
+  }
+
+  .nav-link {
+    font-size: 0.8rem;
   }
 
   .btn {
