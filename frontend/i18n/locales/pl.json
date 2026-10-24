@@ -3,7 +3,8 @@
     "signUp": "Zarejestruj się",
     "logIn": "Zaloguj się",
     "bookmarks": "Zakładki",
-    "logOut": "Wyloguj się"
+    "logOut": "Wyloguj się",
+    "profile": "Profil"
   },
   "placeModal": {
     "upcomingEventsCount": "{count} nadchodzące wydarzenie | {count} nadchodzące wydarzenia | {count} nadchodzących wydarzeń",
@@ -50,7 +51,20 @@
   },
   "accountLayout": {
     "bookmarks": "Zakładki",
-    "logOut": "Wyloguj się"
+    "logOut": "Wyloguj się",
+    "profile": "Profil"
+  },
+  "profile": {
+    "title": "Profil",
+    "loading": "Ładowanie…",
+    "loadError": "Nie udało się wczytać profilu.",
+    "email": "E-mail",
+    "username": "Nazwa użytkownika",
+    "dangerZone": {
+      "title": "Usuń konto",
+      "text": "Konto i wszystkie zapisane miejsca i wydarzenia zostaną usunięte na zawsze. Tego nie można cofnąć.",
+      "button": "Usuń konto"
+    }
   },
   "bookmarks": {
     "title": "Zakładki",

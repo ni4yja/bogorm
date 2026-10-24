@@ -47,6 +47,10 @@ onMounted(() => {
         </button>
 
         <div v-if="isDropdownOpen" class="dropdown">
+          <NuxtLinkLocale to="/profile" class="dropdown-item" @click="isDropdownOpen = false">
+            <IconsProfile class="dropdown-icon" />
+            {{ t('header.profile') }}
+          </NuxtLinkLocale>
           <NuxtLinkLocale to="/bookmarks" class="dropdown-item" @click="isDropdownOpen = false">
             <IconsBookmarkActive class="dropdown-icon" />
             {{ t('header.bookmarks') }}

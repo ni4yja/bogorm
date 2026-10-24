@@ -2,9 +2,15 @@
 const route = useRoute()
 const { logoutAndRedirect } = useAuth()
 const { t } = useI18n()
+const localePath = useLocalePath()
+
+// Auto-imported components can't be resolved from a plain string in :is
+const IconsProfile = resolveComponent('IconsProfile')
+const IconsBookmark = resolveComponent('IconsBookmark')
 
 const navItems = computed(() => [
-  { label: t('accountLayout.bookmarks'), to: '/bookmarks', icon: 'IconsBookmark' },
+  { label: t('accountLayout.profile'), to: localePath('/profile'), icon: IconsProfile },
+  { label: t('accountLayout.bookmarks'), to: localePath('/bookmarks'), icon: IconsBookmark },
 ])
 </script>
 
