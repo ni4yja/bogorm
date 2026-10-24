@@ -6,6 +6,8 @@ const { t } = useI18n()
 useSeoMeta({
   title: () => t('about.metaTitle'),
   description: () => t('about.metaDescription'),
+  ogTitle: () => t('about.metaTitle'),
+  ogDescription: () => t('about.metaDescription'),
 })
 
 const ARTICLE_URL = 'https://anywhere.pl/polecane/po-cichu-na-glos-razem-o-czytaniu-ktore-laczy-ludzi/'

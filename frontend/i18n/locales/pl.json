@@ -1,4 +1,9 @@
 {
+  "site": {
+    "title": "Bogorm — czytelnicza mapa Warszawy",
+    "description": "Bezpłatna mapa księgarń, bibliotek, klubów książki i wydarzeń literackich w Warszawie. Znajdź miejsce do czytania i ludzi, z którymi porozmawiasz o książkach.",
+    "ogImageAlt": "Bogorm — czytelnicza mapa Warszawy"
+  },
   "header": {
     "signUp": "Zarejestruj się",
     "logIn": "Zaloguj się",

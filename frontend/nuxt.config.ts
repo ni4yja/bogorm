@@ -28,7 +28,14 @@ export default defineNuxtConfig({
           'data-domains': 'bogorm.app',
         },
       ],
+      meta: [
+        { name: 'theme-color', content: '#390000' },
+      ],
       link: [
+        { rel: 'icon', href: '/favicon.ico', sizes: '48x48' },
+        { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+        { rel: 'manifest', href: '/site.webmanifest' },
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
         {
@@ -55,6 +62,8 @@ export default defineNuxtConfig({
       { code: 'en', language: 'en-GB', name: 'English', file: 'en.json' },
     ],
     defaultLocale: 'pl',
+    // Needed for canonical, hreflang and og:url links from useLocaleHead
+    baseUrl: 'https://bogorm.app',
     strategy: 'prefix_except_default',
     langDir: 'locales/',
     vueI18n: 'i18n.config.ts',

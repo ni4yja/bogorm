@@ -1,4 +1,9 @@
 {
+  "site": {
+    "title": "Bogorm — a reading map of Warsaw",
+    "description": "A free map of bookshops, libraries, book clubs and literary events in Warsaw. Find a place to read and people to talk books with.",
+    "ogImageAlt": "Bogorm — a reading map of Warsaw"
+  },
   "header": {
     "signUp": "Sign Up",
     "logIn": "Log In",
