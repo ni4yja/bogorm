@@ -7,10 +7,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
-from rest_framework_simplejwt.token_blacklist.models import (
-    BlacklistedToken,
-    OutstandingToken,
-)
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -20,6 +16,7 @@ from .serializers import (
     MeSerializer,
     RegisterSerializer,
 )
+from .tokens import blacklist_all_tokens
 
 
 class RegisterView(generics.CreateAPIView):
@@ -75,13 +72,7 @@ class MeView(generics.RetrieveDestroyAPIView):
         serializer.is_valid(raise_exception=True)
 
         with transaction.atomic():
-            # Blacklist every refresh token so none can be used after deletion.
-            # OutstandingToken.user is SET_NULL, so blacklist rows survive the delete.
-            outstanding = OutstandingToken.objects.filter(user=user)
-            BlacklistedToken.objects.bulk_create(
-                [BlacklistedToken(token=token) for token in outstanding],
-                ignore_conflicts=True,
-            )
+            blacklist_all_tokens(user)
             user.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)

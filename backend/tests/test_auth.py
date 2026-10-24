@@ -2,9 +2,14 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
+from rest_framework_simplejwt.token_blacklist.models import (
+    BlacklistedToken,
+    OutstandingToken,
+)
 
 from bookmarks.models import Bookmark
 from tests.factories import PlaceFactory, UserFactory
+from users.tokens import blacklist_all_tokens
 
 User = get_user_model()
 
@@ -285,3 +290,18 @@ class TestMeDelete:
         response = api_client.get(reverse("me"))
 
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+class TestBlacklistAllTokens:
+    def test_blacklists_every_token_and_skips_already_blacklisted(
+        self, api_client, reader
+    ):
+        first = login(api_client)
+        login(api_client)
+        api_client.post(reverse("logout"), {"refresh": first["refresh"]})
+
+        blacklist_all_tokens(reader)
+
+        outstanding = OutstandingToken.objects.filter(user=reader)
+        assert outstanding.count() == 2
+        assert BlacklistedToken.objects.filter(token__in=outstanding).count() == 2
