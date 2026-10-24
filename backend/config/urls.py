@@ -3,7 +3,12 @@ from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from users.views import EmailNormalizingTokenObtainPairView, LogoutView, RegisterView
+from users.views import (
+    CurrentUserView,
+    EmailNormalizingTokenObtainPairView,
+    LogoutView,
+    RegisterView,
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -17,6 +22,7 @@ urlpatterns = [
     ),
     path("api/v1/auth/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/v1/auth/logout/", LogoutView.as_view(), name="logout"),
+    path("api/v1/auth/me/", CurrentUserView.as_view(), name="me"),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
         "api/docs/",

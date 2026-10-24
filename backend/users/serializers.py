@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
+from django.utils.translation import gettext as _
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -37,3 +38,20 @@ class EmailNormalizingTokenObtainPairSerializer(TokenObtainPairSerializer):
                 attrs[email_field]
             ).lower()
         return super().validate(attrs)
+
+
+class CurrentUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "email", "username"]
+        read_only_fields = fields
+
+
+class DeleteAccountSerializer(serializers.Serializer):
+    password = serializers.CharField(write_only=True)
+
+    def validate_password(self, value):
+        # Password confirmation guards against a stolen access token
+        if not self.context["request"].user.check_password(value):
+            raise serializers.ValidationError(_("Incorrect password."))
+        return value
