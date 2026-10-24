@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Bogorm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-28 15:45+0000\n"
+"POT-Creation-Date: 2026-10-24 09:41+0000\n"
 "PO-Revision-Date: 2026-09-28 16:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -85,10 +85,18 @@ msgstr "Parametr zapytania bbox jest wymagany"
 msgid "bbox must be: minLng,minLat,maxLng,maxLat"
 msgstr "bbox musi mieć format: minLng,minLat,maxLng,maxLat"
 
-#: users/views.py:29
+#: users/serializers.py:56
+msgid "Incorrect password."
+msgstr "Nieprawidłowe hasło."
+
+#: users/views.py:41
 msgid "refresh token is required"
 msgstr "Token odświeżania jest wymagany"
 
-#: users/views.py:38
+#: users/views.py:50
 msgid "invalid or already blacklisted token"
 msgstr "Nieprawidłowy token lub token jest już na czarnej liście"
+
+#: users/views.py:70
+msgid "Staff accounts cannot be deleted via the API."
+msgstr "Kont administratorów nie można usunąć przez API."
