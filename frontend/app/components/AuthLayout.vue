@@ -79,4 +79,17 @@ const { t } = useI18n()
   color: var(--color-grey);
   margin: 0 0 1.75rem;
 }
+
+@media (max-width: 640px) {
+  .auth-card {
+    width: calc(100% - 2rem);
+    max-width: 380px;
+    padding: 2rem 1.5rem;
+  }
+
+  .back-link {
+    position: static;
+    margin-bottom: 1rem;
+  }
+}
 </style>
