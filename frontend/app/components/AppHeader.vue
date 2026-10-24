@@ -212,4 +212,37 @@ onMounted(() => {
   height: 20px;
   flex-shrink: 0;
 }
+
+@media (max-width: 1024px) {
+  .header-right {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .header-right {
+    gap: 0.5rem;
+  }
+
+  .logo {
+    font-size: 0.95rem;
+  }
+
+  .nav {
+    gap: 0.4rem;
+  }
+
+  .btn {
+    padding: 0.45rem 0.7rem;
+    font-size: 0.8rem;
+  }
+
+  .nav-placeholder {
+    width: 120px;
+  }
+
+  .dropdown {
+    min-width: 180px;
+  }
+}
 </style>
