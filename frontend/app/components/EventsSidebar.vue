@@ -440,4 +440,39 @@ function handleToggleBookmark(eventId: string, title: string) {
   font-size: 0.9rem;
   color: var(--color-black);
 }
+
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 320px;
+  }
+}
+
+@media (max-width: 640px) {
+  .sidebar {
+    top: 0.75rem;
+    left: 0.75rem;
+    right: 0.75rem;
+    width: auto;
+    max-height: calc(100% - 1.5rem);
+  }
+
+  .header-row,
+  .back-row {
+    padding: 1rem 1.25rem;
+  }
+
+  .events-list {
+    padding: 0 1.25rem;
+  }
+
+  .badges,
+  .detail-content {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .see-all-btn {
+    margin: 1rem 1.25rem 1.25rem;
+  }
+}
 </style>

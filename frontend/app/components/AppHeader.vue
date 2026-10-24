@@ -83,6 +83,8 @@ onMounted(() => {
 .header-right {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 2rem;
 }
 
@@ -101,6 +103,8 @@ onMounted(() => {
 
 .nav {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 0.75rem;
   align-items: center;
 }
@@ -116,6 +120,7 @@ onMounted(() => {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+  white-space: nowrap;
 }
 
 .btn-icon {
@@ -126,6 +131,7 @@ onMounted(() => {
 .btn-primary {
   background: var(--color-primary);
   color: var(--color-white);
+  border: 1.5px solid transparent;
 }
 
 .btn-outline {
@@ -211,5 +217,45 @@ onMounted(() => {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
+}
+
+@media (max-width: 1440px) {
+  .header-right {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .header {
+    height: auto;
+    min-height: var(--header-height);
+    align-items: flex-start;
+  }
+
+  .header-right {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .logo {
+    font-size: 0.95rem;
+  }
+
+  .nav {
+    flex-basis: 100%;
+    justify-content: flex-end;
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .btn {
+    padding: 0.45rem 0.7rem;
+    font-size: 0.8rem;
+  }
+
+  .dropdown {
+    min-width: 180px;
+  }
 }
 </style>

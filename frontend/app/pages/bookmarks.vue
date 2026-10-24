@@ -461,4 +461,15 @@ onMounted(async () => {
 .pagination-icon--next {
   transform: rotate(180deg);
 }
+
+@media (max-width: 640px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tab {
+    padding: 0.7rem 0.5rem;
+    font-size: 0.85rem;
+  }
+}
 </style>

@@ -308,4 +308,25 @@ function handleToggleEventBookmark(eventId: string, title: string) {
   font-size: 0.9rem;
   color: var(--color-grey);
 }
+
+@media (max-width: 1024px) {
+  .modal {
+    width: calc(100% - 3rem);
+    max-width: 640px;
+  }
+}
+
+@media (max-width: 640px) {
+  .modal {
+    width: calc(100% - 1.5rem);
+  }
+
+  .image-placeholder {
+    height: 200px;
+  }
+
+  .content {
+    padding: 1rem 1.25rem 1.5rem;
+  }
+}
 </style>

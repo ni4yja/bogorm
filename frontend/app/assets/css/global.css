@@ -23,6 +23,28 @@
   --badge-radius: 24px;
 }
 
+@media (max-width: 1440px) {
+  :root {
+    --header-height: 72px;
+    --spacing-md: 28px;
+    --spacing-lg: 56px;
+    --spacing-xl: 64px;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    /* ponytail: fixed estimate for the 2-row mobile header; header now wraps
+       instead of overflowing horizontally, but if a locale's nav text grows
+       enough to wrap to a 3rd row, bump this value or sync it from JS. */
+    --header-height: 104px;
+    --spacing-xs: 14px;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+    --spacing-xl: 36px;
+  }
+}
+
 body {
   font-family: 'Inter', sans-serif;
   font-weight: 400;
@@ -58,6 +80,22 @@ h4 {
   font-family: 'Inter', sans-serif;
   font-weight: 500;
   font-size: 19px;
+}
+
+@media (max-width: 1440px) {
+  h1 {
+    font-size: 44px;
+  }
+}
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: 32px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
 }
 
 .auth-form .label {
