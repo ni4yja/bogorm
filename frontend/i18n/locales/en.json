@@ -1,10 +1,16 @@
 {
+  "site": {
+    "title": "Bogorm — a reading map of Warsaw",
+    "description": "A free map of bookshops, libraries, book clubs and literary events in Warsaw. Find a place to read and people to talk books with.",
+    "ogImageAlt": "Bogorm — a reading map of Warsaw"
+  },
   "header": {
     "signUp": "Sign Up",
     "logIn": "Log In",
     "bookmarks": "Bookmarks",
     "logOut": "Log Out",
-    "profile": "Profile"
+    "profile": "Profile",
+    "about": "About"
   },
   "placeModal": {
     "upcomingEventsCount": "{count} Upcoming Event | {count} Upcoming Events",
@@ -113,6 +119,52 @@
   },
   "events": {
     "comingSoon": "Events page is coming soon."
+  },
+  "about": {
+    "metaTitle": "About — Bogorm",
+    "metaDescription": "Bogorm is a free map of Warsaw's reading life: bookshops, libraries, book clubs and literary events.",
+    "heroTitle": "Discover places, events and people around books in Warsaw",
+    "mapLink": "See the map",
+    "what": {
+      "title": "What is Bogorm",
+      "text": "Bogorm is a map of Warsaw's reading life. It shows bookshops, libraries, book clubs, literary events and other places where people read.",
+      "free": "The map is free to use."
+    },
+    "why": {
+      "title": "Why it exists",
+      "text1": "We often think of reading as something very personal.",
+      "text2": "But every city has people who read the same books, go to the same bookshops and look for similar places to read."
+    },
+    "quote": "Bogorm helps them find each other.",
+    "who": {
+      "title": "Who makes Bogorm",
+      "photoAlt": "Liuba Kuibida, creator of Bogorm",
+      "text1": "I'm Liuba Kuibida, a cultural researcher and developer from Ukraine. Bogorm is my independent project.",
+      "text2": "I came to Warsaw because of the war. {link} (article in Polish) helped me build a new life here.",
+      "text2Link": "Reading together and book clubs",
+      "text3": "Bogorm grew out of that experience. It will keep growing together with its community.",
+      "authorSite": "Author's website",
+      "designer": "Prototype design"
+    },
+    "partners": {
+      "title": "For partners",
+      "lead": "Bogorm connects readers with the places and people who shape the city's book culture.",
+      "nonCommercialTitle": "Non-commercial project",
+      "nonCommercialText": "Taking part is free: I don't charge for being on the map or for promoting events.",
+      "inviteTitle": "I'd love to work with",
+      "invite": ["bookshops", "libraries", "book clubs", "organisers of literary events"],
+      "visibilityTitle": "Visibility",
+      "visibilityText": "Your place appears on Warsaw's reading map.",
+      "readersTitle": "Readers",
+      "readersText": "Your events reach people who are looking for something to read and someone to talk books with.",
+      "networkTitle": "A network",
+      "networkText": "You meet other bookshops, libraries and literary initiatives."
+    },
+    "contact": {
+      "title": "Become a partner",
+      "text": "The map is live and building its first partner network in Warsaw. If you run a place connected to books or organise literary events, write to me.",
+      "email": "liubuntu [at] proton [dot] me"
+    }
   },
   "a11y": {
     "saveEvent": "Save event",
