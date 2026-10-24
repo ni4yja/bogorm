@@ -83,6 +83,8 @@ onMounted(() => {
 .header-right {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 2rem;
 }
 
@@ -101,6 +103,8 @@ onMounted(() => {
 
 .nav {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 0.75rem;
   align-items: center;
 }

@@ -24,13 +24,14 @@ const navItems = computed(() => [
           :to="item.to"
           class="nav-item"
           :class="{ 'nav-item--active': route.path === item.to }"
+          :aria-label="item.label"
         >
           <component :is="item.icon" class="nav-icon" />
           <span class="label-text">{{ item.label }}</span>
         </NuxtLink>
       </nav>
 
-      <button class="logout-btn" @click="logoutAndRedirect">
+      <button class="logout-btn" :aria-label="t('accountLayout.logOut')" @click="logoutAndRedirect">
         <IconsLogOut class="logout-icon" />
         <span class="label-text">{{ t('accountLayout.logOut') }}</span>
       </button>

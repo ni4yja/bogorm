@@ -34,6 +34,9 @@
 
 @media (max-width: 640px) {
   :root {
+    /* ponytail: fixed estimate for the 2-row mobile header; header now wraps
+       instead of overflowing horizontally, but if a locale's nav text grows
+       enough to wrap to a 3rd row, bump this value or sync it from JS. */
     --header-height: 104px;
     --spacing-xs: 14px;
     --spacing-md: 16px;
