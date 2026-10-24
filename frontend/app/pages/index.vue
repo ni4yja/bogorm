@@ -187,4 +187,30 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
   text-decoration: none;
   text-align: center;
 }
+
+@media (max-width: 1024px) {
+  #map {
+    height: 480px;
+  }
+}
+
+@media (max-width: 640px) {
+  #map {
+    height: 380px;
+  }
+
+  .unauth-banner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    padding: var(--spacing-xs);
+  }
+
+  .btn-full {
+    white-space: normal;
+  }
+}
 </style>
