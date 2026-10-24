@@ -74,3 +74,9 @@ export interface BookmarkItem {
   target: BookmarkTarget
   created_at: string
 }
+
+export interface CurrentUser {
+  id: number
+  email: string
+  username: string
+}

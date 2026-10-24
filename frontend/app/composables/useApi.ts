@@ -106,7 +106,8 @@ export function useApi() {
 
   const put = <T>(path: string) => request<T>(path, { method: 'PUT' })
 
-  const del = <T>(path: string) => request<T>(path, { method: 'DELETE' })
+  const del = <T>(path: string, body?: Record<string, unknown>) =>
+    request<T>(path, { method: 'DELETE', body })
 
   return { get, post, put, del }
 }

@@ -69,5 +69,11 @@ export function useBookmarks() {
     return await get<PaginatedResponse<BookmarkItem>>(`/bookmarks/?type=${type}&page=${page}`)
   }
 
-  return { isBookmarked, isPending, registerInitialState, toggleBookmark, fetchBookmarks }
+  const resetBookmarks = () => {
+    bookmarkedPlaces.value = {}
+    bookmarkedEvents.value = {}
+    pendingIds.value = {}
+  }
+
+  return { isBookmarked, isPending, registerInitialState, toggleBookmark, fetchBookmarks, resetBookmarks }
 }
