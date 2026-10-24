@@ -23,6 +23,25 @@
   --badge-radius: 24px;
 }
 
+@media (max-width: 1024px) {
+  :root {
+    --header-height: 72px;
+    --spacing-md: 28px;
+    --spacing-lg: 56px;
+    --spacing-xl: 64px;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --header-height: 64px;
+    --spacing-xs: 14px;
+    --spacing-md: 16px;
+    --spacing-lg: 32px;
+    --spacing-xl: 36px;
+  }
+}
+
 body {
   font-family: 'Inter', sans-serif;
   font-weight: 400;
@@ -58,6 +77,22 @@ h4 {
   font-family: 'Inter', sans-serif;
   font-weight: 500;
   font-size: 19px;
+}
+
+@media (max-width: 1024px) {
+  h1 {
+    font-size: 44px;
+  }
+}
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: 32px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
 }
 
 .auth-form .label {
