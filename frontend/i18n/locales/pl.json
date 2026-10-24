@@ -114,6 +114,55 @@
   "events": {
     "comingSoon": "Strona wydarzeń wkrótce się pojawi."
   },
+  "about": {
+    "metaTitle": "O projekcie — Bogorm",
+    "metaDescription": "Bogorm to bezpłatna mapa czytelniczej Warszawy: księgarnie, biblioteki, kluby książki i wydarzenia literackie.",
+    "heroTitle": "Odkrywaj miejsca, wydarzenia i ludzi wokół książek w Warszawie",
+    "mapLink": "Zobacz mapę",
+    "what": {
+      "title": "Czym jest Bogorm",
+      "text": "Bogorm to mapa czytelniczej Warszawy. Znajdziesz na niej księgarnie, biblioteki, kluby książki, spotkania literackie i inne miejsca, w których ludzie czytają.",
+      "free": "Korzystanie z mapy jest bezpłatne."
+    },
+    "why": {
+      "title": "Dlaczego powstał",
+      "text1": "Czytanie często kojarzy się z czymś bardzo osobistym.",
+      "text2": "Ale w każdym mieście są ludzie, którzy czytają te same książki, chodzą do tych samych księgarni i szukają podobnych miejsc do czytania."
+    },
+    "quote": "Bogorm pomaga im się spotkać.",
+    "who": {
+      "title": "Kto tworzy Bogorm",
+      "photoAlt": "Liuba Kuibida, autorka Bogorm",
+      "text1": "Nazywam się Liuba Kuibida. Jestem kulturolożką i programistką z Ukrainy. Bogorm to mój autorski, niezależny projekt.",
+      "text2": "Do Warszawy przyjechałam przez wojnę. {link} pomogły mi zbudować tu nowe życie.",
+      "text2Link": "Wspólne czytanie i kluby książki",
+      "text3": "Z tego doświadczenia wyrósł Bogorm. Będzie się rozwijał razem ze społecznością.",
+      "authorSite": "Strona autorki",
+      "designer": "Projekt graficzny prototypu"
+    },
+    "partners": {
+      "title": "Dla partnerów",
+      "lead": "Bogorm łączy czytelników z miejscami i ludźmi, którzy tworzą lokalną kulturę książki.",
+      "nonCommercialTitle": "Projekt niekomercyjny",
+      "nonCommercialText": "Udział jest bezpłatny: nie pobieram opłat za obecność na mapie ani za promocję wydarzeń.",
+      "inviteTitle": "Zapraszam do współpracy",
+      "inviteBookshops": "księgarnie",
+      "inviteLibraries": "biblioteki",
+      "inviteClubs": "kluby książki",
+      "inviteOrganisers": "organizatorów wydarzeń literackich",
+      "visibilityTitle": "Widoczność",
+      "visibilityText": "Twoje miejsce pojawia się na czytelniczej mapie Warszawy.",
+      "readersTitle": "Czytelnicy",
+      "readersText": "Twoje wydarzenia trafiają do osób, które szukają czegoś do czytania i ludzi do rozmowy o książkach.",
+      "networkTitle": "Sieć",
+      "networkText": "Poznajesz inne księgarnie, biblioteki i inicjatywy literackie."
+    },
+    "contact": {
+      "title": "Zostań partnerem",
+      "text": "Mapa działa i buduje pierwszą sieć partnerów w Warszawie. Jeśli prowadzisz miejsce związane z książkami albo organizujesz wydarzenia literackie, napisz do mnie.",
+      "email": "liubuntu [małpa] proton [kropka] me"
+    }
+  },
   "a11y": {
     "saveEvent": "Zapisz wydarzenie",
     "savePlace": "Zapisz miejsce",
