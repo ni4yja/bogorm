@@ -26,13 +26,13 @@ const navItems = computed(() => [
           :class="{ 'nav-item--active': route.path === item.to }"
         >
           <component :is="item.icon" class="nav-icon" />
-          {{ item.label }}
+          <span class="label-text">{{ item.label }}</span>
         </NuxtLink>
       </nav>
 
       <button class="logout-btn" @click="logoutAndRedirect">
         <IconsLogOut class="logout-icon" />
-        {{ t('accountLayout.logOut') }}
+        <span class="label-text">{{ t('accountLayout.logOut') }}</span>
       </button>
     </aside>
 
@@ -112,5 +112,56 @@ const navItems = computed(() => [
   flex: 1;
   padding: 2rem 2.5rem;
   min-width: 0;
+}
+
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 200px;
+    padding: 1.5rem 1rem;
+  }
+
+  .content {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .layout {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-height: auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-right: none;
+    border-bottom: 1px solid var(--color-light-grey-40);
+    padding: 0.75rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .nav {
+    flex-direction: row;
+    gap: 0.25rem;
+  }
+
+  .nav-item {
+    padding: 0.5rem;
+  }
+
+  .logout-btn {
+    padding: 0.5rem;
+  }
+
+  .label-text {
+    display: none;
+  }
+
+  .content {
+    padding: 1.25rem;
+  }
 }
 </style>
