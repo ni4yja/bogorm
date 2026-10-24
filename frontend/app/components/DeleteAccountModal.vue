@@ -101,11 +101,11 @@ async function handleSubmit() {
 }
 
 .input--error {
-  border-color: var(--color-danger, #c0392b);
+  border-color: var(--color-error);
 }
 
 .error {
-  color: var(--color-danger, #c0392b);
+  color: var(--color-error);
   font-size: 0.85rem;
   margin: 0.4rem 0 0;
 }
@@ -137,8 +137,8 @@ async function handleSubmit() {
 }
 
 .btn-danger {
-  background: var(--color-danger, #c0392b);
-  border: 1.5px solid var(--color-danger, #c0392b);
+  background: var(--color-error);
+  border: 1.5px solid var(--color-error);
   color: var(--color-white);
 }
 </style>

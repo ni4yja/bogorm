@@ -20,6 +20,9 @@ export function useAuth() {
       email,
       password,
     })
+    // Logging in as a different user without logging out first shouldn't
+    // leak the previous account's cached bookmark state
+    resetBookmarks()
     accessToken.value = response.access
     refreshToken.value = response.refresh
   }

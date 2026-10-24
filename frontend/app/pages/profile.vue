@@ -107,13 +107,13 @@ onMounted(async () => {
 }
 
 .danger-zone {
-  border: 1px solid var(--color-danger, #c0392b);
+  border: 1px solid var(--color-error);
   border-radius: 12px;
   padding: 1.25rem 1.5rem;
 }
 
 .danger-title {
-  color: var(--color-danger, #c0392b);
+  color: var(--color-error);
   font-size: 1rem;
   margin: 0 0 0.5rem;
 }
@@ -126,17 +126,17 @@ onMounted(async () => {
 
 .danger-btn {
   padding: 0.6rem 1.1rem;
-  border: 1.5px solid var(--color-danger, #c0392b);
+  border: 1.5px solid var(--color-error);
   border-radius: 8px;
   background: none;
-  color: var(--color-danger, #c0392b);
+  color: var(--color-error);
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
 }
 
 .danger-btn:hover {
-  background: var(--color-danger, #c0392b);
+  background: var(--color-error);
   color: var(--color-white);
 }
 </style>
