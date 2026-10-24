@@ -34,7 +34,7 @@
 
 @media (max-width: 640px) {
   :root {
-    --header-height: 64px;
+    --header-height: 104px;
     --spacing-xs: 14px;
     --spacing-md: 16px;
     --spacing-lg: 32px;

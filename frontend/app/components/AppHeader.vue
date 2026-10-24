@@ -116,6 +116,7 @@ onMounted(() => {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+  white-space: nowrap;
 }
 
 .btn-icon {
@@ -126,6 +127,7 @@ onMounted(() => {
 .btn-primary {
   background: var(--color-primary);
   color: var(--color-white);
+  border: 1.5px solid transparent;
 }
 
 .btn-outline {
@@ -220,8 +222,16 @@ onMounted(() => {
 }
 
 @media (max-width: 640px) {
+  .header {
+    height: auto;
+    min-height: var(--header-height);
+    align-items: flex-start;
+  }
+
   .header-right {
     gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
 
   .logo {
@@ -229,16 +239,15 @@ onMounted(() => {
   }
 
   .nav {
+    flex-basis: 100%;
+    justify-content: flex-end;
+    display: flex;
     gap: 0.4rem;
   }
 
   .btn {
     padding: 0.45rem 0.7rem;
     font-size: 0.8rem;
-  }
-
-  .nav-placeholder {
-    width: 120px;
   }
 
   .dropdown {
