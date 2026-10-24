@@ -3,7 +3,8 @@
     "signUp": "Sign Up",
     "logIn": "Log In",
     "bookmarks": "Bookmarks",
-    "logOut": "Log Out"
+    "logOut": "Log Out",
+    "profile": "Profile"
   },
   "placeModal": {
     "upcomingEventsCount": "{count} Upcoming Event | {count} Upcoming Events",
@@ -50,7 +51,29 @@
   },
   "accountLayout": {
     "bookmarks": "Bookmarks",
-    "logOut": "Log Out"
+    "logOut": "Log Out",
+    "profile": "Profile"
+  },
+  "profile": {
+    "title": "Profile",
+    "loading": "Loading…",
+    "loadError": "Couldn't load your profile.",
+    "email": "Email",
+    "username": "Username",
+    "dangerZone": {
+      "title": "Delete account",
+      "text": "Your account and all saved places and events will be deleted for good. This can't be undone.",
+      "button": "Delete account"
+    }
+  },
+  "deleteAccount": {
+    "title": "Delete your account?",
+    "warning": "Your account and all saved places and events will be deleted for good. This can't be undone.",
+    "passwordLabel": "Enter your password to confirm",
+    "cancel": "Cancel",
+    "confirm": "Delete account",
+    "deleting": "Deleting…",
+    "genericError": "Couldn't delete your account. Please try again."
   },
   "bookmarks": {
     "title": "Bookmarks",
