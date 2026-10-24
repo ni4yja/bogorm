@@ -6,6 +6,8 @@ const { t } = useI18n()
 
 const { isAuthenticated } = useAuth()
 const isBannerVisible = ref(true)
+// Session-scoped so the banner comes back on the next visit, not on every modal close
+const isBannerDismissed = useSessionStorage('bogorm:unauth-banner-dismissed', false)
 
 const selectedPlace = ref<PlaceDetail | null>(null)
 const selectedEventCount = ref(0)
@@ -85,7 +87,10 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
           @close="selectedPlace = null; selectedEvents = []; isBannerVisible = true"
         />
         <EventsSidebar v-if="isAuthenticated" ref="sidebarRef" @select-event="handleSelectEvent" />
-        <div v-if="isBannerVisible && !isAuthenticated" class="unauth-banner">
+        <div v-if="isBannerVisible && !isBannerDismissed && !isAuthenticated" class="unauth-banner">
+          <button class="banner-close" :aria-label="t('a11y.dismiss')" @click="isBannerDismissed = true">
+            <IconsClose class="banner-close-icon" />
+          </button>
           <i18n-t keypath="home.unauthBanner" tag="p" scope="global">
             <template #bold1>
               <strong>{{ t('home.unauthBannerBold1') }}</strong>
@@ -94,9 +99,9 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
               <strong>{{ t('home.unauthBannerBold2') }}</strong>
             </template>
           </i18n-t>
-          <NuxtLink to="/register" class="btn-full">
+          <NuxtLinkLocale to="/register" class="btn-full">
             {{ t('home.fullExperience') }}
-          </NuxtLink>
+          </NuxtLinkLocale>
         </div>
       </ClientOnly>
     </section>
@@ -158,7 +163,7 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
   right: 1.5rem;
   background: #fff;
   border-radius: 12px;
-  padding: var(--spacing-xs) var(--spacing-md);
+  padding: var(--spacing-xs) calc(var(--spacing-md) + 32px) var(--spacing-xs) var(--spacing-md);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -172,6 +177,31 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
   color: #444;
   line-height: 1.5;
   margin: 0;
+}
+
+.banner-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--color-primary);
+}
+
+.banner-close:hover {
+  background: var(--color-light-grey-40);
+}
+
+.banner-close-icon {
+  width: 18px;
+  height: 18px;
 }
 
 .btn-full {
@@ -206,7 +236,7 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
     left: 0.75rem;
     right: 0.75rem;
     bottom: 0.75rem;
-    padding: var(--spacing-xs);
+    padding: var(--spacing-xs) calc(var(--spacing-xs) + 36px) var(--spacing-xs) var(--spacing-xs);
   }
 
   .btn-full {
