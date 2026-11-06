@@ -172,5 +172,9 @@
     "savePlace": "Save place",
     "close": "Close",
     "dismiss": "Dismiss"
+  },
+  "footer": {
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use"
   }
 }
