@@ -229,6 +229,7 @@ function handleToggleEventBookmark(eventId: string, title: string) {
   color: var(--color-black);
   line-height: 1.6;
   margin-bottom: 1.5rem;
+  white-space: pre-line;
 }
 
 .meta {
