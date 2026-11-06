@@ -58,9 +58,9 @@ const { error, isLoading, handleSubmit } = useAuthForm(
     </form>
 
     <p class="switch-link">
-      {{ t('register.hasAccount') }} <NuxtLink to="/login">
+      {{ t('register.hasAccount') }} <NuxtLinkLocale to="/login">
         {{ t('register.logInLink') }}
-      </NuxtLink>
+      </NuxtLinkLocale>
     </p>
   </AuthLayout>
 </template>
