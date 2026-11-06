@@ -59,8 +59,8 @@ function handleToggleEventBookmark(eventId: string, title: string) {
             <IconsBookmarkActive v-if="isBookmarked('place', place.id)" class="action-icon" />
             <IconsBookmark v-else class="action-icon" />
           </button>
-          <button class="icon-btn" :aria-label="t('a11y.close')" @click="$emit('close')">
-            <IconsClose class="action-icon" />
+          <button class="icon-btn icon-btn--close" :aria-label="t('a11y.close')" @click="$emit('close')">
+            <IconsClose class="close-icon" />
           </button>
         </div>
       </div>
@@ -98,13 +98,13 @@ function handleToggleEventBookmark(eventId: string, title: string) {
           <div class="event-title">
             {{ event.title }}
             <button
-              class="bookmark-btn"
+              class="icon-btn"
               :disabled="isPending('event', event.id)"
               :aria-label="t('a11y.saveEvent')"
               @click="handleToggleEventBookmark(event.id, event.title)"
             >
-              <IconsBookmarkActive v-if="isBookmarked('event', event.id)" class="bookmark-icon" />
-              <IconsBookmark v-else class="bookmark-icon" />
+              <IconsBookmarkActive v-if="isBookmarked('event', event.id)" class="action-icon" />
+              <IconsBookmark v-else class="action-icon" />
             </button>
           </div>
           <div v-if="event.event_time" class="event-time">
@@ -147,6 +147,8 @@ function handleToggleEventBookmark(eventId: string, title: string) {
 .title {
   color: var(--color-primary);
   margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
   /* first line height matches .icon-btn height so icons align with it */
   line-height: 30px;
 }
@@ -162,6 +164,7 @@ function handleToggleEventBookmark(eventId: string, title: string) {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   width: 30px;
   height: 30px;
   padding: 0;
@@ -171,9 +174,22 @@ function handleToggleEventBookmark(eventId: string, title: string) {
   color: var(--color-primary);
 }
 
+/* larger tap target; negative margins keep the row at .icon-btn height */
+.icon-btn--close {
+  width: 40px;
+  height: 40px;
+  margin: -5px -5px -5px 0;
+}
+
 .action-icon {
   width: 22px;
   height: 22px;
+}
+
+/* Close.svg's glyph fills only half of its viewBox */
+.close-icon {
+  width: 32px;
+  height: 32px;
 }
 
 .badges {
@@ -200,20 +216,6 @@ function handleToggleEventBookmark(eventId: string, title: string) {
   height: 14px;
   color: var(--color-white);
   flex-shrink: 0;
-}
-
-.bookmark-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.25rem;
-  flex-shrink: 0;
-  color: var(--color-primary);
-}
-
-.bookmark-icon {
-  width: 22px;
-  height: 22px;
 }
 
 .description {

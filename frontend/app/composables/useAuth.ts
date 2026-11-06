@@ -35,7 +35,8 @@ export function useAuth() {
   const logout = async () => {
     if (refreshToken.value) {
       try {
-        await post('/auth/logout/', { refresh: refreshToken.value })
+        // Lazy body: an expired access token rotates the refresh token before this is sent
+        await post('/auth/logout/', () => ({ refresh: refreshToken.value }))
       }
       catch {
         // logout is best-effort: clear local state even if the request fails

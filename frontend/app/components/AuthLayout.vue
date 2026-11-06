@@ -9,9 +9,9 @@ const { t } = useI18n()
 
 <template>
   <div class="auth-page">
-    <NuxtLink to="/" class="back-link">
+    <NuxtLinkLocale to="/" class="back-link">
       {{ t('authLayout.backToMap') }}
-    </NuxtLink>
+    </NuxtLinkLocale>
 
     <div class="auth-card">
       <span class="logo">Bogorm</span>

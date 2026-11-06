@@ -10,7 +10,8 @@ const password = ref('')
 
 const { error, isLoading, handleSubmit } = useAuthForm(
   () => register(email.value, username.value, password.value),
-  () => t('register.errorDefault'),
+  // The backend's field messages already follow Accept-Language
+  (err: any) => (err?.response?.status === 400 && Object.values(err.data ?? {}).flat().join(' ')) || t('register.errorDefault'),
 )
 </script>
 

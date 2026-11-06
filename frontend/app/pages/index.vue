@@ -3,6 +3,7 @@ import type { Event, PlaceDetail } from '~/types'
 
 definePageMeta({ layout: 'default' })
 const { t } = useI18n()
+const { show } = useToast()
 
 const { isAuthenticated } = useAuth()
 const isBannerVisible = ref(true)
@@ -29,6 +30,15 @@ watch(isAuthenticated, (authenticated: boolean) => {
     clearHighlightFn?.()
 })
 
+// useMapMarkers runs after an await, where useI18n is no longer available
+function handleLoadError() {
+  show(t('home.loadError'))
+}
+
+onBeforeUnmount(() => {
+  mapInstance?.remove()
+})
+
 onMounted(async () => {
   const { L, map, markersLayer } = await useLeafletMap('map')
   mapInstance = map
@@ -41,12 +51,16 @@ onMounted(async () => {
     selectedEventCount,
     selectedEvents,
     isBannerVisible,
+    handleLoadError,
   )
   highlightMarkerFn = highlightMarker
   clearHighlightFn = clearHighlight
 
-  await fetchPlaces(map)
-  map.on('moveend', () => fetchPlaces(map))
+  const refreshPlaces = () => fetchPlaces(map).catch(handleLoadError)
+
+  // Before the first fetch, so a failed load can still recover on the next pan
+  map.on('moveend', refreshPlaces)
+  await refreshPlaces()
 })
 
 function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
@@ -57,9 +71,8 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
 
   mapInstance.flyTo([place.lat, place.lng], 16, { duration: 0.8 })
 
-  mapInstance.once('moveend', () => {
-    highlightMarkerFn?.(place.id)
-  })
+  // fetchPlaces re-applies this to the marker it creates once the map stops
+  highlightMarkerFn?.(place.id)
 }
 </script>
 
@@ -86,7 +99,12 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
           :is-authenticated="isAuthenticated"
           @close="selectedPlace = null; selectedEvents = []; isBannerVisible = true"
         />
-        <EventsSidebar v-if="isAuthenticated" ref="sidebarRef" @select-event="handleSelectEvent" />
+        <EventsSidebar
+          v-if="isAuthenticated"
+          ref="sidebarRef"
+          @select-event="handleSelectEvent"
+          @deselect-event="clearHighlightFn?.()"
+        />
         <div v-if="isBannerVisible && !isBannerDismissed && !isAuthenticated" class="unauth-banner">
           <i18n-t keypath="home.unauthBanner" tag="p" scope="global">
             <template #bold1>

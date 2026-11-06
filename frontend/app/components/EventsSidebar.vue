@@ -3,6 +3,7 @@ import type { EventListItem } from '~/types'
 
 const emit = defineEmits<{
   selectEvent: [place: { id: string, lat: number, lng: number }]
+  deselectEvent: []
 }>()
 
 const { t } = useI18n()
@@ -37,7 +38,9 @@ function openDetail(event: EventListItem) {
 
 function closeDetail() {
   selectedEvent.value = null
-  state.value = 'list'
+  if (state.value === 'detail')
+    state.value = 'list'
+  emit('deselectEvent')
 }
 
 defineExpose({ closeDetail })
@@ -404,6 +407,8 @@ function handleToggleBookmark(eventId: string, title: string) {
 .event-title-lg {
   color: var(--color-primary);
   margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
   /* first line height matches the bookmark button height */
   line-height: 28px;
 }
