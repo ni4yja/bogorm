@@ -43,36 +43,33 @@ function handleToggleEventBookmark(eventId: string, title: string) {
 
 <template>
   <div class="modal">
-    <button class="close" :aria-label="t('a11y.close')" @click="$emit('close')">
-      <IconsClose />
-    </button>
-
-    <div class="image-placeholder">
-      <IconsImage class="image-icon" />
-    </div>
-
-    <div v-if="eventCount > 0 && !isAuthenticated" class="badges">
-      <div class="badge badge--events">
-        <IconsCalendar class="badge-icon" />
-        {{ t('placeModal.upcomingEventsCount', eventCount) }}
-      </div>
-    </div>
-
     <div class="content">
       <div class="title-row">
         <h2 class="title">
           {{ place.title }}
         </h2>
-        <button
-          v-if="isAuthenticated"
-          class="bookmark-btn"
-          :disabled="isPending('place', place.id)"
-          :aria-label="t('a11y.savePlace')"
-          @click="handleTogglePlaceBookmark"
-        >
-          <IconsBookmarkActive v-if="isBookmarked('place', place.id)" class="bookmark-icon" />
-          <IconsBookmark v-else class="bookmark-icon" />
-        </button>
+        <div class="actions">
+          <button
+            v-if="isAuthenticated"
+            class="icon-btn"
+            :disabled="isPending('place', place.id)"
+            :aria-label="t('a11y.savePlace')"
+            @click="handleTogglePlaceBookmark"
+          >
+            <IconsBookmarkActive v-if="isBookmarked('place', place.id)" class="action-icon" />
+            <IconsBookmark v-else class="action-icon" />
+          </button>
+          <button class="icon-btn" :aria-label="t('a11y.close')" @click="$emit('close')">
+            <IconsClose class="action-icon" />
+          </button>
+        </div>
+      </div>
+
+      <div v-if="eventCount > 0 && !isAuthenticated" class="badges">
+        <div class="badge badge--events">
+          <IconsCalendar class="badge-icon" />
+          {{ t('placeModal.upcomingEventsCount', eventCount) }}
+        </div>
       </div>
 
       <p v-if="place.description" class="description">
@@ -135,40 +132,54 @@ function handleToggleEventBookmark(eventId: string, title: string) {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.16);
 }
 
-.close {
-  position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
+.content {
+  padding: 1.25rem 1.5rem 2rem;
+}
+
+.title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.title {
+  color: var(--color-primary);
+  margin: 0;
+  /* first line height matches .icon-btn height so icons align with it */
+  line-height: 30px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
   background: none;
   border: none;
   cursor: pointer;
   color: var(--color-primary);
-  z-index: 1;
-  padding: 0.25rem;
 }
 
-.image-placeholder {
-  width: 100%;
-  height: 354px;
-  background: var(--color-light-grey-40);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 20px 20px 0 0;
-}
-
-.image-icon {
-  width: 80px;
-  height: 63px;
-  color: var(--color-grey);
+.action-icon {
+  width: 22px;
+  height: 22px;
 }
 
 .badges {
-  padding: 0 1.5rem;
-  margin-top: calc(-1 * (var(--badge-height) + var(--spacing-xs)));
-  margin-bottom: 0;
   display: flex;
   gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .badge {
@@ -191,24 +202,6 @@ function handleToggleEventBookmark(eventId: string, title: string) {
   flex-shrink: 0;
 }
 
-.content {
-  padding: 1.25rem 1.5rem 2rem;
-}
-
-.title-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  margin-top: 1rem;
-}
-
-.title {
-  color: var(--color-primary);
-  margin: 0;
-}
-
 .bookmark-btn {
   background: none;
   border: none;
@@ -216,7 +209,6 @@ function handleToggleEventBookmark(eventId: string, title: string) {
   padding: 0.25rem;
   flex-shrink: 0;
   color: var(--color-primary);
-  margin-top: 0.2rem;
 }
 
 .bookmark-icon {
@@ -320,10 +312,6 @@ function handleToggleEventBookmark(eventId: string, title: string) {
 @media (max-width: 640px) {
   .modal {
     width: calc(100% - 1.5rem);
-  }
-
-  .image-placeholder {
-    height: 200px;
   }
 
   .content {
