@@ -115,7 +115,8 @@
     "unauthBanner": "Without an account, {bold1}. To check events' details, note your impressions, and stay up-to-date with literary life of Warsaw, you need to {bold2}.",
     "unauthBannerBold1": "you can only view the map with places",
     "unauthBannerBold2": "sign up to our platform",
-    "fullExperience": "Get The Full Experience"
+    "fullExperience": "Get The Full Experience",
+    "loadError": "Could not load places. Please try again."
   },
   "events": {
     "comingSoon": "Events page is coming soon."

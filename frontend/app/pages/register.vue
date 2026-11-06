@@ -10,7 +10,8 @@ const password = ref('')
 
 const { error, isLoading, handleSubmit } = useAuthForm(
   () => register(email.value, username.value, password.value),
-  () => t('register.errorDefault'),
+  // The backend's field messages already follow Accept-Language
+  (err: any) => (err?.response?.status === 400 && Object.values(err.data ?? {}).flat().join(' ')) || t('register.errorDefault'),
 )
 </script>
 
@@ -58,9 +59,9 @@ const { error, isLoading, handleSubmit } = useAuthForm(
     </form>
 
     <p class="switch-link">
-      {{ t('register.hasAccount') }} <NuxtLink to="/login">
+      {{ t('register.hasAccount') }} <NuxtLinkLocale to="/login">
         {{ t('register.logInLink') }}
-      </NuxtLink>
+      </NuxtLinkLocale>
     </p>
   </AuthLayout>
 </template>

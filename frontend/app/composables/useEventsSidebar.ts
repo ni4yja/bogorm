@@ -1,7 +1,7 @@
-import type { EventListItem, PaginatedResponse } from '~/types'
+import type { EventListItem } from '~/types'
 
 export function useEventsSidebar() {
-  const { get } = useApi()
+  const { getAll } = useApi()
   const { t } = useI18n()
 
   const events = ref<EventListItem[]>([])
@@ -17,10 +17,7 @@ export function useEventsSidebar() {
     hasError.value = false
 
     try {
-      const response = await get<PaginatedResponse<EventListItem>>(
-        '/events/?status=upcoming&week=current',
-      )
-      events.value = response.results
+      events.value = await getAll<EventListItem>('/events/?status=upcoming&week=current')
     }
     catch {
       hasError.value = true

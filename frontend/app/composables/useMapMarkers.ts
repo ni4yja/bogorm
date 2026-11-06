@@ -1,4 +1,4 @@
-import type { Event, MapResponse, PaginatedResponse, PlaceDetail } from '~/types'
+import type { Event, MapResponse, PlaceDetail } from '~/types'
 
 export function useMapMarkers(
   L: typeof import('leaflet'),
@@ -8,18 +8,24 @@ export function useMapMarkers(
   selectedEventCount: Ref<number>,
   selectedEvents: Ref<Event[]>,
   isBannerVisible: Ref<boolean>,
+  onLoadError: () => void,
 ) {
-  const { get } = useApi()
+  const { get, getAll } = useApi()
   const { createIcon } = useMapIcons(L)
 
   let latestClickId = ''
+  let latestFetchId = 0
   const markersById = new Map<string, InstanceType<typeof L.Marker>>()
   let highlightedMarkerId: string | null = null
 
   const fetchPlaces = async (map: ReturnType<typeof L.map>) => {
+    const fetchId = ++latestFetchId
     const bounds = map.getBounds()
     const bbox = `${bounds.getWest()},${bounds.getSouth()},${bounds.getEast()},${bounds.getNorth()}`
     const data = await get<MapResponse>(`/map?bbox=${bbox}`)
+
+    if (fetchId !== latestFetchId)
+      return
 
     markersLayer.clearLayers()
     markersById.clear()
@@ -39,21 +45,32 @@ export function useMapMarkers(
         latestClickId = clickId
 
         isBannerVisible.value = false
-        const detail = await get<PlaceDetail>(`/places/${place.id}/`)
-        if (latestClickId !== clickId)
-          return
 
-        selectedPlace.value = detail
-        selectedEventCount.value = place.event_count
-
-        if (isAuthenticated.value && place.event_count > 0) {
-          const response = await get<PaginatedResponse<Event>>(`/places/${place.id}/events/`)
+        try {
+          const detail = await get<PlaceDetail>(`/places/${place.id}/`)
           if (latestClickId !== clickId)
             return
-          selectedEvents.value = response.results
+
+          selectedPlace.value = detail
+          selectedEventCount.value = place.event_count
+
+          if (isAuthenticated.value && place.event_count > 0) {
+            const events = await getAll<Event>(`/places/${place.id}/events/`)
+            if (latestClickId !== clickId)
+              return
+            selectedEvents.value = events
+          }
+          else {
+            selectedEvents.value = []
+          }
         }
-        else {
-          selectedEvents.value = []
+        catch {
+          if (latestClickId !== clickId)
+            return
+
+          if (!selectedPlace.value)
+            isBannerVisible.value = true
+          onLoadError()
         }
       })
     }

@@ -20,7 +20,7 @@ const pageSize = ref(20)
 const placesCount = ref(0)
 const eventsCount = ref(0)
 const items = ref<BookmarkItem[]>([])
-const isLoading = ref(false)
+const isLoading = ref(true)
 const hasError = ref(false)
 
 const currentCount = computed(() => activeTab.value === 'place' ? placesCount.value : eventsCount.value)
@@ -56,16 +56,19 @@ async function loadBookmarks() {
     if (requestId !== latestRequestId)
       return
 
-    if (response.results.length === 0 && currentPage.value > 1) {
+    applyPage(activeTab.value, response)
+  }
+  catch (error: any) {
+    if (requestId !== latestRequestId)
+      return
+
+    // DRF answers 404 past the last page, e.g. after removals on another device
+    if (error?.response?.status === 404 && currentPage.value > 1) {
       currentPage.value -= 1
       return loadBookmarks()
     }
 
-    applyPage(activeTab.value, response)
-  }
-  catch {
-    if (requestId === latestRequestId)
-      hasError.value = true
+    hasError.value = true
   }
   finally {
     if (requestId === latestRequestId)
@@ -73,24 +76,19 @@ async function loadBookmarks() {
   }
 }
 
+// Runs once on mount and doesn't touch latestRequestId, so a tab switch can't discard the counts
 async function loadCounts() {
-  const requestId = ++latestRequestId
-  hasError.value = false
   try {
     const [placesResponse, eventsResponse] = await Promise.all([
       fetchBookmarks('place', 1),
       fetchBookmarks('event', 1),
     ])
 
-    if (requestId !== latestRequestId)
-      return
-
     applyPage('place', placesResponse)
     applyPage('event', eventsResponse)
   }
   catch {
-    if (requestId === latestRequestId)
-      hasError.value = true
+    hasError.value = true
   }
 }
 
@@ -140,7 +138,6 @@ function isEventTarget(target: BookmarkItem['target']): target is BookmarkEventT
 }
 
 onMounted(async () => {
-  isLoading.value = true
   await loadCounts()
   isLoading.value = false
 })

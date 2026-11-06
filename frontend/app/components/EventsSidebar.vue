@@ -3,6 +3,7 @@ import type { EventListItem } from '~/types'
 
 const emit = defineEmits<{
   selectEvent: [place: { id: string, lat: number, lng: number }]
+  deselectEvent: []
 }>()
 
 const { t } = useI18n()
@@ -37,7 +38,9 @@ function openDetail(event: EventListItem) {
 
 function closeDetail() {
   selectedEvent.value = null
-  state.value = 'list'
+  if (state.value === 'detail')
+    state.value = 'list'
+  emit('deselectEvent')
 }
 
 defineExpose({ closeDetail })
@@ -60,10 +63,6 @@ function handleToggleBookmark(eventId: string, title: string) {
       </button>
 
       <div class="detail-scroll">
-        <div class="image-placeholder">
-          <IconsImage class="image-icon" />
-        </div>
-
         <div class="badges">
           <div class="badge">
             {{ getCategoryLabel(selectedEvent.category) }}
@@ -161,7 +160,7 @@ function handleToggleBookmark(eventId: string, title: string) {
         </div>
       </div>
 
-      <NuxtLinkLocale to="/events" class="see-all-btn">
+      <NuxtLinkLocale v-if="state === 'list'" to="/events" class="see-all-btn">
         <IconsCalendar class="see-all-icon" />
         {{ t('eventsSidebar.seeAll') }}
       </NuxtLinkLocale>
@@ -370,24 +369,8 @@ function handleToggleBookmark(eventId: string, title: string) {
   overflow-y: auto;
 }
 
-.image-placeholder {
-  width: 100%;
-  height: 200px;
-  background: var(--color-light-grey-40);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.image-icon {
-  width: 64px;
-  height: 50px;
-  color: var(--color-grey);
-}
-
 .badges {
   padding: 0 1.5rem;
-  margin-top: -0.9rem;
 }
 
 .badge {
@@ -412,9 +395,22 @@ function handleToggleBookmark(eventId: string, title: string) {
   margin-bottom: 0.75rem;
 }
 
+.title-row .bookmark-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+}
+
 .event-title-lg {
   color: var(--color-primary);
   margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  /* first line height matches the bookmark button height */
+  line-height: 28px;
 }
 
 .description {
@@ -423,6 +419,7 @@ function handleToggleBookmark(eventId: string, title: string) {
   line-height: 1.4;
   color: var(--color-black);
   margin-bottom: 1.25rem;
+  white-space: pre-line;
 }
 
 .meta {

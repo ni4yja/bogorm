@@ -1,3 +1,5 @@
+import type { PaginatedResponse } from '~/types'
+
 let refreshPromise: Promise<void> | null = null
 
 export function useApi() {
@@ -35,6 +37,15 @@ export function useApi() {
     refreshToken.value = response.refresh
   }
 
+  const clearTokens = () => {
+    accessToken.value = null
+    refreshToken.value = null
+  }
+
+  // Network errors and 5xx say nothing about the session, so they must not end it
+  const isSessionRejected = (error: any) =>
+    !refreshToken.value || [400, 401].includes(error?.response?.status)
+
   const ensureFreshToken = async (path: string) => {
     if (isAuthPath(path) || !accessToken.value)
       return
@@ -43,8 +54,8 @@ export function useApi() {
       if (!refreshPromise) {
         refreshPromise = refreshAccessToken()
           .catch((error) => {
-            accessToken.value = null
-            refreshToken.value = null
+            if (isSessionRejected(error))
+              clearTokens()
             throw error
           })
           .finally(() => {
@@ -55,8 +66,11 @@ export function useApi() {
       try {
         await refreshPromise
       }
-      catch {
-        // refresh failed: tokens are already cleared, the request below will 401 and redirect
+      catch (error) {
+        // session rejected: tokens are already cleared, the request below will 401 and redirect.
+        // Otherwise fail here, sending the expired token would 401 and end the session
+        if (!isSessionRejected(error))
+          throw error
       }
     }
   }
@@ -93,6 +107,7 @@ export function useApi() {
     }
     catch (error: any) {
       if (!isAuthPath(path) && error?.response?.status === 401) {
+        clearTokens()
         await navigateTo($localePath('/login'))
       }
       throw error
@@ -100,6 +115,18 @@ export function useApi() {
   }
 
   const get = <T>(path: string) => request<T>(path)
+
+  const getAll = async <T>(path: string) => {
+    const results: T[] = []
+    const separator = path.includes('?') ? '&' : '?'
+
+    for (let page = 1; ; page++) {
+      const response = await get<PaginatedResponse<T>>(`${path}${separator}page=${page}`)
+      results.push(...response.results)
+      if (!response.next)
+        return results
+    }
+  }
 
   const post = <T>(path: string, body: Record<string, unknown> | (() => Record<string, unknown>)) =>
     request<T>(path, { method: 'POST', body })
@@ -109,5 +136,5 @@ export function useApi() {
   const del = <T>(path: string, body?: Record<string, unknown>) =>
     request<T>(path, { method: 'DELETE', body })
 
-  return { get, post, put, del }
+  return { get, getAll, post, put, del }
 }
