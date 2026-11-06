@@ -26,12 +26,6 @@ onMounted(() => {
       Bogorm
     </NuxtLinkLocale>
 
-    <nav class="primary-nav">
-      <NuxtLinkLocale to="/about" class="nav-link">
-        {{ t('header.about') }}
-      </NuxtLinkLocale>
-    </nav>
-
     <div class="header-right">
       <LanguageSwitcher />
 
@@ -78,29 +72,22 @@ onMounted(() => {
   left: 0;
   right: 0;
   z-index: 1000;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   padding: var(--spacing-xs) var(--spacing-md);
   height: var(--header-height);
   background: var(--color-white);
 }
 
-.primary-nav {
-  justify-self: center;
-}
-
 .header-right {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  justify-self: end;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .logo {
-  justify-self: start;
   font-family: 'Merriweather', serif;
   font-weight: 700;
   font-size: 1.1rem;
@@ -108,10 +95,17 @@ onMounted(() => {
   text-decoration: none;
 }
 
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .nav-link {
   font-size: 0.9rem;
   color: var(--color-primary);
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .nav-link:hover,
@@ -123,14 +117,6 @@ onMounted(() => {
 .nav-placeholder {
   width: 180px;
   height: 40px;
-}
-
-.nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  align-items: center;
 }
 
 .btn {
@@ -232,34 +218,20 @@ onMounted(() => {
   flex-shrink: 0;
 }
 
-@media (max-width: 1440px) {
-  .header-right {
-    gap: 1rem;
-  }
-}
-
 @media (max-width: 640px) {
   .header {
-    display: flex;
+    /* A longer locale's login/signup labels plus the language switcher can
+       outgrow one row; wrap instead of overflowing horizontally. */
     flex-wrap: wrap;
-    justify-content: space-between;
     height: auto;
     min-height: var(--header-height);
-    align-items: flex-start;
-  }
-
-  .primary-nav {
-    order: 3;
-    flex-basis: 100%;
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 0.4rem;
+    gap: 0.5rem;
   }
 
   .header-right {
-    gap: 0.5rem;
     flex-wrap: wrap;
     justify-content: flex-end;
+    gap: 0.5rem;
   }
 
   .logo {
@@ -267,19 +239,21 @@ onMounted(() => {
   }
 
   .nav {
-    flex-basis: 100%;
-    justify-content: flex-end;
-    display: flex;
-    gap: 0.4rem;
+    gap: 0.5rem;
   }
 
-  .nav-link {
-    font-size: 0.8rem;
+  .nav-link,
+  .btn {
+    font-size: 0.75rem;
   }
 
   .btn {
-    padding: 0.45rem 0.7rem;
-    font-size: 0.8rem;
+    padding: 0.4rem 0.6rem;
+  }
+
+  .nav-placeholder {
+    width: 120px;
+    height: 32px;
   }
 
   .dropdown {

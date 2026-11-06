@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
+from django.utils import timezone
 from django.utils.translation import gettext as _
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -9,10 +10,11 @@ User = get_user_model()
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
+    accepted = serializers.BooleanField(write_only=True)
 
     class Meta:
         model = User
-        fields = ["id", "email", "username", "password"]
+        fields = ["id", "email", "username", "password", "accepted"]
 
     def validate_password(self, value):
         user = User(
@@ -22,11 +24,19 @@ class RegisterSerializer(serializers.ModelSerializer):
         validate_password(value, user=user)
         return value
 
+    def validate_accepted(self, value):
+        if not value:
+            raise serializers.ValidationError(
+                _("You must accept the Terms of Use and Privacy Policy.")
+            )
+        return value
+
     def create(self, validated_data):
         return User.objects.create_user(
             email=validated_data["email"],
             username=validated_data["username"],
             password=validated_data["password"],
+            terms_accepted_at=timezone.now(),
         )
 
 

@@ -7,9 +7,10 @@ const { t } = useI18n()
 const email = ref('')
 const username = ref('')
 const password = ref('')
+const accepted = ref(false)
 
 const { error, isLoading, handleSubmit } = useAuthForm(
-  () => register(email.value, username.value, password.value),
+  () => register(email.value, username.value, password.value, accepted.value),
   // The backend's field messages already follow Accept-Language
   (err: any) => (err?.response?.status === 400 && Object.values(err.data ?? {}).flat().join(' ')) || t('register.errorDefault'),
 )
@@ -49,6 +50,18 @@ const { error, isLoading, handleSubmit } = useAuthForm(
         required
       >
 
+      <label class="consent">
+        <input v-model="accepted" type="checkbox" required>
+        <i18n-t keypath="register.consent" tag="span" scope="global">
+          <template #terms>
+            <NuxtLinkLocale to="/terms" target="_blank">{{ t('register.consentTerms') }}</NuxtLinkLocale>
+          </template>
+          <template #privacy>
+            <NuxtLinkLocale to="/privacy" target="_blank">{{ t('register.consentPrivacy') }}</NuxtLinkLocale>
+          </template>
+        </i18n-t>
+      </label>
+
       <p v-if="error" class="error">
         {{ error }}
       </p>
@@ -65,3 +78,23 @@ const { error, isLoading, handleSubmit } = useAuthForm(
     </p>
   </AuthLayout>
 </template>
+
+<style scoped>
+.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  margin-bottom: var(--spacing-xs);
+}
+
+.consent input {
+  flex-shrink: 0;
+  margin-top: 0.2em;
+}
+
+.consent a {
+  color: inherit;
+}
+</style>

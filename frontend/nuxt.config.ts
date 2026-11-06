@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     '@vueuse/nuxt',
+    '@nuxt/content',
     '@nuxtjs/i18n',
   ],
 
@@ -53,6 +54,13 @@ export default defineNuxtConfig({
         '@vue/devtools-kit',
         'leaflet',
       ],
+    },
+  },
+
+  content: {
+    experimental: {
+      // Use Node's built-in SQLite instead of the better-sqlite3 native package
+      sqliteConnector: 'native',
     },
   },
 

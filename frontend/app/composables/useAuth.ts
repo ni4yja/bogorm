@@ -27,8 +27,8 @@ export function useAuth() {
     refreshToken.value = response.refresh
   }
 
-  const register = async (email: string, username: string, password: string) => {
-    await post('/auth/register/', { email, username, password })
+  const register = async (email: string, username: string, password: string, accepted: boolean) => {
+    await post('/auth/register/', { email, username, password, accepted })
     await login(email, password)
   }
 
