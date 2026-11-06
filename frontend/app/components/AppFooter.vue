@@ -8,6 +8,9 @@ const year = new Date().getFullYear()
 <template>
   <footer class="app-footer">
     <nav class="footer-links">
+      <NuxtLink :to="localePath('/about')">
+        {{ t('footer.about') }}
+      </NuxtLink>
       <NuxtLink :to="localePath('/privacy')">
         {{ t('footer.privacy') }}
       </NuxtLink>
@@ -51,5 +54,16 @@ const year = new Date().getFullYear()
 .footer-copy {
   margin: 0;
   opacity: 0.7;
+}
+
+@media (max-width: 640px) {
+  .app-footer {
+    flex-direction: column;
+  }
+
+  .footer-links {
+    width: 100%;
+    justify-content: space-between;
+  }
 }
 </style>

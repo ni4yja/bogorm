@@ -9,8 +9,7 @@
     "logIn": "Log In",
     "bookmarks": "Bookmarks",
     "logOut": "Log Out",
-    "profile": "Profile",
-    "about": "About"
+    "profile": "Profile"
   },
   "placeModal": {
     "upcomingEventsCount": "{count} Upcoming Event | {count} Upcoming Events",
@@ -177,6 +176,7 @@
     "dismiss": "Dismiss"
   },
   "footer": {
+    "about": "About",
     "privacy": "Privacy Policy",
     "terms": "Terms of Use"
   }
