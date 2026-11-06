@@ -53,7 +53,10 @@
     "submitting": "Signing up…",
     "errorDefault": "Could not create account. Please check your details.",
     "hasAccount": "Already have an account?",
-    "logInLink": "Log in"
+    "logInLink": "Log in",
+    "consent": "I am at least 16 years old and accept the {terms} and {privacy}.",
+    "consentTerms": "Terms of Use",
+    "consentPrivacy": "Privacy Policy"
   },
   "accountLayout": {
     "bookmarks": "Bookmarks",

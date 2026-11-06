@@ -53,7 +53,10 @@
     "submitting": "Rejestracja…",
     "errorDefault": "Nie udało się utworzyć konta. Sprawdź wprowadzone dane.",
     "hasAccount": "Masz już konto?",
-    "logInLink": "Zaloguj się"
+    "logInLink": "Zaloguj się",
+    "consent": "Mam co najmniej 16 lat i akceptuję {terms} oraz {privacy}.",
+    "consentTerms": "Regulamin",
+    "consentPrivacy": "Politykę prywatności"
   },
   "accountLayout": {
     "bookmarks": "Zakładki",
