@@ -18,6 +18,15 @@ if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 
+// useAsyncData's key includes the locale, so switching language re-runs the
+// query above; re-check then too, since the initial throw only covers the
+// first load.
+watch(page, (value) => {
+  if (!value) {
+    showError(createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true }))
+  }
+})
+
 // Nuxt Content takes the title from the first # heading
 useSeoMeta({
   title: () => page.value?.title,
@@ -35,7 +44,7 @@ useSeoMeta({
   max-width: 720px;
   margin: 0 auto;
   /* The header is fixed, so push the text below it */
-  padding: calc(var(--header-height) + var(--spacing-md)) 16px var(--spacing-lg);
+  padding: calc(var(--header-height) + var(--spacing-md)) var(--spacing-md) var(--spacing-lg);
   line-height: 1.6;
 }
 

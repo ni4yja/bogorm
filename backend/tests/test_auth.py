@@ -22,6 +22,7 @@ def register_payload(**overrides):
         "email": "newreader@bogorm.app",
         "username": "test",
         "password": "correcthorse123battery",
+        "accepted": True,
     }
     payload.update(overrides)
     return payload
@@ -155,7 +156,17 @@ class TestRegister:
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert "password" in response.data
 
-    @pytest.mark.parametrize("missing_field", ["email", "username", "password"])
+    def test_rejects_unaccepted_terms(self, api_client, db):
+        response = api_client.post(
+            reverse("register"), register_payload(accepted=False)
+        )
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "accepted" in response.data
+
+    @pytest.mark.parametrize(
+        "missing_field", ["email", "username", "password", "accepted"]
+    )
     def test_rejects_missing_field(self, api_client, db, missing_field):
         payload = register_payload()
         del payload[missing_field]

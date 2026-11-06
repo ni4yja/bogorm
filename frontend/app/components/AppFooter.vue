@@ -31,7 +31,7 @@ const year = new Date().getFullYear()
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem 1.5rem;
-  padding: 1rem 16px;
+  padding: 1rem var(--spacing-md);
   border-top: 1px solid rgb(0 0 0 / 0.1);
   font-size: 0.875rem;
 }

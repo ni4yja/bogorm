@@ -30,6 +30,10 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
+    # Set at registration once the user accepts the Terms of Use and Privacy
+    # Policy; keeps a compliance record instead of relying on the frontend
+    # checkbox alone.
+    terms_accepted_at = models.DateTimeField(null=True, blank=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]

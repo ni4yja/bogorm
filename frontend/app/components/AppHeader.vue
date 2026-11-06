@@ -220,10 +220,17 @@ onMounted(() => {
 
 @media (max-width: 640px) {
   .header {
+    /* A longer locale's login/signup labels plus the language switcher can
+       outgrow one row; wrap instead of overflowing horizontally. */
+    flex-wrap: wrap;
+    height: auto;
+    min-height: var(--header-height);
     gap: 0.5rem;
   }
 
   .header-right {
+    flex-wrap: wrap;
+    justify-content: flex-end;
     gap: 0.5rem;
   }
 
