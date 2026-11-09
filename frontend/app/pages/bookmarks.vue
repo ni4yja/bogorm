@@ -175,16 +175,16 @@ onMounted(async () => {
       <div v-else-if="hasError" class="state-message">
         {{ t('bookmarks.loadError') }}
       </div>
-      <div v-else-if="items.length === 0" class="empty-state">
-        <IconsPin v-if="activeTab === 'place'" class="empty-icon" />
-        <IconsCalendar v-else class="empty-icon" />
-        <p class="empty-title">
-          {{ activeTab === 'place' ? t('bookmarks.emptyTitlePlaces') : t('bookmarks.emptyTitleEvents') }}
-        </p>
-        <p class="empty-subtitle">
-          {{ activeTab === 'place' ? t('bookmarks.emptySubtitlePlaces') : t('bookmarks.emptySubtitleEvents') }}
-        </p>
-      </div>
+      <BaseEmptyState
+        v-else-if="items.length === 0"
+        :title="activeTab === 'place' ? t('bookmarks.emptyTitlePlaces') : t('bookmarks.emptyTitleEvents')"
+        :subtitle="activeTab === 'place' ? t('bookmarks.emptySubtitlePlaces') : t('bookmarks.emptySubtitleEvents')"
+      >
+        <template #icon>
+          <IconsPin v-if="activeTab === 'place'" />
+          <IconsCalendar v-else />
+        </template>
+      </BaseEmptyState>
 
       <div v-else class="cards-grid">
         <div v-for="item in items" :key="item.id" class="card">
@@ -260,34 +260,6 @@ onMounted(async () => {
   font-size: 0.9rem;
   padding: 2rem 0;
   text-align: center;
-}
-
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 4rem 1rem;
-}
-
-.empty-icon {
-  width: 48px;
-  height: 48px;
-  color: var(--color-light-grey);
-  margin-bottom: 1rem;
-}
-
-.empty-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--color-primary);
-  margin: 0 0 0.5rem;
-}
-
-.empty-subtitle {
-  color: var(--color-grey);
-  font-size: 0.9rem;
-  margin: 0;
 }
 
 .cards-grid {
