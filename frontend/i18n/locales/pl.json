@@ -95,9 +95,6 @@
     "emptySubtitlePlaces": "Odkrywaj miejsca na mapie i zapisuj je w zakładkach!",
     "emptySubtitleEvents": "Odkrywaj wydarzenia na mapie i zapisuj je w zakładkach!",
     "placeBadge": "Miejsce",
-    "pageLabel": "Strona {current} z {total}",
-    "previousPage": "Poprzednia strona",
-    "nextPage": "Następna strona",
     "removeBookmark": "Usuń zakładkę",
     "savedToast": "Zapisano: {title}",
     "viewBookmarks": "Zobacz zapisane",
@@ -179,5 +176,11 @@
     "about": "O projekcie",
     "privacy": "Polityka prywatności",
     "terms": "Regulamin"
+  },
+  "pagination": {
+    "label": "Paginacja",
+    "previous": "Poprzednia strona",
+    "next": "Następna strona",
+    "pageLabel": "Strona {current} z {total}"
   }
 }

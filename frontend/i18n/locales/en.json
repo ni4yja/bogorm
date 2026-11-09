@@ -95,9 +95,6 @@
     "emptySubtitlePlaces": "Explore places on map and save them to your bookmarks!",
     "emptySubtitleEvents": "Explore events on map and save them to your bookmarks!",
     "placeBadge": "Place",
-    "pageLabel": "Page {current} of {total}",
-    "previousPage": "Previous page",
-    "nextPage": "Next page",
     "removeBookmark": "Remove bookmark",
     "savedToast": "{title} saved to bookmarks",
     "viewBookmarks": "View bookmarks",
@@ -179,5 +176,11 @@
     "about": "About",
     "privacy": "Privacy Policy",
     "terms": "Terms of Use"
+  },
+  "pagination": {
+    "label": "Pagination",
+    "previous": "Previous page",
+    "next": "Next page",
+    "pageLabel": "Page {current} of {total}"
   }
 }

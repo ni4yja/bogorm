@@ -107,9 +107,8 @@ function switchTab(tab: Tab) {
   loadBookmarks()
 }
 
+// BasePagination only emits valid, in-range pages
 function goToPage(page: number) {
-  if (page < 1 || page > totalPages.value)
-    return
   currentPage.value = page
   loadBookmarks()
 }
@@ -225,25 +224,13 @@ onMounted(async () => {
         </div>
       </div>
 
-      <div v-if="items.length > 0 && totalPages > 1" class="pagination">
-        <button
-          class="pagination-btn"
-          :disabled="currentPage <= 1"
-          :aria-label="t('bookmarks.previousPage')"
-          @click="goToPage(currentPage - 1)"
-        >
-          <IconsArrowLeft class="pagination-icon" />
-        </button>
-        <span class="pagination-label">{{ t('bookmarks.pageLabel', { current: currentPage, total: totalPages }) }}</span>
-        <button
-          class="pagination-btn"
-          :disabled="currentPage >= totalPages"
-          :aria-label="t('bookmarks.nextPage')"
-          @click="goToPage(currentPage + 1)"
-        >
-          <IconsArrowLeft class="pagination-icon pagination-icon--next" />
-        </button>
-      </div>
+      <BasePagination
+        v-if="items.length > 0"
+        class="pagination-nav"
+        :current-page="currentPage"
+        :total-pages="totalPages"
+        @change="goToPage"
+      />
     </div>
   </AccountLayout>
 </template>
@@ -393,39 +380,8 @@ onMounted(async () => {
   border-radius: 20px;
 }
 
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
+.pagination-nav {
   margin-top: 1.5rem;
-}
-
-.pagination-label {
-  font-size: 0.9rem;
-  color: var(--color-grey);
-}
-
-.pagination-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-primary);
-  padding: 0.25rem;
-}
-
-.pagination-btn:disabled {
-  color: var(--color-light-grey);
-  cursor: not-allowed;
-}
-
-.pagination-icon {
-  width: 20px;
-  height: 20px;
-}
-
-.pagination-icon--next {
-  transform: rotate(180deg);
 }
 
 @media (max-width: 640px) {
