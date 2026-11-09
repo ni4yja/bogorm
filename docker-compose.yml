@@ -20,7 +20,8 @@ services:
     volumes:
       - ./backend:/app
     ports:
-      - "8000:8000"
+      # Bind to localhost only — dev server must not be reachable from the LAN
+      - "127.0.0.1:8000:8000"
     depends_on:
       db:
         condition: service_healthy
@@ -36,7 +37,8 @@ services:
       - ./frontend:/app
       - /app/node_modules
     ports:
-      - "3000:3000"
+      # Bind to localhost only — dev server must not be reachable from the LAN
+      - "127.0.0.1:3000:3000"
     depends_on:
       - web
     env_file:
