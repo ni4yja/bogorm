@@ -198,8 +198,8 @@ onMounted(async () => {
                 {{ item.target.title }}
               </h3>
               <BookmarkButton
-                :type="item.type"
                 :id="item.target.id"
+                :type="item.type"
                 @toggled="handleBookmarkToggled(item.type, item.target.id, $event)"
               />
             </div>
@@ -234,17 +234,6 @@ onMounted(async () => {
 <style scoped>
 .bookmarks-page {
   max-width: 900px;
-}
-
-.page-title {
-  color: var(--color-primary);
-  margin: 0 0 0.35rem;
-}
-
-.page-subtitle {
-  color: var(--color-grey);
-  font-size: 0.95rem;
-  margin: 0 0 1.5rem;
 }
 
 .tabs-nav {
@@ -322,16 +311,6 @@ onMounted(async () => {
 .card-badges {
   display: flex;
   gap: 0.4rem;
-}
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  background: var(--color-primary);
-  color: var(--color-white);
-  font-size: 0.75rem;
-  padding: 0.25rem 0.65rem;
-  border-radius: 20px;
 }
 
 .pagination-nav {
