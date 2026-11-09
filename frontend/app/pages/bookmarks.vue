@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BookmarkEventTarget, BookmarkItem, BookmarkPlaceTarget, PaginatedResponse } from '~/types'
+import type { BookmarkEventTarget, BookmarkItem, BookmarkPlaceTarget, PaginatedResponse, TabItem } from '~/types'
 
 definePageMeta({ layout: 'default' })
 
@@ -8,6 +8,10 @@ const route = useRoute()
 const { fetchBookmarks, toggleBookmark, isBookmarked, isPending, registerInitialState } = useBookmarks()
 const { getCategoryLabel } = useEventCategory()
 const { formatEventTime } = useEventFormat()
+
+// Auto-imported components can't be referenced by string in :is — resolve once in setup
+const PinIcon = resolveComponent('IconsPin')
+const CalendarIcon = resolveComponent('IconsCalendar')
 
 type Tab = 'place' | 'event'
 
@@ -25,6 +29,11 @@ const hasError = ref(false)
 
 const currentCount = computed(() => activeTab.value === 'place' ? placesCount.value : eventsCount.value)
 const totalPages = computed(() => Math.max(1, Math.ceil(currentCount.value / pageSize.value)))
+
+const tabs = computed<TabItem<Tab>[]>(() => [
+  { value: 'place', label: t('bookmarks.placesTab', { count: placesCount.value }), icon: PinIcon },
+  { value: 'event', label: t('bookmarks.eventsTab', { count: eventsCount.value }), icon: CalendarIcon },
+])
 
 let latestRequestId = 0
 
@@ -153,24 +162,13 @@ onMounted(async () => {
         {{ t('bookmarks.subtitle') }}
       </p>
 
-      <div class="tabs">
-        <button
-          class="tab"
-          :class="{ 'tab--active': activeTab === 'place' }"
-          @click="switchTab('place')"
-        >
-          <IconsPin class="tab-icon" />
-          {{ t('bookmarks.placesTab', { count: placesCount }) }}
-        </button>
-        <button
-          class="tab"
-          :class="{ 'tab--active': activeTab === 'event' }"
-          @click="switchTab('event')"
-        >
-          <IconsCalendar class="tab-icon" />
-          {{ t('bookmarks.eventsTab', { count: eventsCount }) }}
-        </button>
-      </div>
+      <!-- Not v-model: switchTab also resets the page and refetches -->
+      <BaseTabs
+        class="tabs-nav"
+        :items="tabs"
+        :model-value="activeTab"
+        @update:model-value="switchTab"
+      />
 
       <div v-if="isLoading" class="state-message">
         {{ t('bookmarks.loading') }}
@@ -266,37 +264,8 @@ onMounted(async () => {
   margin: 0 0 1.5rem;
 }
 
-.tabs {
-  display: flex;
-  border: 1px solid var(--color-light-grey-40);
-  border-radius: 10px;
-  overflow: hidden;
+.tabs-nav {
   margin-bottom: 1.5rem;
-}
-
-.tab {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.85rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 0.95rem;
-  color: var(--color-black);
-}
-
-.tab--active {
-  background: var(--color-light-grey-40);
-  font-weight: 500;
-}
-
-.tab-icon {
-  width: 18px;
-  height: 18px;
-  color: var(--color-primary);
 }
 
 .state-message {
@@ -462,11 +431,6 @@ onMounted(async () => {
 @media (max-width: 640px) {
   .cards-grid {
     grid-template-columns: 1fr;
-  }
-
-  .tab {
-    padding: 0.7rem 0.5rem;
-    font-size: 0.85rem;
   }
 }
 </style>
