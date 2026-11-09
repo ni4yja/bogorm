@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BookmarkEventTarget, BookmarkItem, BookmarkPlaceTarget, PaginatedResponse, TabItem } from '~/types'
 
-definePageMeta({ layout: 'default' })
+definePageMeta({ layout: 'default', middleware: 'auth' })
 
 const { t } = useI18n()
 const route = useRoute()
@@ -153,7 +153,8 @@ onMounted(async () => {
 
 <template>
   <AccountLayout>
-    <div class="bookmarks-page">
+    <ClientOnly>
+      <div class="bookmarks-page">
       <h1 class="page-title">
         {{ t('bookmarks.title') }}
       </h1>
@@ -227,7 +228,8 @@ onMounted(async () => {
         :total-pages="totalPages"
         @change="goToPage"
       />
-    </div>
+      </div>
+    </ClientOnly>
   </AccountLayout>
 </template>
 

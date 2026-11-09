@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { TabItem } from '~/types'
 
-definePageMeta({ layout: 'default' })
+definePageMeta({ layout: 'default', middleware: 'auth' })
 
 const { t } = useI18n()
 const route = useRoute()
@@ -36,21 +36,24 @@ function switchStatus(status: EventStatus) {
 </script>
 
 <template>
-  <div class="events-page">
-    <h1 class="page-title">
-      {{ t('events.title') }}
-    </h1>
-    <p class="page-subtitle">
-      {{ t('events.subtitle') }}
-    </p>
+  <!-- Private page: tokens are client-only, so skip SSR to avoid flashing content before the auth redirect -->
+  <ClientOnly>
+    <div class="events-page">
+      <h1 class="page-title">
+        {{ t('events.title') }}
+      </h1>
+      <p class="page-subtitle">
+        {{ t('events.subtitle') }}
+      </p>
 
-    <BaseTabs
-      class="tabs-nav"
-      :items="tabs"
-      :model-value="activeStatus"
-      @update:model-value="switchStatus"
-    />
-  </div>
+      <BaseTabs
+        class="tabs-nav"
+        :items="tabs"
+        :model-value="activeStatus"
+        @update:model-value="switchStatus"
+      />
+    </div>
+  </ClientOnly>
 </template>
 
 <style scoped>
