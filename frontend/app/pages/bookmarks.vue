@@ -5,7 +5,7 @@ definePageMeta({ layout: 'default' })
 
 const { t } = useI18n()
 const route = useRoute()
-const { fetchBookmarks, toggleBookmark, isBookmarked, isPending, registerInitialState } = useBookmarks()
+const { fetchBookmarks, registerInitialState } = useBookmarks()
 const { getCategoryLabel } = useEventCategory()
 const { formatEventTime } = useEventFormat()
 
@@ -113,8 +113,8 @@ function goToPage(page: number) {
   loadBookmarks()
 }
 
-async function handleToggleBookmark(type: Tab, id: string) {
-  const nowBookmarked = await toggleBookmark(type, id)
+// BookmarkButton already called the API — here we only sync the list
+async function handleBookmarkToggled(type: Tab, id: string, nowBookmarked: boolean) {
   if (nowBookmarked || type !== activeTab.value)
     return
 
@@ -197,15 +197,11 @@ onMounted(async () => {
               <h3 class="card-title">
                 {{ item.target.title }}
               </h3>
-              <button
-                class="bookmark-btn"
-                :disabled="isPending(item.type, item.target.id)"
-                :aria-label="t('bookmarks.removeBookmark')"
-                @click="handleToggleBookmark(item.type, item.target.id)"
-              >
-                <IconsBookmarkActive v-if="isBookmarked(item.type, item.target.id)" class="bookmark-icon" />
-                <IconsBookmark v-else class="bookmark-icon" />
-              </button>
+              <BookmarkButton
+                :type="item.type"
+                :id="item.target.id"
+                @toggled="handleBookmarkToggled(item.type, item.target.id, $event)"
+              />
             </div>
 
             <div v-if="isEventTarget(item.target) && item.target.event_time" class="card-meta">
@@ -306,20 +302,6 @@ onMounted(async () => {
   font-weight: 600;
   color: var(--color-primary);
   margin: 0;
-}
-
-.bookmark-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.15rem;
-  flex-shrink: 0;
-  color: var(--color-primary);
-}
-
-.bookmark-icon {
-  width: 18px;
-  height: 18px;
 }
 
 .card-meta {

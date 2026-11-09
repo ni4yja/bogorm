@@ -95,10 +95,13 @@
     "emptySubtitlePlaces": "Odkrywaj miejsca na mapie i zapisuj je w zakładkach!",
     "emptySubtitleEvents": "Odkrywaj wydarzenia na mapie i zapisuj je w zakładkach!",
     "placeBadge": "Miejsce",
-    "removeBookmark": "Usuń zakładkę",
     "savedToast": "Zapisano: {title}",
     "viewBookmarks": "Zobacz zapisane",
     "updateError": "Nie udało się zaktualizować zakładki. Spróbuj ponownie."
+  },
+  "bookmark": {
+    "add": "Dodaj do zapisanych",
+    "remove": "Usuń z zapisanych"
   },
   "eventCategory": {
     "10": "Prezentacja książki",
