@@ -121,7 +121,10 @@
     "loadError": "Could not load places. Please try again."
   },
   "events": {
-    "comingSoon": "Events page is coming soon."
+    "title": "Events",
+    "subtitle": "Author meetings, book launches and book clubs in Warsaw",
+    "upcoming": "Upcoming",
+    "archived": "Archived"
   },
   "about": {
     "metaTitle": "About — Bogorm",

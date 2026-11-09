@@ -121,7 +121,10 @@
     "loadError": "Nie udało się wczytać miejsc. Spróbuj ponownie."
   },
   "events": {
-    "comingSoon": "Strona wydarzeń wkrótce się pojawi."
+    "title": "Wydarzenia",
+    "subtitle": "Spotkania autorskie, premiery książek i kluby czytelnicze w Warszawie",
+    "upcoming": "Nadchodzące",
+    "archived": "Archiwum"
   },
   "about": {
     "metaTitle": "O projekcie — Bogorm",
