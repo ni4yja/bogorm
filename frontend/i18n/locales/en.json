@@ -9,7 +9,8 @@
     "logIn": "Log In",
     "bookmarks": "Bookmarks",
     "logOut": "Log Out",
-    "profile": "Profile"
+    "profile": "Profile",
+    "events": "Events"
   },
   "placeModal": {
     "upcomingEventsCount": "{count} Upcoming Event | {count} Upcoming Events",

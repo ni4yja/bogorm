@@ -27,6 +27,12 @@ onMounted(() => {
     </NuxtLinkLocale>
 
     <div class="header-right">
+      <!-- Members-only page, so the link is only shown to signed-in users.
+           isMounted: auth state is client-only, avoids a hydration mismatch -->
+      <NuxtLinkLocale v-if="isMounted && isAuthenticated" to="/events" class="nav-link">
+        {{ t('header.events') }}
+      </NuxtLinkLocale>
+
       <LanguageSwitcher />
 
       <div v-if="!isMounted" class="nav-placeholder" />
