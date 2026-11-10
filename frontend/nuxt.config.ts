@@ -58,6 +58,13 @@ export default defineNuxtConfig({
   },
 
   content: {
+    build: {
+      markdown: {
+        // Legal pages have no code blocks — skip shiki to avoid
+        // runtime dep discovery and keep it out of the bundle
+        highlight: false,
+      },
+    },
     experimental: {
       // Use Node's built-in SQLite instead of the better-sqlite3 native package
       sqliteConnector: 'native',

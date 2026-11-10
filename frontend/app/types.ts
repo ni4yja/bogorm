@@ -1,3 +1,12 @@
+import type { Component } from 'vue'
+
+export interface TabItem<V extends string = string> {
+  value: V
+  label: string
+  // resolveComponent() returns a component or a string name
+  icon?: Component | string
+}
+
 export interface Place {
   id: string
   title: string

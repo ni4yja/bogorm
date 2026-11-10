@@ -9,7 +9,8 @@
     "logIn": "Zaloguj się",
     "bookmarks": "Zakładki",
     "logOut": "Wyloguj się",
-    "profile": "Profil"
+    "profile": "Profil",
+    "events": "Wydarzenia"
   },
   "placeModal": {
     "upcomingEventsCount": "{count} nadchodzące wydarzenie | {count} nadchodzące wydarzenia | {count} nadchodzących wydarzeń",
@@ -95,13 +96,13 @@
     "emptySubtitlePlaces": "Odkrywaj miejsca na mapie i zapisuj je w zakładkach!",
     "emptySubtitleEvents": "Odkrywaj wydarzenia na mapie i zapisuj je w zakładkach!",
     "placeBadge": "Miejsce",
-    "pageLabel": "Strona {current} z {total}",
-    "previousPage": "Poprzednia strona",
-    "nextPage": "Następna strona",
-    "removeBookmark": "Usuń zakładkę",
     "savedToast": "Zapisano: {title}",
     "viewBookmarks": "Zobacz zapisane",
     "updateError": "Nie udało się zaktualizować zakładki. Spróbuj ponownie."
+  },
+  "bookmark": {
+    "add": "Dodaj do zapisanych",
+    "remove": "Usuń z zapisanych"
   },
   "eventCategory": {
     "10": "Prezentacja książki",
@@ -121,7 +122,16 @@
     "loadError": "Nie udało się wczytać miejsc. Spróbuj ponownie."
   },
   "events": {
-    "comingSoon": "Strona wydarzeń wkrótce się pojawi."
+    "title": "Wydarzenia",
+    "subtitle": "Spotkania autorskie, premiery książek i kluby czytelnicze w Warszawie",
+    "upcoming": "Nadchodzące",
+    "archived": "Archiwum",
+    "loading": "Ładowanie wydarzeń…",
+    "loadError": "Nie udało się załadować wydarzeń. Spróbuj ponownie później.",
+    "emptyTitleUpcoming": "Brak nadchodzących wydarzeń",
+    "emptySubtitleUpcoming": "Zajrzyj tu wkrótce — nowe wydarzenia pojawiają się regularnie.",
+    "emptyTitleArchived": "Archiwum jest puste",
+    "emptySubtitleArchived": "Tu pojawią się wydarzenia, które już się odbyły."
   },
   "about": {
     "metaTitle": "O projekcie — Bogorm",
@@ -179,5 +189,11 @@
     "about": "O projekcie",
     "privacy": "Polityka prywatności",
     "terms": "Regulamin"
+  },
+  "pagination": {
+    "label": "Paginacja",
+    "previous": "Poprzednia strona",
+    "next": "Następna strona",
+    "pageLabel": "Strona {current} z {total}"
   }
 }

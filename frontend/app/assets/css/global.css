@@ -150,3 +150,26 @@ h4 {
 .marker-highlighted {
   filter: drop-shadow(0 0 8px var(--color-primary));
 }
+
+/* Page header — shared by all content pages (bookmarks, events, places) */
+.page-title {
+  color: var(--color-primary);
+  margin: 0 0 0.35rem;
+}
+
+.page-subtitle {
+  color: var(--color-grey);
+  font-size: 0.95rem;
+  margin: 0 0 1.5rem;
+}
+
+/* Category / status pill — cards, PlaceModal, EventsSidebar */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-size: 0.75rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 20px;
+}

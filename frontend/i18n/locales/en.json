@@ -9,7 +9,8 @@
     "logIn": "Log In",
     "bookmarks": "Bookmarks",
     "logOut": "Log Out",
-    "profile": "Profile"
+    "profile": "Profile",
+    "events": "Events"
   },
   "placeModal": {
     "upcomingEventsCount": "{count} Upcoming Event | {count} Upcoming Events",
@@ -95,13 +96,13 @@
     "emptySubtitlePlaces": "Explore places on map and save them to your bookmarks!",
     "emptySubtitleEvents": "Explore events on map and save them to your bookmarks!",
     "placeBadge": "Place",
-    "pageLabel": "Page {current} of {total}",
-    "previousPage": "Previous page",
-    "nextPage": "Next page",
-    "removeBookmark": "Remove bookmark",
     "savedToast": "{title} saved to bookmarks",
     "viewBookmarks": "View bookmarks",
     "updateError": "Could not update bookmark. Please try again."
+  },
+  "bookmark": {
+    "add": "Add bookmark",
+    "remove": "Remove bookmark"
   },
   "eventCategory": {
     "10": "Book Presentation",
@@ -121,7 +122,16 @@
     "loadError": "Could not load places. Please try again."
   },
   "events": {
-    "comingSoon": "Events page is coming soon."
+    "title": "Events",
+    "subtitle": "Author meetings, book launches and book clubs in Warsaw",
+    "upcoming": "Upcoming",
+    "archived": "Archived",
+    "loading": "Loading events…",
+    "loadError": "Couldn't load events. Please try again later.",
+    "emptyTitleUpcoming": "No upcoming events",
+    "emptySubtitleUpcoming": "Check back soon — new events are added regularly.",
+    "emptyTitleArchived": "The archive is empty",
+    "emptySubtitleArchived": "Events that have already taken place will appear here."
   },
   "about": {
     "metaTitle": "About — Bogorm",
@@ -179,5 +189,11 @@
     "about": "About",
     "privacy": "Privacy Policy",
     "terms": "Terms of Use"
+  },
+  "pagination": {
+    "label": "Pagination",
+    "previous": "Previous page",
+    "next": "Next page",
+    "pageLabel": "Page {current} of {total}"
   }
 }

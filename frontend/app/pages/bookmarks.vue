@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import type { BookmarkEventTarget, BookmarkItem, BookmarkPlaceTarget, PaginatedResponse } from '~/types'
+import type { BookmarkEventTarget, BookmarkItem, BookmarkPlaceTarget, PaginatedResponse, TabItem } from '~/types'
 
-definePageMeta({ layout: 'default' })
+definePageMeta({ layout: 'default', middleware: 'auth' })
 
 const { t } = useI18n()
 const route = useRoute()
-const { fetchBookmarks, toggleBookmark, isBookmarked, isPending, registerInitialState } = useBookmarks()
+const { fetchBookmarks, registerInitialState } = useBookmarks()
 const { getCategoryLabel } = useEventCategory()
 const { formatEventTime } = useEventFormat()
+
+// Auto-imported components can't be referenced by string in :is — resolve once in setup
+const PinIcon = resolveComponent('IconsPin')
+const CalendarIcon = resolveComponent('IconsCalendar')
 
 type Tab = 'place' | 'event'
 
@@ -25,6 +29,11 @@ const hasError = ref(false)
 
 const currentCount = computed(() => activeTab.value === 'place' ? placesCount.value : eventsCount.value)
 const totalPages = computed(() => Math.max(1, Math.ceil(currentCount.value / pageSize.value)))
+
+const tabs = computed<TabItem<Tab>[]>(() => [
+  { value: 'place', label: t('bookmarks.placesTab', { count: placesCount.value }), icon: PinIcon },
+  { value: 'event', label: t('bookmarks.eventsTab', { count: eventsCount.value }), icon: CalendarIcon },
+])
 
 let latestRequestId = 0
 
@@ -98,15 +107,14 @@ function switchTab(tab: Tab) {
   loadBookmarks()
 }
 
+// BasePagination only emits valid, in-range pages
 function goToPage(page: number) {
-  if (page < 1 || page > totalPages.value)
-    return
   currentPage.value = page
   loadBookmarks()
 }
 
-async function handleToggleBookmark(type: Tab, id: string) {
-  const nowBookmarked = await toggleBookmark(type, id)
+// BookmarkButton already called the API — here we only sync the list
+async function handleBookmarkToggled(type: Tab, id: string, nowBookmarked: boolean) {
   if (nowBookmarked || type !== activeTab.value)
     return
 
@@ -145,108 +153,85 @@ onMounted(async () => {
 
 <template>
   <AccountLayout>
-    <div class="bookmarks-page">
-      <h1 class="page-title">
-        {{ t('bookmarks.title') }}
-      </h1>
-      <p class="page-subtitle">
-        {{ t('bookmarks.subtitle') }}
-      </p>
-
-      <div class="tabs">
-        <button
-          class="tab"
-          :class="{ 'tab--active': activeTab === 'place' }"
-          @click="switchTab('place')"
-        >
-          <IconsPin class="tab-icon" />
-          {{ t('bookmarks.placesTab', { count: placesCount }) }}
-        </button>
-        <button
-          class="tab"
-          :class="{ 'tab--active': activeTab === 'event' }"
-          @click="switchTab('event')"
-        >
-          <IconsCalendar class="tab-icon" />
-          {{ t('bookmarks.eventsTab', { count: eventsCount }) }}
-        </button>
-      </div>
-
-      <div v-if="isLoading" class="state-message">
-        {{ t('bookmarks.loading') }}
-      </div>
-      <div v-else-if="hasError" class="state-message">
-        {{ t('bookmarks.loadError') }}
-      </div>
-      <div v-else-if="items.length === 0" class="empty-state">
-        <IconsPin v-if="activeTab === 'place'" class="empty-icon" />
-        <IconsCalendar v-else class="empty-icon" />
-        <p class="empty-title">
-          {{ activeTab === 'place' ? t('bookmarks.emptyTitlePlaces') : t('bookmarks.emptyTitleEvents') }}
+    <!-- Private page: tokens are client-only, so skip SSR to avoid flashing content before the auth redirect -->
+    <ClientOnly>
+      <div class="bookmarks-page">
+        <h1 class="page-title">
+          {{ t('bookmarks.title') }}
+        </h1>
+        <p class="page-subtitle">
+          {{ t('bookmarks.subtitle') }}
         </p>
-        <p class="empty-subtitle">
-          {{ activeTab === 'place' ? t('bookmarks.emptySubtitlePlaces') : t('bookmarks.emptySubtitleEvents') }}
-        </p>
-      </div>
 
-      <div v-else class="cards-grid">
-        <div v-for="item in items" :key="item.id" class="card">
-          <div class="card-image">
-            <IconsImage class="image-icon" />
-          </div>
+        <!-- Not v-model: switchTab also resets the page and refetches -->
+        <BaseTabs
+          class="tabs-nav"
+          :items="tabs"
+          :model-value="activeTab"
+          @update:model-value="switchTab"
+        />
 
-          <div class="card-content">
-            <div class="card-title-row">
-              <h3 class="card-title">
-                {{ item.target.title }}
-              </h3>
-              <button
-                class="bookmark-btn"
-                :disabled="isPending(item.type, item.target.id)"
-                :aria-label="t('bookmarks.removeBookmark')"
-                @click="handleToggleBookmark(item.type, item.target.id)"
-              >
-                <IconsBookmarkActive v-if="isBookmarked(item.type, item.target.id)" class="bookmark-icon" />
-                <IconsBookmark v-else class="bookmark-icon" />
-              </button>
+        <div v-if="isLoading" class="state-message">
+          {{ t('bookmarks.loading') }}
+        </div>
+        <div v-else-if="hasError" class="state-message">
+          {{ t('bookmarks.loadError') }}
+        </div>
+        <BaseEmptyState
+          v-else-if="items.length === 0"
+          :title="activeTab === 'place' ? t('bookmarks.emptyTitlePlaces') : t('bookmarks.emptyTitleEvents')"
+          :subtitle="activeTab === 'place' ? t('bookmarks.emptySubtitlePlaces') : t('bookmarks.emptySubtitleEvents')"
+        >
+          <template #icon>
+            <IconsPin v-if="activeTab === 'place'" />
+            <IconsCalendar v-else />
+          </template>
+        </BaseEmptyState>
+
+        <div v-else class="cards-grid">
+          <div v-for="item in items" :key="item.id" class="card">
+            <div class="card-image">
+              <IconsImage class="image-icon" />
             </div>
 
-            <div v-if="isEventTarget(item.target) && item.target.event_time" class="card-meta">
-              <IconsTime class="meta-icon" />
-              {{ formatEventTime(item.target.event_time) }}
-            </div>
+            <div class="card-content">
+              <div class="card-title-row">
+                <h3 class="card-title">
+                  {{ item.target.title }}
+                </h3>
+                <BookmarkButton
+                  :id="item.target.id"
+                  :title="item.target.title"
+                  :type="item.type"
+                  @toggled="handleBookmarkToggled(item.type, item.target.id, $event)"
+                />
+              </div>
 
-            <div v-if="isEventTarget(item.target)" class="card-badges">
-              <span class="badge">{{ getCategoryLabel(item.target.category) }}</span>
-            </div>
+              <div v-if="isEventTarget(item.target) && item.target.event_time" class="card-meta">
+                <IconsTime class="meta-icon" />
+                {{ formatEventTime(item.target.event_time) }}
+              </div>
 
-            <div v-if="isPlaceTarget(item.target)" class="card-badges">
-              <span class="badge">{{ t('bookmarks.placeBadge') }}</span>
+              <div v-if="isEventTarget(item.target)" class="card-badges">
+                <span class="badge">{{ getCategoryLabel(item.target.category) }}</span>
+              </div>
+
+              <div v-if="isPlaceTarget(item.target)" class="card-badges">
+                <span class="badge">{{ t('bookmarks.placeBadge') }}</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div v-if="items.length > 0 && totalPages > 1" class="pagination">
-        <button
-          class="pagination-btn"
-          :disabled="currentPage <= 1"
-          :aria-label="t('bookmarks.previousPage')"
-          @click="goToPage(currentPage - 1)"
-        >
-          <IconsArrowLeft class="pagination-icon" />
-        </button>
-        <span class="pagination-label">{{ t('bookmarks.pageLabel', { current: currentPage, total: totalPages }) }}</span>
-        <button
-          class="pagination-btn"
-          :disabled="currentPage >= totalPages"
-          :aria-label="t('bookmarks.nextPage')"
-          @click="goToPage(currentPage + 1)"
-        >
-          <IconsArrowLeft class="pagination-icon pagination-icon--next" />
-        </button>
+        <BasePagination
+          v-if="items.length > 0"
+          class="pagination-nav"
+          :current-page="currentPage"
+          :total-pages="totalPages"
+          @change="goToPage"
+        />
       </div>
-    </div>
+    </ClientOnly>
   </AccountLayout>
 </template>
 
@@ -255,48 +240,8 @@ onMounted(async () => {
   max-width: 900px;
 }
 
-.page-title {
-  color: var(--color-primary);
-  margin: 0 0 0.35rem;
-}
-
-.page-subtitle {
-  color: var(--color-grey);
-  font-size: 0.95rem;
-  margin: 0 0 1.5rem;
-}
-
-.tabs {
-  display: flex;
-  border: 1px solid var(--color-light-grey-40);
-  border-radius: 10px;
-  overflow: hidden;
+.tabs-nav {
   margin-bottom: 1.5rem;
-}
-
-.tab {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.85rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 0.95rem;
-  color: var(--color-black);
-}
-
-.tab--active {
-  background: var(--color-light-grey-40);
-  font-weight: 500;
-}
-
-.tab-icon {
-  width: 18px;
-  height: 18px;
-  color: var(--color-primary);
 }
 
 .state-message {
@@ -304,34 +249,6 @@ onMounted(async () => {
   font-size: 0.9rem;
   padding: 2rem 0;
   text-align: center;
-}
-
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 4rem 1rem;
-}
-
-.empty-icon {
-  width: 48px;
-  height: 48px;
-  color: var(--color-light-grey);
-  margin-bottom: 1rem;
-}
-
-.empty-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--color-primary);
-  margin: 0 0 0.5rem;
-}
-
-.empty-subtitle {
-  color: var(--color-grey);
-  font-size: 0.9rem;
-  margin: 0;
 }
 
 .cards-grid {
@@ -380,20 +297,6 @@ onMounted(async () => {
   margin: 0;
 }
 
-.bookmark-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.15rem;
-  flex-shrink: 0;
-  color: var(--color-primary);
-}
-
-.bookmark-icon {
-  width: 18px;
-  height: 18px;
-}
-
 .card-meta {
   display: flex;
   align-items: center;
@@ -414,59 +317,13 @@ onMounted(async () => {
   gap: 0.4rem;
 }
 
-.badge {
-  display: inline-flex;
-  align-items: center;
-  background: var(--color-primary);
-  color: var(--color-white);
-  font-size: 0.75rem;
-  padding: 0.25rem 0.65rem;
-  border-radius: 20px;
-}
-
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
+.pagination-nav {
   margin-top: 1.5rem;
-}
-
-.pagination-label {
-  font-size: 0.9rem;
-  color: var(--color-grey);
-}
-
-.pagination-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-primary);
-  padding: 0.25rem;
-}
-
-.pagination-btn:disabled {
-  color: var(--color-light-grey);
-  cursor: not-allowed;
-}
-
-.pagination-icon {
-  width: 20px;
-  height: 20px;
-}
-
-.pagination-icon--next {
-  transform: rotate(180deg);
 }
 
 @media (max-width: 640px) {
   .cards-grid {
     grid-template-columns: 1fr;
-  }
-
-  .tab {
-    padding: 0.7rem 0.5rem;
-    font-size: 0.85rem;
   }
 }
 </style>

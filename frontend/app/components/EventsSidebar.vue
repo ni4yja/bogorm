@@ -14,6 +14,8 @@ const { events, isLoading, error, fetchWeeklyEvents } = useEventsSidebar()
 const { getCategoryLabel } = useEventCategory()
 const { isBookmarked, isPending, registerInitialState, toggleBookmark } = useBookmarks()
 const { formatEventTime } = useEventFormat()
+// /events is a private page (see middleware/auth.ts) — same gating as the header's Events link
+const { isAuthenticated } = useAuth()
 
 const state = ref<SidebarState>('list')
 const selectedEvent = ref<EventListItem | null>(null)
@@ -160,7 +162,7 @@ function handleToggleBookmark(eventId: string, title: string) {
         </div>
       </div>
 
-      <NuxtLinkLocale v-if="state === 'list'" to="/events" class="see-all-btn">
+      <NuxtLinkLocale v-if="state === 'list' && isAuthenticated" to="/events" class="see-all-btn">
         <IconsCalendar class="see-all-icon" />
         {{ t('eventsSidebar.seeAll') }}
       </NuxtLinkLocale>
