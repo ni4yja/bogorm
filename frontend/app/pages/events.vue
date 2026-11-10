@@ -108,12 +108,16 @@ onMounted(loadEvents)
         </template>
       </BaseEmptyState>
 
-      <!-- Temporary plain list — replaced by EventCard in the next step -->
-      <ul v-else class="events-list">
-        <li v-for="event in events" :key="event.id">
-          {{ event.title }}
-        </li>
-      </ul>
+      <div v-else class="cards-grid">
+        <EventCard
+          v-for="event in events"
+          :key="event.id"
+          :title="event.title"
+          :event-time="event.event_time"
+          :category="event.category"
+          :place-title="event.place.title"
+        />
+      </div>
     </div>
   </ClientOnly>
 </template>
@@ -136,10 +140,20 @@ onMounted(loadEvents)
   text-align: center;
 }
 
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
 @media (max-width: 640px) {
   .events-page {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>
