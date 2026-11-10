@@ -153,81 +153,82 @@ onMounted(async () => {
 
 <template>
   <AccountLayout>
+    <!-- Private page: tokens are client-only, so skip SSR to avoid flashing content before the auth redirect -->
     <ClientOnly>
       <div class="bookmarks-page">
-      <h1 class="page-title">
-        {{ t('bookmarks.title') }}
-      </h1>
-      <p class="page-subtitle">
-        {{ t('bookmarks.subtitle') }}
-      </p>
+        <h1 class="page-title">
+          {{ t('bookmarks.title') }}
+        </h1>
+        <p class="page-subtitle">
+          {{ t('bookmarks.subtitle') }}
+        </p>
 
-      <!-- Not v-model: switchTab also resets the page and refetches -->
-      <BaseTabs
-        class="tabs-nav"
-        :items="tabs"
-        :model-value="activeTab"
-        @update:model-value="switchTab"
-      />
+        <!-- Not v-model: switchTab also resets the page and refetches -->
+        <BaseTabs
+          class="tabs-nav"
+          :items="tabs"
+          :model-value="activeTab"
+          @update:model-value="switchTab"
+        />
 
-      <div v-if="isLoading" class="state-message">
-        {{ t('bookmarks.loading') }}
-      </div>
-      <div v-else-if="hasError" class="state-message">
-        {{ t('bookmarks.loadError') }}
-      </div>
-      <BaseEmptyState
-        v-else-if="items.length === 0"
-        :title="activeTab === 'place' ? t('bookmarks.emptyTitlePlaces') : t('bookmarks.emptyTitleEvents')"
-        :subtitle="activeTab === 'place' ? t('bookmarks.emptySubtitlePlaces') : t('bookmarks.emptySubtitleEvents')"
-      >
-        <template #icon>
-          <IconsPin v-if="activeTab === 'place'" />
-          <IconsCalendar v-else />
-        </template>
-      </BaseEmptyState>
+        <div v-if="isLoading" class="state-message">
+          {{ t('bookmarks.loading') }}
+        </div>
+        <div v-else-if="hasError" class="state-message">
+          {{ t('bookmarks.loadError') }}
+        </div>
+        <BaseEmptyState
+          v-else-if="items.length === 0"
+          :title="activeTab === 'place' ? t('bookmarks.emptyTitlePlaces') : t('bookmarks.emptyTitleEvents')"
+          :subtitle="activeTab === 'place' ? t('bookmarks.emptySubtitlePlaces') : t('bookmarks.emptySubtitleEvents')"
+        >
+          <template #icon>
+            <IconsPin v-if="activeTab === 'place'" />
+            <IconsCalendar v-else />
+          </template>
+        </BaseEmptyState>
 
-      <div v-else class="cards-grid">
-        <div v-for="item in items" :key="item.id" class="card">
-          <div class="card-image">
-            <IconsImage class="image-icon" />
-          </div>
-
-          <div class="card-content">
-            <div class="card-title-row">
-              <h3 class="card-title">
-                {{ item.target.title }}
-              </h3>
-              <BookmarkButton
-                :id="item.target.id"
-                :type="item.type"
-                @toggled="handleBookmarkToggled(item.type, item.target.id, $event)"
-              />
+        <div v-else class="cards-grid">
+          <div v-for="item in items" :key="item.id" class="card">
+            <div class="card-image">
+              <IconsImage class="image-icon" />
             </div>
 
-            <div v-if="isEventTarget(item.target) && item.target.event_time" class="card-meta">
-              <IconsTime class="meta-icon" />
-              {{ formatEventTime(item.target.event_time) }}
-            </div>
+            <div class="card-content">
+              <div class="card-title-row">
+                <h3 class="card-title">
+                  {{ item.target.title }}
+                </h3>
+                <BookmarkButton
+                  :id="item.target.id"
+                  :type="item.type"
+                  @toggled="handleBookmarkToggled(item.type, item.target.id, $event)"
+                />
+              </div>
 
-            <div v-if="isEventTarget(item.target)" class="card-badges">
-              <span class="badge">{{ getCategoryLabel(item.target.category) }}</span>
-            </div>
+              <div v-if="isEventTarget(item.target) && item.target.event_time" class="card-meta">
+                <IconsTime class="meta-icon" />
+                {{ formatEventTime(item.target.event_time) }}
+              </div>
 
-            <div v-if="isPlaceTarget(item.target)" class="card-badges">
-              <span class="badge">{{ t('bookmarks.placeBadge') }}</span>
+              <div v-if="isEventTarget(item.target)" class="card-badges">
+                <span class="badge">{{ getCategoryLabel(item.target.category) }}</span>
+              </div>
+
+              <div v-if="isPlaceTarget(item.target)" class="card-badges">
+                <span class="badge">{{ t('bookmarks.placeBadge') }}</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <BasePagination
-        v-if="items.length > 0"
-        class="pagination-nav"
-        :current-page="currentPage"
-        :total-pages="totalPages"
-        @change="goToPage"
-      />
+        <BasePagination
+          v-if="items.length > 0"
+          class="pagination-nav"
+          :current-page="currentPage"
+          :total-pages="totalPages"
+          @change="goToPage"
+        />
       </div>
     </ClientOnly>
   </AccountLayout>

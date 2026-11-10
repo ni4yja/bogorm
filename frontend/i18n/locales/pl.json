@@ -124,7 +124,13 @@
     "title": "Wydarzenia",
     "subtitle": "Spotkania autorskie, premiery książek i kluby czytelnicze w Warszawie",
     "upcoming": "Nadchodzące",
-    "archived": "Archiwum"
+    "archived": "Archiwum",
+    "loading": "Ładowanie wydarzeń…",
+    "loadError": "Nie udało się załadować wydarzeń. Spróbuj ponownie później.",
+    "emptyTitleUpcoming": "Brak nadchodzących wydarzeń",
+    "emptySubtitleUpcoming": "Zajrzyj tu wkrótce — nowe wydarzenia pojawiają się regularnie.",
+    "emptyTitleArchived": "Archiwum jest puste",
+    "emptySubtitleArchived": "Tu pojawią się wydarzenia, które już się odbyły."
   },
   "about": {
     "metaTitle": "O projekcie — Bogorm",

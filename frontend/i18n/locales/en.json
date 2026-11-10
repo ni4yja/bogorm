@@ -124,7 +124,13 @@
     "title": "Events",
     "subtitle": "Author meetings, book launches and book clubs in Warsaw",
     "upcoming": "Upcoming",
-    "archived": "Archived"
+    "archived": "Archived",
+    "loading": "Loading events…",
+    "loadError": "Couldn't load events. Please try again later.",
+    "emptyTitleUpcoming": "No upcoming events",
+    "emptySubtitleUpcoming": "Check back soon — new events are added regularly.",
+    "emptyTitleArchived": "The archive is empty",
+    "emptySubtitleArchived": "Events that have already taken place will appear here."
   },
   "about": {
     "metaTitle": "About — Bogorm",
