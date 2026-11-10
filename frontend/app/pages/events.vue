@@ -67,9 +67,11 @@ async function loadEvents() {
     if (requestId !== latestRequestId)
       return
 
-    // DRF answers 404 past the last page (stale link, or the list shrank) — start over
+    // DRF answers 404 past the last page (stale link, or the list shrank) — step back one page,
+    // same recovery as /bookmarks, instead of losing the user's place entirely
     if (error?.response?.status === 404 && currentPage.value > 1) {
-      router.replace({ query: { ...route.query, page: undefined } })
+      const previousPage = currentPage.value - 1
+      router.replace({ query: { ...route.query, page: previousPage === 1 ? undefined : String(previousPage) } })
       return
     }
 
