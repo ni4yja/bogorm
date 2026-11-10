@@ -7,6 +7,7 @@ const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const { get } = useApi()
+const { registerInitialState } = useBookmarks()
 
 // Auto-imported components can't be referenced by string in :is — resolve once in setup
 const CalendarIcon = resolveComponent('IconsCalendar')
@@ -42,6 +43,10 @@ async function loadEvents() {
 
     if (requestId !== latestRequestId)
       return
+
+    // Seed shared bookmark state so icons render right away and stay in sync with the map and /bookmarks
+    for (const event of response.results)
+      registerInitialState('event', event.id, event.is_bookmarked)
 
     events.value = response.results
   }
@@ -116,7 +121,11 @@ onMounted(loadEvents)
           :event-time="event.event_time"
           :category="event.category"
           :place-title="event.place.title"
-        />
+        >
+          <template #actions>
+            <BookmarkButton :id="event.id" type="event" />
+          </template>
+        </EventCard>
       </div>
     </div>
   </ClientOnly>
