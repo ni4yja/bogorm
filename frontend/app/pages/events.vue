@@ -3,6 +3,9 @@ import type { EventListItem, PaginatedResponse, TabItem } from '~/types'
 
 definePageMeta({ layout: 'default', middleware: 'auth' })
 
+// Matches PAGE_SIZE in DRF's PageNumberPagination settings
+const PAGE_SIZE = 20
+
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
@@ -19,16 +22,25 @@ const activeStatus = computed<EventStatus>(() =>
   route.query.status === 'archived' ? 'archived' : 'upcoming',
 )
 
+// Anything that isn't a positive integer (?page=abc, ?page=0) falls back to the first page
+const currentPage = computed(() => {
+  const page = Number(route.query.page)
+  return Number.isInteger(page) && page > 0 ? page : 1
+})
+
 const tabs = computed<TabItem<EventStatus>[]>(() => [
   { value: 'upcoming', label: t('events.upcoming'), icon: CalendarIcon },
   { value: 'archived', label: t('events.archived'), icon: CalendarIcon },
 ])
 
 const events = ref<EventListItem[]>([])
+const totalCount = ref(0)
 const isLoading = ref(true)
 const hasError = ref(false)
 
-// Guards against a slow response for the old tab overwriting the new one
+const totalPages = computed(() => Math.max(1, Math.ceil(totalCount.value / PAGE_SIZE)))
+
+// Guards against a slow response for the old tab or page overwriting the new one
 let latestRequestId = 0
 
 async function loadEvents() {
@@ -38,7 +50,7 @@ async function loadEvents() {
 
   try {
     const response = await get<PaginatedResponse<EventListItem>>(
-      `/events/?status=${activeStatus.value}`,
+      `/events/?status=${activeStatus.value}&page=${currentPage.value}`,
     )
 
     if (requestId !== latestRequestId)
@@ -49,10 +61,17 @@ async function loadEvents() {
       registerInitialState('event', event.id, event.is_bookmarked)
 
     events.value = response.results
+    totalCount.value = response.count
   }
-  catch {
+  catch (error: any) {
     if (requestId !== latestRequestId)
       return
+
+    // DRF answers 404 past the last page (stale link, or the list shrank) — start over
+    if (error?.response?.status === 404 && currentPage.value > 1) {
+      router.replace({ query: { ...route.query, page: undefined } })
+      return
+    }
 
     hasError.value = true
   }
@@ -74,8 +93,19 @@ function switchStatus(status: EventStatus) {
   })
 }
 
+// push, not replace: the back button should return to the previous page of results
+function goToPage(page: number) {
+  router.push({
+    query: {
+      ...route.query,
+      page: page === 1 ? undefined : String(page),
+    },
+  })
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
 // Not immediate: page setup also runs on the server, where there's no token
-watch(activeStatus, loadEvents)
+watch([activeStatus, currentPage], loadEvents)
 onMounted(loadEvents)
 </script>
 
@@ -113,20 +143,29 @@ onMounted(loadEvents)
         </template>
       </BaseEmptyState>
 
-      <div v-else class="cards-grid">
-        <EventCard
-          v-for="event in events"
-          :key="event.id"
-          :title="event.title"
-          :event-time="event.event_time"
-          :category="event.category"
-          :place-title="event.place.title"
-        >
-          <template #actions>
-            <BookmarkButton :id="event.id" type="event" />
-          </template>
-        </EventCard>
-      </div>
+      <template v-else>
+        <div class="cards-grid">
+          <EventCard
+            v-for="event in events"
+            :key="event.id"
+            :title="event.title"
+            :event-time="event.event_time"
+            :category="event.category"
+            :place-title="event.place.title"
+          >
+            <template #actions>
+              <BookmarkButton :id="event.id" type="event" />
+            </template>
+          </EventCard>
+        </div>
+
+        <BasePagination
+          class="pagination-nav"
+          :current-page="currentPage"
+          :total-pages="totalPages"
+          @change="goToPage"
+        />
+      </template>
     </div>
   </ClientOnly>
 </template>
@@ -153,6 +192,10 @@ onMounted(loadEvents)
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.25rem;
+}
+
+.pagination-nav {
+  margin-top: 2rem;
 }
 
 @media (max-width: 640px) {
