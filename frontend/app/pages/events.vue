@@ -154,7 +154,7 @@ onMounted(loadEvents)
             :place-title="event.place.title"
           >
             <template #actions>
-              <BookmarkButton :id="event.id" type="event" />
+              <BookmarkButton :id="event.id" type="event" :title="event.title" />
             </template>
           </EventCard>
         </div>

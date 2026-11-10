@@ -2,6 +2,8 @@
 const props = defineProps<{
   type: 'place' | 'event'
   id: string
+  // Shown in the toast ("Saved: …"), so the user knows what was bookmarked
+  title: string
 }>()
 
 const emit = defineEmits<{
@@ -14,7 +16,7 @@ const { isBookmarked, isPending, toggleBookmark } = useBookmarks()
 const active = computed(() => isBookmarked(props.type, props.id))
 
 async function handleClick() {
-  const nowBookmarked = await toggleBookmark(props.type, props.id)
+  const nowBookmarked = await toggleBookmark(props.type, props.id, props.title)
   // Pages react to the new state, e.g. /bookmarks drops the card on removal
   emit('toggled', nowBookmarked)
 }

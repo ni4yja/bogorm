@@ -201,6 +201,7 @@ onMounted(async () => {
                 </h3>
                 <BookmarkButton
                   :id="item.target.id"
+                  :title="item.target.title"
                   :type="item.type"
                   @toggled="handleBookmarkToggled(item.type, item.target.id, $event)"
                 />
