@@ -153,8 +153,10 @@ const navItems = computed(() => [
     padding: 0.5rem;
   }
 
+    /* On mobile the row reads as tabs, so logout looked like a third one and got tapped by accident.
+     It stays available in the header's account dropdown. */
   .logout-btn {
-    padding: 0.5rem;
+    display: none;
   }
 
   .label-text {
