@@ -9,10 +9,45 @@ const username = ref('')
 const password = ref('')
 const accepted = ref(false)
 
+// Inputs that can show their own error; anything else from the API goes to the general message
+const FIELDS = ['email', 'username', 'password'] as const
+type Field = typeof FIELDS[number]
+
+const fieldErrors = ref<Partial<Record<Field, string>>>({})
+
+function isField(key: string): key is Field {
+  return (FIELDS as readonly string[]).includes(key)
+}
+
+function toMessage(value: unknown): string {
+  return [value].flat().join(' ')
+}
+
+// The backend's field messages already follow Accept-Language
+function mapError(err: any): string {
+  if (err?.response?.status !== 400 || !err.data)
+    return t('register.errorDefault')
+
+  const perField: Partial<Record<Field, string>> = {}
+  const general: string[] = []
+
+  for (const [key, value] of Object.entries(err.data as Record<string, unknown>)) {
+    if (isField(key))
+      perField[key] = toMessage(value)
+    else
+      general.push(toMessage(value))
+  }
+
+  fieldErrors.value = perField
+  return general.length > 0 ? general.join(' ') : t('register.checkFields')
+}
+
 const { error, isLoading, handleSubmit } = useAuthForm(
-  () => register(email.value, username.value, password.value, accepted.value),
-  // The backend's field messages already follow Accept-Language
-  (err: any) => (err?.response?.status === 400 && Object.values(err.data ?? {}).flat().join(' ')) || t('register.errorDefault'),
+  () => {
+    fieldErrors.value = {}
+    return register(email.value, username.value, password.value, accepted.value)
+  },
+  mapError,
 )
 </script>
 
@@ -26,8 +61,15 @@ const { error, isLoading, handleSubmit } = useAuthForm(
         type="email"
         :placeholder="t('register.emailPlaceholder')"
         class="input"
+        :class="{ 'input--invalid': fieldErrors.email }"
+        :aria-invalid="!!fieldErrors.email"
+        :aria-describedby="fieldErrors.email ? 'email-error' : undefined"
         required
+        @input="fieldErrors.email = undefined"
       >
+      <p v-if="fieldErrors.email" id="email-error" class="error">
+        {{ fieldErrors.email }}
+      </p>
 
       <label class="label" for="username">{{ t('register.usernameLabel') }}</label>
       <input
@@ -36,8 +78,15 @@ const { error, isLoading, handleSubmit } = useAuthForm(
         type="text"
         :placeholder="t('register.usernamePlaceholder')"
         class="input"
+        :class="{ 'input--invalid': fieldErrors.username }"
+        :aria-invalid="!!fieldErrors.username"
+        :aria-describedby="fieldErrors.username ? 'username-error' : undefined"
         required
+        @input="fieldErrors.username = undefined"
       >
+      <p v-if="fieldErrors.username" id="username-error" class="error">
+        {{ fieldErrors.username }}
+      </p>
 
       <label class="label" for="password">{{ t('register.passwordLabel') }}</label>
       <input
@@ -46,9 +95,16 @@ const { error, isLoading, handleSubmit } = useAuthForm(
         type="password"
         :placeholder="t('register.passwordPlaceholder')"
         class="input"
+        :class="{ 'input--invalid': fieldErrors.password }"
+        :aria-invalid="!!fieldErrors.password"
+        :aria-describedby="fieldErrors.password ? 'password-error' : undefined"
         minlength="8"
         required
+        @input="fieldErrors.password = undefined"
       >
+      <p v-if="fieldErrors.password" id="password-error" class="error">
+        {{ fieldErrors.password }}
+      </p>
 
       <label class="consent">
         <input v-model="accepted" type="checkbox" required>
@@ -62,7 +118,7 @@ const { error, isLoading, handleSubmit } = useAuthForm(
         </i18n-t>
       </label>
 
-      <p v-if="error" class="error">
+      <p v-if="error" class="error" role="alert">
         {{ error }}
       </p>
 
@@ -80,6 +136,11 @@ const { error, isLoading, handleSubmit } = useAuthForm(
 </template>
 
 <style scoped>
+/* Two classes so it outranks the global `.auth-form .input` border */
+.auth-form .input--invalid {
+  border-color: var(--color-error);
+}
+
 .consent {
   display: flex;
   align-items: flex-start;

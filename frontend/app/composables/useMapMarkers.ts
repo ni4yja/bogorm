@@ -7,7 +7,6 @@ export function useMapMarkers(
   selectedPlace: Ref<PlaceDetail | null>,
   selectedEventCount: Ref<number>,
   selectedEvents: Ref<Event[]>,
-  isBannerVisible: Ref<boolean>,
   onLoadError: () => void,
 ) {
   const { get, getAll } = useApi()
@@ -44,8 +43,6 @@ export function useMapMarkers(
         const clickId = place.id
         latestClickId = clickId
 
-        isBannerVisible.value = false
-
         try {
           const detail = await get<PlaceDetail>(`/places/${place.id}/`)
           if (latestClickId !== clickId)
@@ -68,8 +65,6 @@ export function useMapMarkers(
           if (latestClickId !== clickId)
             return
 
-          if (!selectedPlace.value)
-            isBannerVisible.value = true
           onLoadError()
         }
       })

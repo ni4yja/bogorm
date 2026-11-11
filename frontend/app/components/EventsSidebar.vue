@@ -17,7 +17,8 @@ const { formatEventTime } = useEventFormat()
 // /events is a private page (see middleware/auth.ts) — same gating as the header's Events link
 const { isAuthenticated } = useAuth()
 
-const state = ref<SidebarState>('list')
+// Collapsed by default so the map stays the first thing visitors see
+const state = ref<SidebarState>('collapsed')
 const selectedEvent = ref<EventListItem | null>(null)
 
 watch(events, (newEvents: EventListItem[]) => {
@@ -202,7 +203,7 @@ function handleToggleBookmark(eventId: string, title: string) {
 
 .header-title {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.6rem;
   margin: 0;
   font-size: 1rem;

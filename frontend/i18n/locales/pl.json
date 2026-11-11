@@ -16,6 +16,14 @@
     "upcomingEventsCount": "{count} nadchodzące wydarzenie | {count} nadchodzące wydarzenia | {count} nadchodzących wydarzeń",
     "upcomingEvents": "Nadchodzące wydarzenia:"
   },
+  "placeCategory": {
+    "10": "Biblioteka",
+    "20": "Księgarnia",
+    "30": "Centrum kultury",
+    "40": "Kawiarnia",
+    "50": "Muzeum",
+    "60": "Inne"
+  },
   "eventsSidebar": {
     "backToWeek": "Do wszystkich wydarzeń tego tygodnia",
     "title": "Wydarzenia w tym tygodniu",
@@ -56,7 +64,8 @@
     "logInLink": "Zaloguj się",
     "consent": "Mam co najmniej 16 lat i akceptuję {terms} oraz {privacy}.",
     "consentTerms": "Regulamin",
-    "consentPrivacy": "Politykę prywatności"
+    "consentPrivacy": "Politykę prywatności",
+    "checkFields": "Popraw zaznaczone pola."
   },
   "accountLayout": {
     "bookmarks": "Zakładki",
@@ -70,7 +79,7 @@
     "email": "E-mail",
     "username": "Nazwa użytkownika",
     "dangerZone": {
-      "title": "Usuń konto",
+      "toggle": "Usuń konto",
       "text": "Konto i wszystkie zapisane miejsca i wydarzenia zostaną usunięte na zawsze. Tego nie można cofnąć.",
       "button": "Usuń konto"
     }
@@ -113,12 +122,12 @@
     "60": "Inne"
   },
   "home": {
-    "heroTitle": "Czytanie nie musi być samotnym zajęciem!",
-    "heroSubtitle": "Odkrywaj miejsca, wydarzenia i ludzi wokół książek. Wszystko bezpłatnie. I sporo radości.",
-    "unauthBanner": "Bez konta, {bold1}. Aby sprawdzić szczegóły wydarzeń, zapisywać wrażenia i być na bieżąco z życiem literackim Warszawy, {bold2}.",
-    "unauthBannerBold1": "możesz oglądać tylko mapę z miejscami",
-    "unauthBannerBold2": "zarejestruj się na naszej platformie",
-    "fullExperience": "Odkryj pełne możliwości",
+    "betaNotice": {
+      "badge": "beta",
+      "lead": "Bogorm to czytelnicza mapa Warszawy. Jest w wersji beta i dopiero się zapełnia.",
+      "invite": "Brakuje Twojego miejsca albo chcesz dodać swoje wydarzenie? Napisz do mnie: {email}",
+      "email": "liubuntu [małpa] proton [kropka] me"
+    },
     "loadError": "Nie udało się wczytać miejsc. Spróbuj ponownie."
   },
   "events": {
@@ -169,7 +178,7 @@
       "visibilityTitle": "Widoczność",
       "visibilityText": "Twoje miejsce pojawia się na czytelniczej mapie Warszawy.",
       "readersTitle": "Czytelnicy",
-      "readersText": "Twoje wydarzenia trafiają do osób, które szukają czegoś do czytania i ludzi do rozmowy o książkach.",
+      "readersText": "Twoje wydarzenia trafią do osób, które same szukają spotkań wokół książek.",
       "networkTitle": "Sieć",
       "networkText": "Poznajesz inne księgarnie, biblioteki i inicjatywy literackie."
     },

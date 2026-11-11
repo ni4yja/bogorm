@@ -16,6 +16,14 @@
     "upcomingEventsCount": "{count} Upcoming Event | {count} Upcoming Events",
     "upcomingEvents": "Upcoming Events:"
   },
+  "placeCategory": {
+    "10": "Library",
+    "20": "Bookshop",
+    "30": "Cultural Centre",
+    "40": "Café",
+    "50": "Museum",
+    "60": "Other"
+  },
   "eventsSidebar": {
     "backToWeek": "To All Events This Week",
     "title": "Events This Week",
@@ -56,7 +64,8 @@
     "logInLink": "Log in",
     "consent": "I am at least 16 years old and accept the {terms} and {privacy}.",
     "consentTerms": "Terms of Use",
-    "consentPrivacy": "Privacy Policy"
+    "consentPrivacy": "Privacy Policy",
+    "checkFields": "Please fix the highlighted fields."
   },
   "accountLayout": {
     "bookmarks": "Bookmarks",
@@ -70,7 +79,7 @@
     "email": "Email",
     "username": "Username",
     "dangerZone": {
-      "title": "Delete account",
+      "toggle": "Delete account",
       "text": "Your account and all saved places and events will be deleted for good. This can't be undone.",
       "button": "Delete account"
     }
@@ -113,12 +122,12 @@
     "60": "Other"
   },
   "home": {
-    "heroTitle": "Reading doesn't have to be a lonely habit!",
-    "heroSubtitle": "Discover places, events, and people around books. It's totally free. And absolutely fun!",
-    "unauthBanner": "Without an account, {bold1}. To check events' details, note your impressions, and stay up-to-date with literary life of Warsaw, you need to {bold2}.",
-    "unauthBannerBold1": "you can only view the map with places",
-    "unauthBannerBold2": "sign up to our platform",
-    "fullExperience": "Get The Full Experience",
+    "betaNotice": {
+      "badge": "beta",
+      "lead": "Bogorm is a reading map of Warsaw. It's in beta and still filling up.",
+      "invite": "Is your place missing, or do you want to add your event? Write to me: {email}",
+      "email": "liubuntu [at] proton [dot] me"
+    },
     "loadError": "Could not load places. Please try again."
   },
   "events": {
@@ -169,7 +178,7 @@
       "visibilityTitle": "Visibility",
       "visibilityText": "Your place appears on Warsaw's reading map.",
       "readersTitle": "Readers",
-      "readersText": "Your events reach people who are looking for something to read and someone to talk books with.",
+      "readersText": "Your events reach people who are already looking for book events.",
       "networkTitle": "A network",
       "networkText": "You meet other bookshops, libraries and literary initiatives."
     },

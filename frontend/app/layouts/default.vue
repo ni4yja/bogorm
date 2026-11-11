@@ -19,5 +19,8 @@
 
 .layout-content {
   flex: 1;
+  /* Lets a page stretch to the remaining height (the home map relies on this) */
+  display: flex;
+  flex-direction: column;
 }
 </style>
