@@ -15,10 +15,17 @@ const selectedEventCount = ref(0)
 const selectedEvents = ref<Event[]>([])
 const isModalOpen = computed(() => selectedPlace.value !== null)
 const sidebarRef = ref<{ closeDetail: () => void } | null>(null)
+const mapWrapperRef = ref<HTMLElement | null>(null)
 
 let mapInstance: Awaited<ReturnType<typeof useLeafletMap>>['map'] | null = null
 let highlightMarkerFn: ((placeId: string) => void) | null = null
 let clearHighlightFn: (() => void) | null = null
+
+// Leaflet only tracks window resizes, not its container: the map height now depends on
+// the notice and footer, so redraw tiles whenever the wrapper itself changes size
+useResizeObserver(mapWrapperRef, () => {
+  mapInstance?.invalidateSize()
+})
 
 watch(selectedPlace, (place: PlaceDetail | null) => {
   if (place)
@@ -77,7 +84,7 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
 
 <template>
   <div class="page">
-    <section class="map-wrapper">
+    <section ref="mapWrapperRef" class="map-wrapper">
       <ClientOnly>
         <div id="map" />
         <div v-if="isModalOpen" class="map-overlay" />
@@ -116,21 +123,28 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
 </template>
 
 <style scoped>
+/* Fills the space between header and footer; the map takes whatever the notice leaves */
 .page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   padding-top: var(--header-height);
 }
 
 .map-wrapper {
   position: relative;
-  /* Top margin used to come from the hero; keeps the map off the header */
-  margin: var(--spacing-md);
+  flex: 1;
+  /* Below this the page scrolls instead of squashing the map into a strip */
+  min-height: 360px;
+  margin: var(--spacing-xs) var(--spacing-md);
   border-radius: 16px;
   overflow: hidden;
 }
 
+/* Absolute so Leaflet gets exact pixel dimensions; percentage heights in a flex column often resolve to 0 */
 #map {
-  height: 620px;
-  width: 100%;
+  position: absolute;
+  inset: 0;
 }
 
 .map-overlay {
@@ -156,7 +170,7 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
-  margin: 0 var(--spacing-md) var(--spacing-md);
+  margin: 0 var(--spacing-md) var(--spacing-xs);
   padding: var(--spacing-xs) var(--spacing-md);
   background: var(--color-yellow);
   color: var(--color-primary);
@@ -184,5 +198,17 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
   text-decoration: underline;
   text-underline-offset: 2px;
   overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .map-wrapper {
+    min-height: 280px;
+  }
+
+  .beta-notice {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: var(--spacing-xs);
+  }
 }
 </style>
