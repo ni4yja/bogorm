@@ -103,7 +103,10 @@ onMounted(async () => {
 
 .detail-row dd {
   margin: 0;
+  min-width: 0;
   color: var(--color-black);
+  /* Long emails have no natural break points and would push the page sideways on mobile */
+  overflow-wrap: anywhere;
 }
 
 .danger-zone {
@@ -138,5 +141,16 @@ onMounted(async () => {
 .danger-btn:hover {
   background: var(--color-error);
   color: var(--color-white);
+}
+
+@media (max-width: 640px) {
+  .detail-row {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .detail-row dt {
+    width: auto;
+  }
 }
 </style>
