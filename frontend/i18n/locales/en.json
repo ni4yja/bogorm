@@ -16,6 +16,14 @@
     "upcomingEventsCount": "{count} Upcoming Event | {count} Upcoming Events",
     "upcomingEvents": "Upcoming Events:"
   },
+  "placeCategory": {
+    "10": "Library",
+    "20": "Bookshop",
+    "30": "Cultural Centre",
+    "40": "Café",
+    "50": "Museum",
+    "60": "Other"
+  },
   "eventsSidebar": {
     "backToWeek": "To All Events This Week",
     "title": "Events This Week",

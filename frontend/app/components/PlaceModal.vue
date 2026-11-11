@@ -14,6 +14,7 @@ defineEmits<{
 
 const { t } = useI18n()
 const { formatEventTime } = useEventFormat()
+const { getCategoryLabel } = usePlaceCategory()
 
 const upcomingEvents = computed(() =>
   props.events.filter((e: Event) => e.event_time && new Date(e.event_time) > new Date()),
@@ -65,17 +66,17 @@ function handleToggleEventBookmark(eventId: string, title: string) {
         </div>
       </div>
 
-      <div v-if="eventCount > 0 && !isAuthenticated" class="badges">
-        <div class="badge badge--events">
+      <div class="badges">
+        <div class="badge">
+          {{ getCategoryLabel(place.category) }}
+        </div>
+        <div v-if="eventCount > 0 && !isAuthenticated" class="badge badge--events">
           <IconsCalendar class="badge-icon" />
           {{ t('placeModal.upcomingEventsCount', eventCount) }}
         </div>
       </div>
 
-      <p v-if="place.description" class="description">
-        {{ place.description }}
-      </p>
-
+      <!-- Practical info first: people open the card to find out where the place is -->
       <div v-if="place.address || place.website" class="meta">
         <div v-if="place.address" class="meta-item">
           <IconsPin class="meta-icon" />
@@ -88,6 +89,10 @@ function handleToggleEventBookmark(eventId: string, title: string) {
           </a>
         </div>
       </div>
+
+      <p v-if="place.description" class="description">
+        {{ place.description }}
+      </p>
 
       <div v-if="isAuthenticated && upcomingEvents.length > 0" class="events-section">
         <div class="events-header">
@@ -194,8 +199,9 @@ function handleToggleEventBookmark(eventId: string, title: string) {
 
 .badges {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .badge {
@@ -218,20 +224,14 @@ function handleToggleEventBookmark(eventId: string, title: string) {
   flex-shrink: 0;
 }
 
-.description {
-  font-size: 1rem;
-  color: var(--color-black);
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-  white-space: pre-line;
-}
-
+/* Sits above the description now, so the divider moves below it */
 .meta {
-  border-top: 1px solid var(--color-light-grey-40);
-  padding-top: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-light-grey-40);
 }
 
 .meta-item {
@@ -245,6 +245,7 @@ function handleToggleEventBookmark(eventId: string, title: string) {
 .meta-item a {
   color: var(--color-black);
   text-decoration: none;
+  overflow-wrap: anywhere;
 }
 
 .meta-icon {
@@ -252,6 +253,14 @@ function handleToggleEventBookmark(eventId: string, title: string) {
   height: 20px;
   flex-shrink: 0;
   color: var(--color-primary);
+}
+
+.description {
+  font-size: 1rem;
+  color: var(--color-black);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  white-space: pre-line;
 }
 
 .events-section {
