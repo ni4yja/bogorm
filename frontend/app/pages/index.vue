@@ -6,9 +6,9 @@ const { t } = useI18n()
 const { show } = useToast()
 
 const { isAuthenticated } = useAuth()
-const isBannerVisible = ref(true)
-// Session-scoped so the banner comes back on the next visit, not on every modal close
-const isBannerDismissed = useSessionStorage('bogorm:unauth-banner-dismissed', false)
+
+// Kept out of the locale files: vue-i18n parses "@" as a linked-message reference
+const CONTACT_MAILTO = 'mailto:liubuntu@proton.me'
 
 const selectedPlace = ref<PlaceDetail | null>(null)
 const selectedEventCount = ref(0)
@@ -50,7 +50,6 @@ onMounted(async () => {
     selectedPlace,
     selectedEventCount,
     selectedEvents,
-    isBannerVisible,
     handleLoadError,
   )
   highlightMarkerFn = highlightMarker
@@ -88,7 +87,7 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
           :event-count="selectedEventCount"
           :events="selectedEvents"
           :is-authenticated="isAuthenticated"
-          @close="selectedPlace = null; selectedEvents = []; isBannerVisible = true"
+          @close="selectedPlace = null; selectedEvents = []"
         />
         <EventsSidebar
           v-if="isAuthenticated"
@@ -96,24 +95,23 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
           @select-event="handleSelectEvent"
           @deselect-event="clearHighlightFn?.()"
         />
-        <div v-if="isBannerVisible && !isBannerDismissed && !isAuthenticated" class="unauth-banner">
-          <i18n-t keypath="home.unauthBanner" tag="p" scope="global">
-            <template #bold1>
-              <strong>{{ t('home.unauthBannerBold1') }}</strong>
-            </template>
-            <template #bold2>
-              <strong>{{ t('home.unauthBannerBold2') }}</strong>
-            </template>
-          </i18n-t>
-          <NuxtLinkLocale to="/register" class="btn-full">
-            {{ t('home.fullExperience') }}
-          </NuxtLinkLocale>
-          <button class="banner-close" :aria-label="t('a11y.dismiss')" @click="isBannerDismissed = true">
-            <IconsClose class="banner-close-icon" />
-          </button>
-        </div>
       </ClientOnly>
     </section>
+
+    <!-- Static and shown to everyone, so it renders on the server with no hydration flash -->
+    <aside class="beta-notice">
+      <span class="badge">{{ t('home.betaNotice.badge') }}</span>
+      <div class="beta-notice-text">
+        <p class="beta-notice-lead">
+          {{ t('home.betaNotice.lead') }}
+        </p>
+        <i18n-t keypath="home.betaNotice.invite" tag="p" scope="global">
+          <template #email>
+            <a :href="CONTACT_MAILTO" class="beta-notice-link">{{ t('home.betaNotice.email') }}</a>
+          </template>
+        </i18n-t>
+      </div>
+    </aside>
   </div>
 </template>
 
@@ -153,97 +151,38 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
   overflow: hidden;
 }
 
-.unauth-banner {
-  --banner-close-size: 44px;
-  --banner-close-offset: 0.5rem;
-  position: absolute;
-  bottom: 1.5rem;
-  left: 1.5rem;
-  right: 1.5rem;
-  background: #fff;
-  border-radius: 12px;
-  padding: var(--spacing-xs) var(--spacing-md);
+/* Yellow card below the map: the only copy on the first screen, so it should stand out */
+.beta-notice {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  z-index: 1000;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  align-items: flex-start;
+  gap: 1rem;
+  margin: 0 var(--spacing-md) var(--spacing-md);
+  padding: var(--spacing-xs) var(--spacing-md);
+  background: var(--color-yellow);
+  color: var(--color-primary);
+  border-radius: 12px;
 }
 
-.unauth-banner p {
+.beta-notice .badge {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.beta-notice-text p {
   font-size: 0.9rem;
-  color: #444;
+  color: inherit;
   line-height: 1.5;
   margin: 0;
 }
 
-.banner-close {
-  flex-shrink: 0;
-  width: var(--banner-close-size);
-  height: var(--banner-close-size);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  color: var(--color-primary);
+.beta-notice-lead {
+  font-weight: 500;
 }
 
-.banner-close:hover {
-  background: var(--color-light-grey-40);
-}
-
-.banner-close-icon {
-  width: 18px;
-  height: 18px;
-}
-
-.btn-full {
-  white-space: nowrap;
-  background: var(--color-primary);
-  color: #fff;
-  border: none;
-  padding: 0.85rem 1.75rem;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  cursor: pointer;
-  display: inline-block;
-  text-decoration: none;
-  text-align: center;
-}
-
-@media (max-width: 1440px) {
-  #map {
-    height: 480px;
-  }
-}
-
-@media (max-width: 640px) {
-  #map {
-    height: 380px;
-  }
-
-  .unauth-banner {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.85rem;
-    left: 0.75rem;
-    right: 0.75rem;
-    bottom: 0.75rem;
-    padding: var(--spacing-xs) calc(var(--banner-close-offset) + var(--banner-close-size)) var(--spacing-xs) var(--spacing-xs);
-  }
-
-  .btn-full {
-    white-space: normal;
-  }
-
-  .banner-close {
-    position: absolute;
-    top: var(--banner-close-offset);
-    right: var(--banner-close-offset);
-  }
+.beta-notice-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  overflow-wrap: anywhere;
 }
 </style>

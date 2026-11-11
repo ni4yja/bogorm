@@ -113,10 +113,12 @@
     "60": "Other"
   },
   "home": {
-    "unauthBanner": "Without an account, {bold1}. To check events' details, note your impressions, and stay up-to-date with literary life of Warsaw, you need to {bold2}.",
-    "unauthBannerBold1": "you can only view the map with places",
-    "unauthBannerBold2": "sign up to our platform",
-    "fullExperience": "Get The Full Experience",
+    "betaNotice": {
+      "badge": "beta",
+      "lead": "Bogorm is a reading map of Warsaw. It's in beta and still filling up.",
+      "invite": "Is your place missing, or do you want to add your event? Write to me: {email}",
+      "email": "liubuntu [at] proton [dot] me"
+    },
     "loadError": "Could not load places. Please try again."
   },
   "events": {

@@ -113,10 +113,12 @@
     "60": "Inne"
   },
   "home": {
-    "unauthBanner": "Bez konta, {bold1}. Aby sprawdzić szczegóły wydarzeń, zapisywać wrażenia i być na bieżąco z życiem literackim Warszawy, {bold2}.",
-    "unauthBannerBold1": "możesz oglądać tylko mapę z miejscami",
-    "unauthBannerBold2": "zarejestruj się na naszej platformie",
-    "fullExperience": "Odkryj pełne możliwości",
+    "betaNotice": {
+      "badge": "beta",
+      "lead": "Bogorm to czytelnicza mapa Warszawy. Jest w wersji beta i dopiero się zapełnia.",
+      "invite": "Brakuje Twojego miejsca albo chcesz dodać swoje wydarzenie? Napisz do mnie: {email}",
+      "email": "liubuntu [małpa] proton [kropka] me"
+    },
     "loadError": "Nie udało się wczytać miejsc. Spróbuj ponownie."
   },
   "events": {
