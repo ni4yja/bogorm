@@ -23,4 +23,10 @@
   display: flex;
   flex-direction: column;
 }
+
+/* In a flex column, `margin: 0 auto` makes a page shrink to its content instead of stretching.
+   Full width restores the old block behaviour; max-width + auto margins still centre it. */
+.layout-content > :deep(*) {
+  width: 100%;
+}
 </style>
