@@ -79,7 +79,7 @@
     "email": "E-mail",
     "username": "Nazwa użytkownika",
     "dangerZone": {
-      "title": "Usuń konto",
+      "toggle": "Usuń konto",
       "text": "Konto i wszystkie zapisane miejsca i wydarzenia zostaną usunięte na zawsze. Tego nie można cofnąć.",
       "button": "Usuń konto"
     }

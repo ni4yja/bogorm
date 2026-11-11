@@ -50,17 +50,18 @@ onMounted(async () => {
           </div>
         </dl>
 
-        <section class="danger-zone">
-          <h2 class="danger-title">
-            {{ t('profile.dangerZone.title') }}
-          </h2>
-          <p class="danger-text">
-            {{ t('profile.dangerZone.text') }}
-          </p>
-          <button class="danger-btn" @click="isDeleteModalOpen = true">
-            {{ t('profile.dangerZone.button') }}
-          </button>
-        </section>
+        <!-- Collapsed by default: an always-open red block read like an invitation to delete -->
+        <details class="danger-toggle">
+          <summary>{{ t('profile.dangerZone.toggle') }}</summary>
+          <section class="danger-zone">
+            <p class="danger-text">
+              {{ t('profile.dangerZone.text') }}
+            </p>
+            <button class="danger-btn" @click="isDeleteModalOpen = true">
+              {{ t('profile.dangerZone.button') }}
+            </button>
+          </section>
+        </details>
       </template>
     </div>
     <DeleteAccountModal v-if="isDeleteModalOpen" @close="isDeleteModalOpen = false" />
@@ -109,16 +110,29 @@ onMounted(async () => {
   overflow-wrap: anywhere;
 }
 
+.danger-toggle summary {
+  display: inline-block;
+  list-style: none;
+  color: var(--color-grey);
+  font-size: 0.85rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+/* Safari still draws its own disclosure triangle */
+.danger-toggle summary::-webkit-details-marker {
+  display: none;
+}
+
+.danger-toggle[open] summary {
+  margin-bottom: 1rem;
+}
+
 .danger-zone {
   border: 1px solid var(--color-error);
   border-radius: 12px;
   padding: 1.25rem 1.5rem;
-}
-
-.danger-title {
-  color: var(--color-error);
-  font-size: 1rem;
-  margin: 0 0 0.5rem;
 }
 
 .danger-text {

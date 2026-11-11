@@ -79,7 +79,7 @@
     "email": "Email",
     "username": "Username",
     "dangerZone": {
-      "title": "Delete account",
+      "toggle": "Delete account",
       "text": "Your account and all saved places and events will be deleted for good. This can't be undone.",
       "button": "Delete account"
     }
