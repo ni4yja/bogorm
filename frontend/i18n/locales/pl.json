@@ -64,7 +64,8 @@
     "logInLink": "Zaloguj się",
     "consent": "Mam co najmniej 16 lat i akceptuję {terms} oraz {privacy}.",
     "consentTerms": "Regulamin",
-    "consentPrivacy": "Politykę prywatności"
+    "consentPrivacy": "Politykę prywatności",
+    "checkFields": "Popraw zaznaczone pola."
   },
   "accountLayout": {
     "bookmarks": "Zakładki",
