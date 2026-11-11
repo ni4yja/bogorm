@@ -78,15 +78,6 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
 
 <template>
   <div class="page">
-    <section class="hero">
-      <h1>
-        {{ t('home.heroTitle') }}
-      </h1>
-      <p class="hero-subtitle">
-        {{ t('home.heroSubtitle') }}
-      </p>
-    </section>
-
     <section class="map-wrapper">
       <ClientOnly>
         <div id="map" />
@@ -131,22 +122,10 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
   padding-top: var(--header-height);
 }
 
-.hero {
-  text-align: center;
-  padding: var(--spacing-lg) var(--spacing-md) var(--spacing-xl);
-}
-
-.hero h1 {
-  margin-bottom: var(--spacing-xs);
-}
-
-.hero-subtitle {
-  color: #313131;
-}
-
 .map-wrapper {
   position: relative;
-  margin: 0 var(--spacing-md) var(--spacing-md);
+  /* Top margin used to come from the hero; keeps the map off the header */
+  margin: var(--spacing-md);
   border-radius: 16px;
   overflow: hidden;
 }
