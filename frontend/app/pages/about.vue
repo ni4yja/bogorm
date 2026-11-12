@@ -12,7 +12,7 @@ useSeoMeta({
 
 const ARTICLE_URL = 'https://anywhere.pl/polecane/po-cichu-na-glos-razem-o-czytaniu-ktore-laczy-ludzi/'
 const AUTHOR_URL = 'https://liubuntu.tech'
-const DESIGNER_URL = 'https://www.linkedin.com/in/anastasiia-kirman-4b35b72a4/'
+const DESIGNER_URL = 'https://www.linkedin.com/in/anastasiia-shkonda-4b35b72a4/'
 
 const benefits = computed(() => [
   { title: t('about.partners.visibilityTitle'), text: t('about.partners.visibilityText') },
