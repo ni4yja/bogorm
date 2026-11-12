@@ -17,6 +17,9 @@ const year = new Date().getFullYear()
       <NuxtLink :to="localePath('/terms')">
         {{ t('footer.terms') }}
       </NuxtLink>
+      <a v-if="SHOW_BUYCOFFEE" :href="BUYCOFFEE_URL" target="_blank" rel="noopener">
+        {{ t('footer.support') }} ↗
+      </a>
     </nav>
     <p class="footer-copy">
       © {{ year }} Bogorm

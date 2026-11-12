@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'default' })
 
-const { t, tm, rt } = useI18n()
+const { t, te } = useI18n()
 
 useSeoMeta({
   title: () => t('about.metaTitle'),
@@ -13,6 +13,7 @@ useSeoMeta({
 const ARTICLE_URL = 'https://anywhere.pl/polecane/po-cichu-na-glos-razem-o-czytaniu-ktore-laczy-ludzi/'
 const AUTHOR_URL = 'https://liubuntu.tech'
 const DESIGNER_URL = 'https://www.linkedin.com/in/anastasiia-shkonda-4b35b72a4/'
+const NEWSLETTER_URL = 'https://buttondown.com/bogorm'
 
 const benefits = computed(() => [
   { title: t('about.partners.visibilityTitle'), text: t('about.partners.visibilityText') },
@@ -20,7 +21,14 @@ const benefits = computed(() => [
   { title: t('about.partners.networkTitle'), text: t('about.partners.networkText') },
 ])
 
-const invitees = computed(() => tm('about.partners.invite').map(item => rt(item)))
+// tm() is typed against the whole locale schema and hits TypeScript's recursion limit;
+// read the list item by item with t() instead, until there are no more items
+const invitees = computed(() => {
+  const items: string[] = []
+  for (let i = 0; te(`about.partners.invite.${i}`); i++)
+    items.push(t(`about.partners.invite.${i}`))
+  return items
+})
 </script>
 
 <template>
@@ -37,7 +45,7 @@ const invitees = computed(() => tm('about.partners.invite').map(item => rt(item)
         <span class="map-link-text">{{ t('about.mapLink') }} →</span>
       </NuxtLinkLocale>
 
-      <!-- What / why / quote -->
+      <!-- What / why / newsletter -->
       <section class="cell span-4 stack">
         <span class="label label--index">01</span>
         <h2>{{ t('about.what.title') }}</h2>
@@ -50,9 +58,12 @@ const invitees = computed(() => tm('about.partners.invite').map(item => rt(item)
         <p>{{ t('about.why.text1') }}</p>
         <p>{{ t('about.why.text2') }}</p>
       </section>
-      <div class="cell span-3 cell--yellow quote">
-        <p>{{ t('about.quote') }}</p>
-      </div>
+      <a :href="NEWSLETTER_URL" target="_blank" rel="noopener" class="cell span-3 cell--yellow newsletter">
+        <span class="label">{{ t('about.newsletter.label') }}</span>
+        <span class="newsletter-title">{{ t('about.newsletter.title') }}</span>
+        <span class="newsletter-text">{{ t('about.newsletter.teaser') }}</span>
+        <span class="newsletter-link">{{ t('about.newsletter.link') }} ↗</span>
+      </a>
 
       <!-- Who -->
       <div class="cell span-4 row-2 photo">
@@ -68,6 +79,12 @@ const invitees = computed(() => tm('about.partners.invite').map(item => rt(item)
           </template>
         </i18n-t>
         <p>{{ t('about.who.text3') }}</p>
+        <!-- Support ask closes the personal story: the reader already knows whom they'd support -->
+        <i18n-t v-if="SHOW_BUYCOFFEE" keypath="about.who.support" tag="p" scope="global">
+          <template #link>
+            <a :href="BUYCOFFEE_URL" target="_blank" rel="noopener" class="inline-link">{{ t('about.who.supportLink') }} ↗</a>
+          </template>
+        </i18n-t>
       </section>
       <div class="cell span-3 credit">
         <span class="label">{{ t('about.who.authorSite') }}</span>
@@ -228,17 +245,37 @@ const invitees = computed(() => tm('about.partners.invite').map(item => rt(item)
   text-decoration: underline;
 }
 
-/* Quote */
-.quote {
+/* Newsletter: the whole cell is the link, like the map cell above it */
+.newsletter {
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 8px;
+  color: var(--color-primary);
+  text-decoration: none;
 }
 
-.quote p {
+/* A name, not a section heading: same serif as the partners title */
+.newsletter-title {
   font-family: 'Merriweather', serif;
   font-weight: 700;
   font-size: 27px;
   line-height: 1.3;
+}
+
+.newsletter-text {
+  font-size: 16px;
+  color: var(--color-black);
+}
+
+.newsletter-link {
+  margin-top: 8px;
+  font-size: 19px;
+  font-weight: 500;
+}
+
+.newsletter:hover .newsletter-link {
+  text-decoration: underline;
 }
 
 /* Who */
@@ -332,7 +369,7 @@ const invitees = computed(() => tm('about.partners.invite').map(item => rt(item)
 
 .contact-email {
   flex: 1 1 260px;
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 500;
   color: var(--color-yellow);
   text-decoration: none;
@@ -362,9 +399,13 @@ const invitees = computed(() => tm('about.partners.invite').map(item => rt(item)
     font-size: 28px;
   }
 
-  .quote p,
+  .newsletter-title,
   .map-link-text {
     font-size: 22px;
+  }
+
+  .contact-email {
+    font-size: 20px;
   }
 }
 </style>

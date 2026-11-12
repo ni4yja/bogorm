@@ -166,7 +166,9 @@
       "text2Link": "Wspólne czytanie i kluby książki",
       "text3": "Z tego doświadczenia wyrósł Bogorm. Będzie się rozwijał razem ze społecznością.",
       "authorSite": "Strona autorki",
-      "designer": "Projekt graficzny prototypu"
+      "designer": "Projekt graficzny prototypu",
+      "support": "Bogorm tworzę sama i jest bezpłatny dla wszystkich. Jeśli chcesz pomóc mu rosnąć, możesz {link}.",
+      "supportLink": "postawić mi kawę"
     },
     "partners": {
       "title": "Dla partnerów",
@@ -186,6 +188,12 @@
       "title": "Zostań partnerem",
       "text": "Mapa działa i buduje pierwszą sieć partnerów w Warszawie. Jeśli prowadzisz miejsce związane z książkami albo organizujesz wydarzenia literackie, napisz do mnie.",
       "email": "liubuntu [małpa] proton [kropka] me"
+    },
+    "newsletter": {
+      "label": "Newsletter",
+      "title": "Na marginesie",
+      "teaser": "Notatki z pracy nad Bogormem, po polsku.",
+      "link": "Zapisz się"
     }
   },
   "a11y": {
@@ -197,7 +205,8 @@
   "footer": {
     "about": "O projekcie",
     "privacy": "Polityka prywatności",
-    "terms": "Regulamin"
+    "terms": "Regulamin",
+    "support": "Wesprzyj"
   },
   "pagination": {
     "label": "Paginacja",
