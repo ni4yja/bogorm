@@ -92,7 +92,7 @@ const invitees = computed(() => {
       </div>
       <div class="cell span-5 credit">
         <span class="label">{{ t('about.who.designer') }}</span>
-        <a :href="DESIGNER_URL" target="_blank" rel="noopener" class="credit-link">Anastasiia Kirman ↗</a>
+        <a :href="DESIGNER_URL" target="_blank" rel="noopener" class="credit-link">Anastasiia Shkonda ↗</a>
       </div>
 
       <!-- Partners -->
