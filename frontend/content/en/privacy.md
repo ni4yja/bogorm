@@ -1,6 +1,6 @@
 # Privacy Policy
 
-*Last updated: 6 November 2026*
+*Last updated: 12 November 2026*
 
 Bogorm is a reading map of Warsaw, available at bogorm.app. This page explains what data I collect, why, and what rights you have.
 
@@ -8,7 +8,7 @@ Bogorm is a reading map of Warsaw, available at bogorm.app. This page explains w
 
 The data controller is Liubov Kuibida, a private individual who runs Bogorm.
 
-Contact for anything related to your data: **liubuntu@proton.me**
+Contact for anything related to your data: **support@bogorm.app**
 
 ## What data I collect and why
 
@@ -50,6 +50,19 @@ For statistics I use Umami, installed on my own server. Umami:
 It collects only general information: which page was visited, where the visit came from, device and browser type, and country. This data stays on my server and is not shared with anyone.
 Legal basis: legitimate interest, namely knowing how to improve the site (Art. 6(1)(f) GDPR).
 
+### Newsletter "Na marginesie"
+
+If you subscribe to the newsletter, I process your email address to send you new issues. I send it through Buttondown, which also records the subscription date, your IP address and the page you subscribed from.
+
+I don't track whether you open my emails or which links you click: the newsletter has no tracking pixels and no link redirects.
+
+Legal basis: your consent (Art. 6(1)(a) GDPR). You can withdraw it at any time: every email has an unsubscribe link.
+
+### Messages to me
+
+If you write to support@bogorm.app, I process your email address and the content of your message so I can reply.
+Legal basis: legitimate interest, namely answering your message (Art. 6(1)(f) GDPR).
+
 ## Who I share data with
 
 I do not sell data or share it for marketing. I use a few external services the site cannot run without:
@@ -57,12 +70,16 @@ I do not sell data or share it for marketing. I use a few external services the 
 - **DigitalOcean** — hosting. The Bogorm and Umami servers are in a data centre in Frankfurt, Germany.
 - **CARTO** — map tiles. When you view the map, your browser loads map tiles directly from CARTO's servers, so CARTO sees your IP address.
 - **Google Fonts** — fonts. Your browser loads them directly from Google's servers, so Google sees your IP address.
+- **Buttondown** — newsletter delivery. Subscriber data is stored on Amazon Web Services servers in the USA.
+- **Proton** — email. Messages sent to support@bogorm.app are stored in Proton's mailbox in Switzerland.
 
-Some of these companies are based in the USA. When data leaves the European Economic Area, this happens on the basis of a European Commission decision (EU–US Data Privacy Framework) or standard contractual clauses.
+Some of these companies are based outside the European Economic Area. Switzerland, where Proton operates, is recognised by the European Commission as providing an adequate level of data protection. Companies based in the USA process data on the basis of a European Commission decision (EU–US Data Privacy Framework) or standard contractual clauses.
 
 ## How long I keep data
 
 - **Account and bookmarks** — until you delete your account. When you do, the data is erased immediately and permanently.
+- **Newsletter** — until you unsubscribe.
+- **Messages to me** — as long as needed to handle your matter.
 - **Server logs** — up to 14 days.
 - **Umami statistics** — with no time limit, because they cannot identify anyone.
 
@@ -75,9 +92,10 @@ You have the right to:
 - delete it — you can delete your account yourself on your profile page,
 - restrict processing,
 - data portability,
-- object to processing based on legitimate interest.
+- object to processing based on legitimate interest,
+- withdraw your consent to the newsletter at any time.
 
-To use these rights, write to **liubuntu@proton.me**.
+To use these rights, write to **support@bogorm.app**.
 
 You can also file a complaint with the Polish data protection authority, the President of the Personal Data Protection Office (ul. Stawki 2, 00-193 Warszawa, uodo.gov.pl).
 
