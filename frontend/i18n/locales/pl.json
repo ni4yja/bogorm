@@ -65,7 +65,8 @@
     "consent": "Mam co najmniej 16 lat i akceptuję {terms} oraz {privacy}.",
     "consentTerms": "Regulamin",
     "consentPrivacy": "Politykę prywatności",
-    "checkFields": "Popraw zaznaczone pola."
+    "checkFields": "Popraw zaznaczone pola.",
+    "needHelp": "Problem z rejestracją? Napisz na {email}"
   },
   "accountLayout": {
     "bookmarks": "Zakładki",

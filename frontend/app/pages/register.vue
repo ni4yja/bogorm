@@ -132,6 +132,12 @@ const { error, isLoading, handleSubmit } = useAuthForm(
         {{ t('register.logInLink') }}
       </NuxtLinkLocale>
     </p>
+
+    <i18n-t keypath="register.needHelp" tag="p" scope="global" class="switch-link help-link">
+      <template #email>
+        <a :href="SUPPORT_MAILTO">{{ SUPPORT_EMAIL }}</a>
+      </template>
+    </i18n-t>
   </AuthLayout>
 </template>
 
@@ -157,5 +163,11 @@ const { error, isLoading, handleSubmit } = useAuthForm(
 
 .consent a {
   color: inherit;
+}
+
+/* Secondary to the login link: smaller and set apart, so it reads as a footnote */
+.help-link {
+  margin-top: 1.5rem;
+  font-size: 12px;
 }
 </style>
