@@ -125,8 +125,7 @@
     "betaNotice": {
       "badge": "beta",
       "lead": "Bogorm to czytelnicza mapa Warszawy. Jest w wersji beta i dopiero się zapełnia.",
-      "invite": "Brakuje Twojego miejsca albo chcesz dodać swoje wydarzenie? Napisz do mnie: {email}",
-      "email": "liubuntu [małpa] proton [kropka] me"
+      "invite": "Brakuje Twojego miejsca albo chcesz dodać swoje wydarzenie? Napisz do mnie: {email}"
     },
     "loadError": "Nie udało się wczytać miejsc. Spróbuj ponownie."
   },

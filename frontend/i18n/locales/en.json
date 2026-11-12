@@ -125,8 +125,7 @@
     "betaNotice": {
       "badge": "beta",
       "lead": "Bogorm is a reading map of Warsaw. It's in beta and still filling up.",
-      "invite": "Is your place missing, or do you want to add your event? Write to me: {email}",
-      "email": "liubuntu [at] proton [dot] me"
+      "invite": "Is your place missing, or do you want to add your event? Write to me: {email}"
     },
     "loadError": "Could not load places. Please try again."
   },
