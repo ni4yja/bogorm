@@ -1,13 +1,13 @@
 # Regulamin
 
-*Ostatnia aktualizacja: 6 listopada 2026*
+*Ostatnia aktualizacja: 12 listopada 2026*
 
 ## 1. Kilka słów na początek
 
 Bogorm to czytelnicza mapa Warszawy dostępna pod adresem bogorm.app. Ten regulamin opisuje, na jakich zasadach możesz z niej korzystać. Jest to regulamin w rozumieniu ustawy z dnia 18 lipca 2002 r. o świadczeniu usług drogą elektroniczną.
 
 Serwis prowadzi Liubov Kuibida, osoba fizyczna.
-Kontakt: **liubuntu@proton.me**
+Kontakt: **support@bogorm.app**
 
 ## 2. Co oferuje Bogorm
 
@@ -64,7 +64,7 @@ Bogorm może czasem być niedostępny, na przykład z powodu prac technicznych l
 
 ## 8. Reklamacje
 
-Jeśli coś nie działa tak, jak powinno, napisz na **liubuntu@proton.me**. Opisz problem i podaj adres e-mail konta, jeśli sprawa go dotyczy.
+Jeśli coś nie działa tak, jak powinno, napisz na **support@bogorm.app**. Opisz problem i podaj adres e-mail konta, jeśli sprawa go dotyczy.
 
 Odpowiem w ciągu 14 dni.
 

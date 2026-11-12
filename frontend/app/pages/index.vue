@@ -7,9 +7,6 @@ const { show } = useToast()
 
 const { isAuthenticated } = useAuth()
 
-// Kept out of the locale files: vue-i18n parses "@" as a linked-message reference
-const CONTACT_MAILTO = 'mailto:liubuntu@proton.me'
-
 const selectedPlace = ref<PlaceDetail | null>(null)
 const selectedEventCount = ref(0)
 const selectedEvents = ref<Event[]>([])
@@ -114,7 +111,7 @@ function handleSelectEvent(place: { id: string, lat: number, lng: number }) {
         </p>
         <i18n-t keypath="home.betaNotice.invite" tag="p" scope="global">
           <template #email>
-            <a :href="CONTACT_MAILTO" class="beta-notice-link">{{ t('home.betaNotice.email') }}</a>
+            <a :href="SUPPORT_MAILTO" class="beta-notice-link">{{ SUPPORT_EMAIL }}</a>
           </template>
         </i18n-t>
       </div>

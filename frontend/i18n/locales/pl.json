@@ -65,7 +65,8 @@
     "consent": "Mam co najmniej 16 lat i akceptuję {terms} oraz {privacy}.",
     "consentTerms": "Regulamin",
     "consentPrivacy": "Politykę prywatności",
-    "checkFields": "Popraw zaznaczone pola."
+    "checkFields": "Popraw zaznaczone pola.",
+    "needHelp": "Problem z rejestracją? Napisz na {email}"
   },
   "accountLayout": {
     "bookmarks": "Zakładki",
@@ -125,8 +126,7 @@
     "betaNotice": {
       "badge": "beta",
       "lead": "Bogorm to czytelnicza mapa Warszawy. Jest w wersji beta i dopiero się zapełnia.",
-      "invite": "Brakuje Twojego miejsca albo chcesz dodać swoje wydarzenie? Napisz do mnie: {email}",
-      "email": "liubuntu [małpa] proton [kropka] me"
+      "invite": "Brakuje Twojego miejsca albo chcesz dodać swoje wydarzenie? Napisz do mnie: {email}"
     },
     "loadError": "Nie udało się wczytać miejsc. Spróbuj ponownie."
   },
@@ -161,12 +161,14 @@
     "who": {
       "title": "Kto tworzy Bogorm",
       "photoAlt": "Liuba Kuibida, autorka Bogorm",
-      "text1": "Nazywam się Liuba Kuibida. Jestem kulturolożką i programistką z Ukrainy. Bogorm to mój autorski, niezależny projekt.",
+      "text1": "Nazywam się Liuba Kuibida. Jestem kulturoznawczynią i programistką z Ukrainy. Bogorm to mój autorski, niezależny projekt.",
       "text2": "Do Warszawy przyjechałam przez wojnę. {link} pomogły mi zbudować tu nowe życie.",
       "text2Link": "Wspólne czytanie i kluby książki",
       "text3": "Z tego doświadczenia wyrósł Bogorm. Będzie się rozwijał razem ze społecznością.",
       "authorSite": "Strona autorki",
-      "designer": "Projekt graficzny prototypu"
+      "designer": "Projekt graficzny prototypu",
+      "support": "Bogorm tworzę sama i jest bezpłatny dla wszystkich. Jeśli chcesz pomóc mu rosnąć, możesz {link}.",
+      "supportLink": "postawić mi kawę"
     },
     "partners": {
       "title": "Dla partnerów",
@@ -186,6 +188,12 @@
       "title": "Zostań partnerem",
       "text": "Mapa działa i buduje pierwszą sieć partnerów w Warszawie. Jeśli prowadzisz miejsce związane z książkami albo organizujesz wydarzenia literackie, napisz do mnie.",
       "email": "liubuntu [małpa] proton [kropka] me"
+    },
+    "newsletter": {
+      "label": "Newsletter",
+      "title": "Na marginesie",
+      "teaser": "Notatki z pracy nad Bogormem, po polsku.",
+      "link": "Zapisz się"
     }
   },
   "a11y": {
@@ -197,7 +205,8 @@
   "footer": {
     "about": "O projekcie",
     "privacy": "Polityka prywatności",
-    "terms": "Regulamin"
+    "terms": "Regulamin",
+    "support": "Wesprzyj"
   },
   "pagination": {
     "label": "Paginacja",

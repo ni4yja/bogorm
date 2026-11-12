@@ -1,13 +1,13 @@
 # Terms of Use
 
-*Last updated: 6 November 2026*
+*Last updated: 12 November 2026*
 
 ## 1. A few words to start
 
 Bogorm is a reading map of Warsaw, available at bogorm.app. These terms describe the rules for using it. They are terms of service within the meaning of the Polish Act of 18 July 2002 on Providing Services by Electronic Means.
 
 The site is run by Liubov Kuibida, a private individual.
-Contact: **liubuntu@proton.me**
+Contact: **support@bogorm.app**
 
 ## 2. What Bogorm offers
 
@@ -64,7 +64,7 @@ Bogorm may sometimes be unavailable, for example because of maintenance or a tec
 
 ## 8. Complaints
 
-If something does not work as it should, write to **liubuntu@proton.me**. Describe the problem and include your account email if the issue concerns your account.
+If something does not work as it should, write to **support@bogorm.app**. Describe the problem and include your account email if the issue concerns your account.
 
 I will reply within 14 days.
 

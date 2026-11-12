@@ -1,6 +1,6 @@
 # Polityka prywatności
 
-*Ostatnia aktualizacja: 6 listopada 2026*
+*Ostatnia aktualizacja: 12 listopada 2026*
 
 Bogorm to czytelnicza mapa Warszawy dostępna pod adresem bogorm.app. Ta strona wyjaśnia, jakie dane zbieram, po co i jakie masz prawa.
 
@@ -8,7 +8,7 @@ Bogorm to czytelnicza mapa Warszawy dostępna pod adresem bogorm.app. Ta strona 
 
 Administratorką danych jest Liubov Kuibida, osoba fizyczna prowadząca serwis Bogorm.
 
-Kontakt we wszystkich sprawach dotyczących danych: **liubuntu@proton.me**
+Kontakt we wszystkich sprawach dotyczących danych: **support@bogorm.app**
 
 ## Jakie dane zbieram i po co
 
@@ -50,6 +50,19 @@ Do statystyk używam narzędzia Umami, zainstalowanego na moim własnym serwerze
 Zbiera tylko ogólne informacje: którą stronę odwiedzono, skąd przyszła wizyta, typ urządzenia i przeglądarki oraz kraj. Te dane trafiają wyłącznie na mój serwer i nie są nikomu przekazywane.
 Podstawa prawna: prawnie uzasadniony interes, czyli wiedza o tym, jak rozwijać serwis (art. 6 ust. 1 lit. f RODO).
 
+### Newsletter „Na marginesie”
+
+Jeśli zapiszesz się na newsletter, przetwarzam Twój adres e-mail, żeby wysyłać Ci kolejne wydania. Wysyłam go przez Buttondown, który zapisuje też datę zapisu, adres IP i stronę, z której nastąpił zapis.
+
+Nie sprawdzam, czy otwierasz wiadomości ani w które linki klikasz: w newsletterze nie ma pikseli śledzących ani przekierowań linków.
+
+Podstawa prawna: Twoja zgoda (art. 6 ust. 1 lit. a RODO). Możesz ją wycofać w każdej chwili: link do wypisania się jest w każdej wiadomości.
+
+### Wiadomości do mnie
+
+Jeśli piszesz na support@bogorm.app, przetwarzam Twój adres e-mail i treść wiadomości, żeby Ci odpowiedzieć.
+Podstawa prawna: prawnie uzasadniony interes, czyli odpowiedź na Twoją wiadomość (art. 6 ust. 1 lit. f RODO).
+
 ## Komu przekazuję dane
 
 Nie sprzedaję danych i nie przekazuję ich w celach marketingowych. Korzystam z kilku usług zewnętrznych, bez których serwis nie mógłby działać:
@@ -57,12 +70,16 @@ Nie sprzedaję danych i nie przekazuję ich w celach marketingowych. Korzystam z
 - **DigitalOcean** — hosting. Serwery Bogorm i Umami stoją w centrum danych we Frankfurcie (Niemcy).
 - **CARTO** — podkłady mapowe. Gdy oglądasz mapę, Twoja przeglądarka pobiera fragmenty mapy bezpośrednio z serwerów CARTO, więc CARTO widzi Twój adres IP.
 - **Google Fonts** — czcionki. Twoja przeglądarka pobiera je bezpośrednio z serwerów Google, więc Google widzi Twój adres IP.
+- **Buttondown** — wysyłka newslettera. Dane subskrybentów są przechowywane na serwerach Amazon Web Services w USA.
+- **Proton** — poczta. Wiadomości wysłane na support@bogorm.app są przechowywane w skrzynce Proton w Szwajcarii.
 
-Część tych firm ma siedzibę w USA. Jeśli dane trafiają poza Europejski Obszar Gospodarczy, odbywa się to na podstawie decyzji Komisji Europejskiej (EU–US Data Privacy Framework) lub standardowych klauzul umownych.
+Część tych firm ma siedzibę poza Europejskim Obszarem Gospodarczym. Szwajcaria, gdzie działa Proton, jest uznana przez Komisję Europejską za kraj zapewniający odpowiedni poziom ochrony danych. Firmy z USA przetwarzają dane na podstawie decyzji Komisji Europejskiej (EU–US Data Privacy Framework) lub standardowych klauzul umownych.
 
 ## Jak długo przechowuję dane
 
 - **Konto i zakładki** — do czasu usunięcia konta. Po usunięciu konta dane są kasowane od razu i na stałe.
+- **Newsletter** — do czasu wypisania się.
+- **Wiadomości do mnie** — tak długo, jak to potrzebne do załatwienia sprawy.
 - **Logi serwera** — do 14 dni.
 - **Statystyki Umami** — bez ograniczenia czasowego, bo nie pozwalają nikogo zidentyfikować.
 
@@ -75,9 +92,10 @@ Masz prawo:
 - ich usunięcia — konto możesz usunąć samodzielnie na stronie profilu,
 - ograniczenia przetwarzania,
 - przeniesienia danych,
-- sprzeciwu wobec przetwarzania opartego na prawnie uzasadnionym interesie.
+- sprzeciwu wobec przetwarzania opartego na prawnie uzasadnionym interesie,
+- wycofania zgody na newsletter w dowolnym momencie.
 
-Żeby skorzystać z tych praw, napisz na **liubuntu@proton.me**.
+Żeby skorzystać z tych praw, napisz na **support@bogorm.app**.
 
 Możesz też złożyć skargę do Prezesa Urzędu Ochrony Danych Osobowych (ul. Stawki 2, 00-193 Warszawa, uodo.gov.pl).
 
