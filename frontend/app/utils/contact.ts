@@ -4,4 +4,4 @@ export const SUPPORT_MAILTO = `mailto:${SUPPORT_EMAIL}`
 // Check the final address once the page is verified
 export const BUYCOFFEE_URL = 'https://buycoffee.to/liubuntu'
 // One switch for the about page and the footer; flip to true once buycoffee.to verifies the page
-export const SHOW_BUYCOFFEE = false
+export const SHOW_BUYCOFFEE = true
