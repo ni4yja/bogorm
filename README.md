@@ -46,7 +46,7 @@ and literary places, with events and personal bookmarks.
 Requirements: Docker.
 
 ```bash
-git clone https://github.com/<user>/bogorm.git
+git clone https://github.com/ni4yja/bogorm.git
 cd bogorm
 cp .env.example .env        # fill in the values
 docker compose up -d        # starts frontend, backend and database
