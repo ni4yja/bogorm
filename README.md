@@ -3,7 +3,7 @@
 An interactive map of Warsaw's reading life — bookshops, libraries,
 and literary places, with events and personal bookmarks.
 
-![Bogorm demo](demo.gif)
+![Bogorm demo](demo.mp4)
 
 **Live:** [bogorm.app](https://bogorm.app)
 
